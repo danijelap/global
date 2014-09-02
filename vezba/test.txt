@@ -33,7 +33,7 @@
 				<input type="password">
 			</div>
 			<div class="row">
-				<input type="submit" value="Submit">
+				<input type="submit" value="Potvrdi">
 			</div>
 		</div>
 
