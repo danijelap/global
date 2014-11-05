@@ -5,6 +5,9 @@ class Drzava(models.Model):
 	naziv = models.CharField(max_length=50)
 	def __str__(self):
 		return self.naziv
+	@property
+	def gradovi(self):
+		return self.grad_set.all()
 
 class Grad(models.Model):
 	naziv = models.CharField(max_length=50)

@@ -1,0 +1,17 @@
+<style>
+ div {
+	border: 1px solid;
+ }
+</style>
+{% if objekti %}
+    {% for objekat in objekti %}
+    <div>
+		<p>Broj soba: {{ objekat.broj_soba }}</p>
+		<p>Grad: {{ objekat.deo_grada.grad }} ({{ objekat.deo_grada }})</p>
+		<p>Adresa: {{ objekat.adresa }}</p>
+		<p>Površina: {{ objekat.povrsina }}</p>
+	</div>
+    {% endfor %}
+{% else %}
+    <p>Nema oglasa.</p>
+{% endif %}
