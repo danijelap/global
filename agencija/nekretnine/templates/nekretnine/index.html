@@ -1,7 +1,12 @@
-{% if spisak %}
+{% if drzave %}
     <ul>
-    {% for Drzava in spisak %}
-		<li>{{ Drzava.naziv}}</li>
+    {% for drzava in drzave %}
+		<li><b>{{ drzava.naziv}}</b></li>
+		{% if drzava.gradovi %}
+			{% for grad in drzava.gradovi %}
+				<li>{{ grad.naziv}}</li>
+			{% endfor %}
+		{% endif %}
     {% endfor %}
     </ul>
 {% else %}
