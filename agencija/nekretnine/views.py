@@ -1,3 +1,9 @@
 from django.shortcuts import render
 
-# Create your views here.
+from nekretnine.models import Drzava
+
+
+def index(request):
+	spisak = Drzava.objects.all()
+	context = {'spisak': spisak}
+	return render(request, 'nekretnine/index.html', context)

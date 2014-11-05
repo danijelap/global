@@ -1,0 +1,9 @@
+{% if spisak %}
+    <ul>
+    {% for Drzava in spisak %}
+		<li>{{ Drzava.naziv}}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nema drzava.</p>
+{% endif %}
