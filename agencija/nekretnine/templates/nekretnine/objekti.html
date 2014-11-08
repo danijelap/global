@@ -1,15 +1,76 @@
 <style>
- div {
+ div.main{
+	width:660px;
+	position: relative;
+	left: 50%;
+	margin-left: -330px;
 	border: 1px solid;
  }
+ div.komplet {
+	border: 1px solid;
+	width:280px;
+	float:left;
+	margin:9px;
+	border: 1px solid;
+	border-radius: 7px;
+	border-color:#B0B0B0;
+	background: -webkit-linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* Standard syntax (must be last) */
+ }
+ div.osobine{
+	margin-top: 20px;
+	float:left;
+	text-align:right;
+	margin-right:15px;
+	margin-left:10px;
+	
+ }
+ div.podaci{
+	margin-top: 20px;
+	float:left;
+	width:180px;
+	height:190px;
+ }
+ div.naslov{
+	float:left;
+	width:230px;
+	height:15px;
+	margin-left:10px;
+	margin-top:10px;
+}
+button{
+	width:50px;
+	height:20px;
+	background-color:blue;
+	color:white;
+	border-radius: 7px;
+	float:right;
+	
+}		
 </style>
 {% if objekti %}
     {% for objekat in objekti %}
-    <div>
-		<p>Broj soba: {{ objekat.broj_soba }}</p>
-		<p>Grad: {{ objekat.deo_grada.grad }} ({{ objekat.deo_grada }})</p>
-		<p>Adresa: {{ objekat.adresa }}</p>
-		<p>Površina: {{ objekat.povrsina }}</p>
+	<div class = "main">
+		<div class = "komplet">
+			<div class = "naslov">
+				Trosoban , Novi Beograd
+			</div>
+			<div class = "osobine">
+				<p>Broj soba</p>
+				<p>Grad</p>
+				<p>Adresa</p>
+				<p>Površina</p>
+			</div>
+			<div class = "podaci">
+				<p>{{ objekat.broj_soba }}</p>
+				<p>{{ objekat.deo_grada.grad }} ({{ objekat.deo_grada }})</p>
+				<p>{{ objekat.adresa }}</p>
+				<p>{{ objekat.povrsina }}</p>
+				<button type="button">Više</button>
+			</div>
+		</div>
 	</div>
     {% endfor %}
 {% else %}
