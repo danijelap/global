@@ -15,23 +15,23 @@
 	border-radius: 7px;
 	border-color:#B0B0B0;
 	background: -webkit-linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* Standard syntax (must be last) */
+	background: -o-linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* For Firefox 3.6 to 15 */
+	background: linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* Standard syntax (must be last) */
  }
  div.osobine{
-	margin-top: 20px;
 	float:left;
 	text-align:right;
 	margin-right:15px;
 	margin-left:10px;
-	
+	width:80px;
  }
- div.podaci{
-	margin-top: 20px;
+ div.podatak{
 	float:left;
-	width:180px;
-	height:190px;
+	width:150px;
+ }
+ div.podaci {
+ 	height: 140px;
  }
  div.naslov{
 	float:left;
@@ -39,6 +39,9 @@
 	height:15px;
 	margin-left:10px;
 	margin-top:10px;
+}
+div.red {
+	clear: both;
 }
 button{
 	width:50px;
@@ -48,31 +51,50 @@ button{
 	border-radius: 7px;
 	float:right;
 	
-}		
+}
 </style>
-{% if objekti %}
-    {% for objekat in objekti %}
 	<div class = "main">
+		<form>
+			Delovi grada: 
+			<select name="deo_grada">
+				<option value="0">Izaberite...</option>
+				{% for deo_grada in delovi_grada %}
+				<option value="{{ deo_grada.id }}">{{ deo_grada.naziv }}</option>
+				{% endfor %}
+			</select>
+			<input type="submit" value="Pretraga" />
+		</form>
+{% if objekti %}
+	{% for objekat in objekti %}
 		<div class = "komplet">
-			<div class = "naslov">
-				Trosoban , Novi Beograd
+			<div class="podaci">
+				<div class = "naslov">
+					Trosoban , Novi Beograd
+				</div>
+				<div class="red">
+					<div class = "osobine">Broj soba</div>
+					<div class = "podatak">{{ objekat.broj_soba }}</div>
+				</div>
+				<div class="red">
+					<div class = "osobine">Grad</div>
+					<div class = "podatak">{{ objekat.deo_grada.grad }} ({{ objekat.deo_grada }})</div>
+				</div>
+				<div class="red">
+					<div class = "osobine">Adresa</div>
+					<div class = "podatak">{{ objekat.adresa }}</div>
+				</div>
+				<div class="red">
+					<div class = "osobine">Površina</div>
+					<div class = "podatak">{{ objekat.povrsina }}</div>
+				</div>
+				<div class="red"></div>
+				
 			</div>
-			<div class = "osobine">
-				<p>Broj soba</p>
-				<p>Grad</p>
-				<p>Adresa</p>
-				<p>Površina</p>
-			</div>
-			<div class = "podaci">
-				<p>{{ objekat.broj_soba }}</p>
-				<p>{{ objekat.deo_grada.grad }} ({{ objekat.deo_grada }})</p>
-				<p>{{ objekat.adresa }}</p>
-				<p>{{ objekat.povrsina }}</p>
-				<button type="button">Više</button>
-			</div>
+			<button type="button">Više</button>
 		</div>
-	</div>
-    {% endfor %}
+	{% endfor %}
 {% else %}
-    <p>Nema oglasa.</p>
+		<p>Nema oglasa.</p>
 {% endif %}
+		<div class="red"></div>
+	</div>
