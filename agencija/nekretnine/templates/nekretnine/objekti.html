@@ -8,7 +8,8 @@
  }
  div.komplet {
 	border: 1px solid;
-	width:280px;
+	width:290px;
+	height:170px;
 	float:left;
 	margin:9px;
 	border: 1px solid;
@@ -29,6 +30,7 @@
  div.podatak{
 	float:left;
 	width:150px;
+	
  }
  div.podaci {
  	height: 140px;
@@ -43,6 +45,10 @@
 div.red {
 	clear: both;
 }
+.slika {
+		margin-top: 20px;
+	    float: left;
+}
 button{
 	width:50px;
 	height:20px;
@@ -50,6 +56,8 @@ button{
 	color:white;
 	border-radius: 7px;
 	float:right;
+    margin-right:5px;
+	margin-bottom:5px;
 	
 }
 </style>
@@ -59,7 +67,21 @@ button{
 			<select name="deo_grada">
 				<option value="0">Izaberite...</option>
 				{% for deo_grada in delovi_grada %}
-				<option value="{{ deo_grada.id }}">{{ deo_grada.naziv }}</option>
+				<option value="{{ deo_grada.id }}"{% if izabran_deo_grada == deo_grada.id %} selected{% endif %}>{{ deo_grada.naziv }}</option>
+				{% endfor %}
+			</select>
+			Tip objekta:
+			<select name ="tip_objekta">
+				<option value="0">Izaberite...</option>
+				{% for tip_objekta in tipovi_objekta %}
+				<option value="{{ tip_objekta.id }}"{% if izabran_tip_objekta == tip_objekta.id %} selected{% endif %}>{{ tip_objekta.naziv }}</option>
+				{% endfor %}
+			</select>	
+			Nameštenost:
+			<select name = "namestenost">
+				<option value="0">Izaberite...</option>
+				{% for namestenost in namestenosti %}
+				<option value="{{ namestenost.id }}"{% if izabrana_namestenost == namestenost.id %} selected{% endif %}>{{ namestenost.naziv }}</option>
 				{% endfor %}
 			</select>
 			<input type="submit" value="Pretraga" />
