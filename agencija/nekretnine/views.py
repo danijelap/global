@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from nekretnine.models import Drzava, Objekat, DeoGrada, TipObjekta, Namestenost
+from nekretnine.models import Drzava, Objekat, DeoGrada, TipObjekta, Namestenost, Grad
 
 
 def index(request):
@@ -12,6 +12,7 @@ def objekti(request):
 	deo_grada = int(request.GET.get('deo_grada', 0))
 	tip_objekta = int(request.GET.get('tip_objekta', 0))
 	namestenost = int(request.GET.get('namestenost', 0))
+	grad = int(request.GET.get('grad', 0))
 	filter_dictionary = {}
 	
 	if deo_grada != 0:
@@ -23,14 +24,20 @@ def objekti(request):
 	if namestenost != 0:
 		filter_dictionary['namestenost_id'] = namestenost
 		
+	if grad != 0:
+		filter_dictionary['deo_grada__grad_id'] = grad
+		
+		
 	objekti = Objekat.objects.filter(**filter_dictionary)
 	
 	tipovi_objekta = TipObjekta.objects.all();
 	delovi_grada = DeoGrada.objects.all();
 	namestenosti = Namestenost.objects.all();
+	gradovi = Grad.objects.all();
 	
 	context = {'objekti': objekti, 'delovi_grada': delovi_grada, 
 		'tipovi_objekta': tipovi_objekta, 'izabran_deo_grada': deo_grada, 
-		'izabran_tip_objekta': tip_objekta, 'izabrana_namestenost':namestenost}
+		'izabran_tip_objekta': tip_objekta, 'izabrana_namestenost':namestenost,'namestenosti':namestenosti, 
+		'izabran_grad':grad,'gradovi':gradovi}
 	return render(request, 'nekretnine/objekti.html', context)
 	

@@ -85,6 +85,14 @@ button{
 				{% endfor %}
 			</select>
 			<input type="submit" value="Pretraga" />
+			Grad:
+			<select name = "grad">
+				<option value="0">Izaberite...</option>
+				{% for grad in gradovi %}
+				<option value="{{ grad.id }}"{% if izabran_grad == grad.id  %} selected{% endif %}>{{grad.naziv }}</option>
+				{% endfor %}
+			</select>
+			<input type="submit" value="Pretraga" />
 		</form>
 {% if objekti %}
 	{% for objekat in objekti %}
