@@ -63,13 +63,6 @@ button{
 </style>
 	<div class = "main">
 		<form>
-			Delovi grada: 
-			<select name="deo_grada">
-				<option value="0">Izaberite...</option>
-				{% for deo_grada in delovi_grada %}
-				<option value="{{ deo_grada.id }}"{% if izabran_deo_grada == deo_grada.id %} selected{% endif %}>{{ deo_grada.naziv }}</option>
-				{% endfor %}
-			</select>
 			Tip objekta:
 			<select name ="tip_objekta">
 				<option value="0">Izaberite...</option>
@@ -84,13 +77,31 @@ button{
 				<option value="{{ namestenost.id }}"{% if izabrana_namestenost == namestenost.id %} selected{% endif %}>{{ namestenost.naziv }}</option>
 				{% endfor %}
 			</select>
-			<input type="submit" value="Pretraga" />
 			Grad:
 			<select name = "grad">
 				<option value="0">Izaberite...</option>
 				{% for grad in gradovi %}
 				<option value="{{ grad.id }}"{% if izabran_grad == grad.id  %} selected{% endif %}>{{grad.naziv }}</option>
 				{% endfor %}
+			</select>
+			Cena:
+			<select name = "cena">
+				<option value="nista">Izaberite...</option>
+				<option value="0-200"{% if izabrana_cena == "0-200" %} selected{% endif %}>0-200 € </option>
+				<option value="200-400"{% if izabrana_cena == "200-400" %} selected{% endif %}>200-400 € </option>
+				<option value="400-600"{% if izabrana_cena == "400-600" %} selected{% endif %}>400-600 € </option>
+				<option value="600-800"{% if izabrana_cena == "600-800" %} selected{% endif %}>600-800 € </option>
+			</select>
+			Broj soba:
+			<select name = "broj_soba">
+				<option value="nista">Izaberite...</option>
+				<option value="1">1</option>
+				<option value="1.5">1.5</option>
+				<option value="2">2</option>
+				<option value="2.5">2.5</option>
+				<option value="3">3</option>
+				<option value="3.5">3.5</option>
+				<option value="4">4</option>
 			</select>
 			<input type="submit" value="Pretraga" />
 		</form>

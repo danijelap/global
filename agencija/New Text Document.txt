@@ -1,0 +1,19 @@
+Pogledacu ovo veceras, siguran sam da je dobro, a evo ti sad sledeci zadatak :)
+
+Treba da dodaš filter za cenu. Ovaj filter je malo drugaciji, sada cene neceš citati iz modela nego ceš rucno popuniti nekoliko opsega. Ako je na primer opseg 0-200€, stavi u value od opcije 0-200 a u tekst koji ce se prikazati dodaj još € na kraj. Kada ti stigne zahtev ti ceš dobiti 0-200 u parametru cena. Ova dva broja možeš da izvuceš u dve promenljive cena_min i cena_max na sledeci nacin:
+
+(cena_min, cena_max) = param_cena.split('-')
+cena_min = int(cena_min) # da se promeni tip promenljive u integer, možda nije obavezno ali za svaki slucaj
+cena_max = int(cena_max) # da se promeni tip, verovatno nije obavezno
+
+Kad dobiješ ove promenljive onda možeš da ih ubaciš u filter tako što treba da kažeš da je cena veca ili jednaka cena_min a manja ili jednaka od cena_max. Takvi uslovi se u filter funkciji postavljaju tako što se na ime polja u modelu doda još:
+
+__ge za vece ili jednako (greater or equal)
+__gt za vece (greater than)
+__le za manje ili jednako (less or equal)
+__lt za manje (less than)
+
+Tako bi na primer ako hoceš da dobiješ stanove kojima je cena veca ili jednaka od cena_min dodala ovo u filter dictionary:
+filter_dictionary['cena__ge'] = cena_min
+
+To je to :)
