@@ -1,141 +1,163 @@
-<style>
- div.main{
-	width:660px;
-	position: relative;
-	left: 50%;
-	margin-left: -330px;
-	border: 1px solid;
- }
- div.komplet {
-	border: 1px solid;
-	width:290px;
-	height:170px;
-	float:left;
-	margin:9px;
-	border: 1px solid;
-	border-radius: 7px;
-	border-color:#B0B0B0;
-	background: -webkit-linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* For Safari 5.1 to 6.0 */
-	background: -o-linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* For Opera 11.1 to 12.0 */
-	background: -moz-linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* For Firefox 3.6 to 15 */
-	background: linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* Standard syntax (must be last) */
- }
- div.osobine{
-	float:left;
-	text-align:right;
-	margin-right:15px;
-	margin-left:10px;
-	width:80px;
- }
- div.podatak{
-	float:left;
-	width:150px;
-	
- }
- div.podaci {
- 	height: 140px;
- }
- div.naslov{
-	float:left;
-	width:230px;
-	height:15px;
-	margin-left:10px;
-	margin-top:10px;
-}
-div.red {
-	clear: both;
-}
-.slika {
-		margin-top: 20px;
-	    float: left;
-}
-button{
-	width:50px;
-	height:20px;
-	background-color:blue;
-	color:white;
-	border-radius: 7px;
-	float:right;
-    margin-right:5px;
-	margin-bottom:5px;
-	
-}
-</style>
-	<div class = "main">
-		<form>
-			Tip objekta:
-			<select name ="tip_objekta">
-				<option value="0">Izaberite...</option>
-				{% for tip_objekta in tipovi_objekta %}
-				<option value="{{ tip_objekta.id }}"{% if izabran_tip_objekta == tip_objekta.id %} selected{% endif %}>{{ tip_objekta.naziv }}</option>
-				{% endfor %}
-			</select>	
-			Nameštenost:
-			<select name = "namestenost">
-				<option value="0">Izaberite...</option>
-				{% for namestenost in namestenosti %}
-				<option value="{{ namestenost.id }}"{% if izabrana_namestenost == namestenost.id %} selected{% endif %}>{{ namestenost.naziv }}</option>
-				{% endfor %}
-			</select>
-			Grad:
-			<select name = "grad">
-				<option value="0">Izaberite...</option>
-				{% for grad in gradovi %}
-				<option value="{{ grad.id }}"{% if izabran_grad == grad.id  %} selected{% endif %}>{{grad.naziv }}</option>
-				{% endfor %}
-			</select>
-			Cena:
-			<select name = "cena">
-				<option value="nista">Izaberite...</option>
-				<option value="0-200"{% if izabrana_cena == "0-200" %} selected{% endif %}>0-200 € </option>
-				<option value="200-400"{% if izabrana_cena == "200-400" %} selected{% endif %}>200-400 € </option>
-				<option value="400-600"{% if izabrana_cena == "400-600" %} selected{% endif %}>400-600 € </option>
-				<option value="600-800"{% if izabrana_cena == "600-800" %} selected{% endif %}>600-800 € </option>
-			</select>
-			Broj soba:
-			<select name = "broj_soba">
-				<option value="nista">Izaberite...</option>
-				<option value="1">1</option>
-				<option value="1.5">1.5</option>
-				<option value="2">2</option>
-				<option value="2.5">2.5</option>
-				<option value="3">3</option>
-				<option value="3.5">3.5</option>
-				<option value="4">4</option>
-			</select>
-			<input type="submit" value="Pretraga" />
-		</form>
-{% if objekti %}
-	{% for objekat in objekti %}
-		<div class = "komplet">
-			<div class="podaci">
-				<div class = "naslov">
-					Trosoban , Novi Beograd
-				</div>
-				<div class="red">
-					<div class = "osobine">Broj soba</div>
-					<div class = "podatak">{{ objekat.broj_soba }}</div>
-				</div>
-				<div class="red">
-					<div class = "osobine">Grad</div>
-					<div class = "podatak">{{ objekat.deo_grada.grad }} ({{ objekat.deo_grada }})</div>
-				</div>
-				<div class="red">
-					<div class = "osobine">Adresa</div>
-					<div class = "podatak">{{ objekat.adresa }}</div>
-				</div>
-				<div class="red">
-					<div class = "osobine">Površina</div>
-					<div class = "podatak">{{ objekat.povrsina }}</div>
-				</div>
-				<div class="red"></div>
+<head>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+	<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+	<link rel="stylesheet" href="/resources/demos/style.css">
+	<style>
+		div.main{
+		width:660px;
+		position: relative;
+		left: 50%;
+		margin-left: -330px;
+		border: 1px solid;
+		}
+		div.komplet {
+			border: 1px solid;
+			width:290px;
+			height:170px;
+			float:left;
+			margin:9px;
+			border: 1px solid;
+			border-radius: 7px;
+			border-color:#B0B0B0;
+			background: -webkit-linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* For Safari 5.1 to 6.0 */
+			background: -o-linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* For Opera 11.1 to 12.0 */
+			background: -moz-linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* For Firefox 3.6 to 15 */
+			background: linear-gradient(top, #E8E8E8 , #FFFFFF  ); /* Standard syntax (must be last) */
+		 }
+		div.osobine{
+			float:left;
+			text-align:right;
+			margin-right:15px;
+			margin-left:10px;
+			width:80px;
+		}
+		div.podatak{
+			float:left;
+			width:150px;
+			
+		 }
+		div.podaci {
+			height: 140px;
+		 }
+		div.naslov{
+			float:left;
+			width:230px;
+			height:15px;
+			margin-left:10px;
+			margin-top:10px;
+		}
+		div.red {
+			clear: both;
+		}
+		.slika {
+			margin-top: 20px;
+			float: left;
+		}
+		button{
+			width:50px;
+			height:20px;
+			background-color:blue;
+			color:white;
+			border-radius: 7px;
+			float:right;
+			margin-right:5px;
+			margin-bottom:5px;
+			
+		}
+	</style>
+	<script>
+		$(function() {
+		$( "#slider-range" ).slider({
+		  range: true,
+		  min: 0,
+		  max: 800,
+		  values: [ 75, 300 ],
+		  slide: function( event, ui ) {
+			$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+		  }
+		});
+		$( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+		  " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+	  });
+	</script>
+	</head>
+	<body>
+		<div class = "main">
+			<form>
+				Tip objekta:
+				<select name ="tip_objekta">
+					<option value="0">Izaberite...</option>
+					{% for tip_objekta in tipovi_objekta %}
+					<option value="{{ tip_objekta.id }}"{% if izabran_tip_objekta == tip_objekta.id %} selected{% endif %}>{{ tip_objekta.naziv }}</option>
+					{% endfor %}
+				</select>	
+				Nameštenost:
+				<select name = "namestenost">
+					<option value="0">Izaberite...</option>
+					{% for namestenost in namestenosti %}
+					<option value="{{ namestenost.id }}"{% if izabrana_namestenost == namestenost.id %} selected{% endif %}>{{ namestenost.naziv }}</option>
+					{% endfor %}
+				</select>
+				Grad:
+				<select name = "grad">
+					<option value="0">Izaberite...</option>
+					{% for grad in gradovi %}
+					<option value="{{ grad.id }}"{% if izabran_grad == grad.id  %} selected{% endif %}>{{grad.naziv }}</option>
+					{% endfor %}
+				</select>
 				
+				Broj soba:
+				<select name = "broj_soba">
+					<option value="nista">Izaberite...</option>
+					<option value="1"{% if izabran_broj_soba == "1" %} selected {% endif %}>1</option>
+					<option value="1.5"{% if izabran_broj_soba == "1.5" %} selected {% endif %}>1.5</option>
+					<option value="2"{% if izabran_broj_soba == "2" %} selected {% endif %}>2</option>
+					<option value="2.5"{% if izabran_broj_soba == "2.5" %} selected {% endif %}>2.5</option>
+					<option value="3"{% if izabran_broj_soba == "3" %} selected {% endif %}>3</option>
+					<option value="3.5"{% if izabran_broj_soba == "3.5" %} selected {% endif %}>3.5</option>
+					<option value="4"{% if izabran_broj_soba == "4" %} selected {% endif %}>4</option>
+				</select>
+				<p>
+					<label for="amount">Opseg cena:</label>
+					<input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+				</p>
+				<div id="slider-range"></div>
+				<input type="submit" value="Pretraga" />
+			</form>
+		{% if objekti %}
+			{% for objekat in objekti %}
+				<div class = "komplet">
+					<div class="podaci">
+						<div class = "naslov">
+							Trosoban , Novi Beograd
+						</div>
+						<div class="red">
+							<div class = "osobine">Broj soba</div>
+							<div class = "podatak">{{ objekat.broj_soba }}</div>
+						</div>
+						<div class="red">
+							<div class = "osobine">Grad</div>
+							<div class = "podatak">{{ objekat.deo_grada.grad }} ({{ objekat.deo_grada }})</div>
+						</div>
+						<div class="red">
+							<div class = "osobine">Adresa</div>
+							<div class = "podatak">{{ objekat.adresa }}</div>
+						</div>
+						<div class="red">
+							<div class = "osobine">Površina</div>
+							<div class = "podatak">{{ objekat.povrsina }}</div>
+						</div>
+						<div class="red"></div>
+						
+					</div>
+					<button type="button">Više</button>
+				</div>
+			{% endfor %}
+		{% else %}
+				<p>Nema oglasa.</p>
+		{% endif %}
+				<div class="red"></div>
 			</div>
-			<button type="button">Više</button>
-		</div>
-	{% endfor %}
-{% else %}
-		<p>Nema oglasa.</p>
-{% endif %}
-		<div class="red"></div>
-	</div>
+	</body>
+</html>

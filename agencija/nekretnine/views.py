@@ -26,16 +26,12 @@ def objekti(request):
 	if grad != 0:
 		filter_dictionary['deo_grada__grad_id'] = grad 
 	
-	if cena != 'nista':
-		(cena_min, cena_max) = cena.split('-')
-		cena_min = int(cena_min)
-		cena_max = int(cena_max) 
-		filter_dictionary['cena__gte'] = cena_min	
-		filter_dictionary['cena__lte'] = cena_max
-		
+	
 	if broj_soba != 'nista':
 		filter_dictionary['broj_soba'] = broj_soba
-	
+		
+	if cena != 'nista'
+		?
 		
 	objekti = Objekat.objects.filter(**filter_dictionary)
 	
@@ -46,6 +42,6 @@ def objekti(request):
 	context = {'objekti': objekti, 'tipovi_objekta': tipovi_objekta, 
 		'izabran_tip_objekta': tip_objekta, 'izabrana_namestenost': namestenost,
 		'namestenosti': namestenosti, 'izabran_grad': grad, 'gradovi': gradovi, 
-		'izabrana_cena': cena, 'broj_soba': broj_soba}
+		'izabrana_cena': cena, 'izabran_broj_soba': broj_soba}
 	return render(request, 'nekretnine/objekti.html', context)
 	

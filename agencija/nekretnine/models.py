@@ -14,6 +14,9 @@ class Grad(models.Model):
 	drzava = models.ForeignKey(Drzava)
 	def __str__(self):
 		return self.naziv
+	@property
+	def delovi_grada(self):
+		return self.deograda_set.all()
 
 class DeoGrada(models.Model):
 	naziv = models.CharField(max_length=50)

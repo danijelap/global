@@ -5,9 +5,9 @@
 		{% if drzava.gradovi %}
 			{% for grad in drzava.gradovi %}
 				<li>{{ grad.naziv}}</li>
-				{% if drzava.gradovi.deo_grada %}
-					{% for deo_grada in drzava.gradovi.deo_grada %}
-						<li>{{ deo_grada.naziv}}</li>
+				{% if grad.delovi_grada %}
+					{% for deo_grada in grad.delovi_grada %}
+						<li><i>{{ deo_grada.naziv}}</i></li>
 					{% endfor %}
 				{% endif %}
 			{% endfor %}
