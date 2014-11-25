@@ -54,7 +54,7 @@
 			margin-top: 20px;
 			float: left;
 		}
-		button{
+		a.vise {
 			width:50px;
 			height:20px;
 			background-color:blue;
@@ -74,11 +74,11 @@
 		  max: 800,
 		  values: [ 75, 300 ],
 		  slide: function( event, ui ) {
-			$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+			$( "#amount" ).val( ui.values[ 0 ] + "-" + ui.values[ 1 ] );
 		  }
 		});
-		$( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-		  " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+		$( "#amount" ).val( $( "#slider-range" ).slider( "values", 0 ) +
+		  "-" + $( "#slider-range" ).slider( "values", 1 ) );
 	  });
 	</script>
 	</head>
@@ -119,8 +119,8 @@
 					<option value="4"{% if izabran_broj_soba == "4" %} selected {% endif %}>4</option>
 				</select>
 				<p>
-					<label for="amount">Opseg cena:</label>
-					<input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+					<label for="amount">Opseg cena (€):</label>
+					<input type="text" id="amount" name="cena" readonly style="border:0; color:#f6931f; font-weight:bold;" />
 				</p>
 				<div id="slider-range"></div>
 				<input type="submit" value="Pretraga" />
@@ -151,7 +151,7 @@
 						<div class="red"></div>
 						
 					</div>
-					<button type="button">Više</button>
+					<a class="vise" href="/nekretnine/detalji?id_stana={{ objekat.id }}">Više</a>
 				</div>
 			{% endfor %}
 		{% else %}
