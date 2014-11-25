@@ -30,9 +30,7 @@ def objekti(request):
 	if broj_soba != 'nista':
 		filter_dictionary['broj_soba'] = broj_soba
 		
-	if cena != 'nista'
-		?
-		
+			
 	objekti = Objekat.objects.filter(**filter_dictionary)
 	
 	tipovi_objekta = TipObjekta.objects.all();
@@ -44,4 +42,13 @@ def objekti(request):
 		'namestenosti': namestenosti, 'izabran_grad': grad, 'gradovi': gradovi, 
 		'izabrana_cena': cena, 'izabran_broj_soba': broj_soba}
 	return render(request, 'nekretnine/objekti.html', context)
+	
+def detalji(request):
+
+	id_stana = request.GET.get('id_stana')
+	
+	stan = Objekat.objects.get(id = id_stana);
+	context = {'stan' : stan}
+	return render(request, 'nekretnine/detalji.html', context)
+	
 	
