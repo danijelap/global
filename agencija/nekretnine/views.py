@@ -26,6 +26,12 @@ def objekti(request):
 	if grad != 0:
 		filter_dictionary['deo_grada__grad_id'] = grad 
 	
+	if cena != 'nista':
+		(cena_min, cena_max) = cena.split('-')
+		cena_min = int(cena_min)
+		cena_max = int(cena_max) 
+		filter_dictionary['cena__gte'] = cena_min	
+		filter_dictionary['cena__lte'] = cena_max
 	
 	if broj_soba != 'nista':
 		filter_dictionary['broj_soba'] = broj_soba

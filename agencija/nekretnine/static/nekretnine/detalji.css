@@ -1,0 +1,42 @@
+.main{
+	width:840px;
+	height:600px;
+	position:relative;
+	left:50%;
+	margin-left:-420px;
+}
+.slike{
+	width:400px;
+	height:400px;
+	float:left;
+	border:1px solid;
+}
+.red{
+	margin-top:20px;
+	width:400px;
+	height:30px;
+}
+.plavo{
+	color:#0066CC;
+}
+.podatak{
+	float:right;
+	text-align:right;
+	margin-right:10px;
+}	
+.osobina{
+	float:left;
+	width:120px;
+	margin-left:10px;
+}	
+.podaci{
+	width:400px;
+	height:400px;
+	float:left;
+	border:1px solid;
+	margin-left:30px;
+}
+hr {
+	margin-left: 10px;
+	margin-right: 10px;
+}

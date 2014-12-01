@@ -1,52 +1,43 @@
-<style>
-	.main{
-		width:840px;
-		height:600px;
-		position:relative;
-	    left:50%;
-		margin-left:-420px;
-		border:1px solid;
-	}
-	.slike{
-		width:400px;
-		height:400px;
-		float:left;
-		border:1px solid;
-	}
-	.red{
-		width:390;
-		height:30px;
-		border:1px solid;
-	}
-	.podatak{
-		border:1px solid;
-		float:right;
-		width:180px;
-		height:25px;
-	}	
-	.osobina{
-		border:1px solid;
-		float:left;
-		width:180px;
-		height:25px;
-	}	
-	
-	.podaci{
-		width:400px;
-		height:400px;
-		float:left;
-		border:1px solid;
-		margin-left:30px;
-	}
-</style>
- 
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/detalji.css' %}" /> 
 			<div class = "main">
 			
 				<div class = "slike">Slike</div>
 				<div class = "podaci">
 					<div class ="red"> 
-						<div class = "osobina">Broj soba </div>
-						<div class = "podatak">{{ stan.broj_soba }} </div>
+						<div class = "plavo">
+							<div class = "osobina">Tip objekta</div>
+							<div class = "podatak">{{ stan.tip_objekta }}</div>
+						</div>
+					</div>
+					<p><hr></p>
+					<div class ="red"> 
+						<div class = "osobina">Lokacija</div>
+						<div class = "podatak">{{ stan.deo_grada.grad }} ({{ stan.deo_grada }})</div>
+					</div>
+					<div class ="red"> 
+						<div class = "osobina">Adresa</div>
+						<div class = "podatak">{{ stan.adresa }}</div>
+					</div>
+					<div class ="red"> 
+						<div class = "osobina">Površina</div>
+						<div class = "podatak">{{ stan.povrsina }}m2</div>
+					</div>
+					<div class ="red"> 
+						<div class = "osobina">Broj soba</div>
+						<div class = "podatak">{{ stan.broj_soba }}</div>
+					</div>
+					<p><hr></p>
+					<div class ="red"> 
+						<div class = "plavo">
+							<div class = "osobina">Cena </div>
+							<div class = "podatak">{{ stan.cena }} € </div>
+						</div>	
+					</div>
+					<p><hr></p>
+					<div class ="red"> 
+						<div class = "osobina">Nameštenost </div>
+						<div class = "podatak">{{ stan.namestenost }} </div>
 					</div>
 				</div>
 				</div>
