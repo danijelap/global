@@ -12,6 +12,6 @@ $(function() {
 		"-" + $( "#slider-range" ).slider( "values", 1 ) );
 });
 
-$(function vise() {
-	$("#prazan").load("/nekretnine/detalji?id_stana ={{ objekat.id }}");
+$(function vise(objekat_id) {
+	$("#prazan").load("/nekretnine/detalji?id_stana=" + objekat_id);
 });
