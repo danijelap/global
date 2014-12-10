@@ -14,4 +14,4 @@ $(function() {
 
 function vise(objekat_id) {
 	$("#prazan").load("/nekretnine/detalji?id_stana=" + objekat_id);
-});
+}
