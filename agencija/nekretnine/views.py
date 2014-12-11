@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from nekretnine.models import Drzava, Objekat,
+from nekretnine.models import Drzava, Objekat
 
 
 
@@ -15,4 +15,10 @@ def objekti(request):
 	context = {'objekti' : objekti}
 	return render(request, 'nekretnine/objekti.html', context)
 
-
+def detalji(request):
+	stan_id = request.GET.get('stan_id', None)
+	if stan_id is not None:
+		stan = Objekat.objects.get(id = stan_id)
+		context = {'stan' : stan}
+		return render(request, 'nekretnine/detalji.html', context)
+	

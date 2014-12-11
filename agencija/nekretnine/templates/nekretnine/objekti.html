@@ -41,7 +41,7 @@
 							<div class = "osobina">Površina</div>
 							<div class = "podatak">{{ objekat.povrsina }}m2</div>
 						</div>
-					<input type = "button" id = "dugme"  class = "dugme" value = "Više" />
+					<input type = "button" id = "dugme"  class = "dugme" value = "Više" onclick="vise({{objekat.id}})" />
 					</div>
 				</div>
 				{% endfor %}
@@ -50,9 +50,7 @@
 			{% endif %}
 		</div>
 		
-		<div class = "detalji">
-			<div class = "prazan">
-			</div>
+		<div id="prazan" class="prazan">
 		</div>
 		
 	</body>
