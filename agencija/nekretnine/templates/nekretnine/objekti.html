@@ -11,47 +11,49 @@
 		<div class = "filteri">
 			<p>Filteri</p>
 		</div>
-		<div class = "favoriti">
-			Favoriti
-		</div>
-		<div class = "slike">
-			Slike
-		</div>
-		
-		<div class = "lista_stanova">
-			{% if objekti %}
-				{% for objekat in objekti %}
-				<div class = "jedan_stan">
-					<div class = "slika">
+		<div class = "levo">
+			<div class = "favoriti">
+				Favoriti
+			</div>
+			
+			<div class = "lista_stanova">
+				{% if objekti %}
+					{% for objekat in objekti %}
+					<div class = "jedan_stan">
+						<div class = "slika">
+						</div>
+						<div class = "text">
+							<div class="red">
+								<div class = "osobina">Broj soba</div>
+								<div class = "podatak">{{ objekat.broj_soba }}</div>
+							</div>
+							<div class="red">
+								<div class = "osobina">Grad</div>
+								<div class = "podatak">{{ objekat.deo_grada.grad }} ({{ objekat.deo_grada }})</div>
+							</div>
+							<div class="red">
+								<div class = "osobina">Adresa</div>
+								<div class = "podatak">{{ objekat.adresa }}</div>
+							</div>
+							<div class="red">
+								<div class = "osobina">Površina</div>
+								<div class = "podatak">{{ objekat.povrsina }}m2</div>
+							</div>
+						<input type = "button" id = "dugme"  class = "dugme" value = "Više" onclick="vise({{objekat.id}})" />
+						</div>
 					</div>
-					<div class = "text">
-						<div class="red">
-							<div class = "osobina">Broj soba</div>
-							<div class = "podatak">{{ objekat.broj_soba }}</div>
-						</div>
-						<div class="red">
-							<div class = "osobina">Grad</div>
-							<div class = "podatak">{{ objekat.deo_grada.grad }} ({{ objekat.deo_grada }})</div>
-						</div>
-						<div class="red">
-							<div class = "osobina">Adresa</div>
-							<div class = "podatak">{{ objekat.adresa }}</div>
-						</div>
-						<div class="red">
-							<div class = "osobina">Površina</div>
-							<div class = "podatak">{{ objekat.povrsina }}m2</div>
-						</div>
-					<input type = "button" id = "dugme"  class = "dugme" value = "Više" />
-					</div>
+					{% endfor %}
+				{% else %}
+						<p>Nema oglasa.</p>
+				{% endif %}
+			</div>
+		</div>
+		<div class = "desno">
+			<div class = "slike">
+			</div>
+			<div class = "vise_o_stanu">
+				<div id="prazan" class = "prazan">
 				</div>
-				{% endfor %}
-			{% else %}
-					<p>Nema oglasa.</p>
-			{% endif %}
-		</div>
-		
-		<div class = "detalji">
-			<div class = "prazan">
 			</div>
 		</div>
 		

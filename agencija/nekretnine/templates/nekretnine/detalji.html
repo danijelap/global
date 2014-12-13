@@ -1,15 +1,9 @@
 <html>	
 	<head>
 		<style>
-				.detalji{
-					width:49%;
-					height:500px;
-					float:left;
-					border:1px solid;
-				}
 				.detalji_text{
-					width:400px;
-					height:400px;
+					width:395px;
+					height:410px;
 					border:1px solid;
 					position:relative;
 					left: 20%;
@@ -29,18 +23,24 @@
 				}
 				.red_detalji{
 					margin-top:20px;
-					width:398px;
+					width:390px;
 					height:30px;
 				}
+				.plavo{
+					color:blue;
+				}
+				
 		</style>
-	</head>	
-	<body>
-		<div class = "detalji">
+			</head>	
+			<body>
 			<div class = "detalji_text">
-				<div class = "red_detalji">
-					<div class = "detalji_parametri">Tip objekta</div>
-					<div class = "detalji_vrednosti">{{ stan.tip_objekta }}</div>
+				<div class = "red_detalji" >
+					<div class = "plavo">
+						<div class = "detalji_parametri">Tip objekta</div>
+						<div class = "detalji_vrednosti">{{ stan.tip_objekta }}</div>
+					</div>	
 				</div>
+				<p class = "crta"><hr></p>
 				<div class = "red_detalji">
 					<div class = "detalji_parametri">Lokacija</div>
 					<div class = "detalji_vrednosti">{{ stan.deo_grada.grad }} ({{ stan.deo_grada }})</div>
@@ -57,15 +57,19 @@
 					<div class = "detalji_parametri">Broj soba</div>
 					<div class = "detalji_vrednosti">{{ stan.broj_soba }}</div>
 				</div>
-				<div class = "red_detalji">
-					<div class = "detalji_parametri">Cena</div>
-					<div class = "detalji_vrednosti">{{ stan.cena }} €</div>
+				<p class = "crta"><hr></p>
+				<div class = "red_detalji" >
+					<div class = "plavo">
+						<div class = "detalji_parametri">Cena</div>
+						<div class = "detalji_vrednosti">{{ stan.cena }} €</div>
+					</div>
 				</div>
+				<p class = "crta"><hr></p>
 				<div class = "red_detalji">
 					<div class = "detalji_parametri">Nameštenost</div>
 					<div class = "detalji_vrednosti">{{ stan.namestenost }}</div>
 				</div>
 			</div>
-		</div>
+		
 	</body>
 </html>
