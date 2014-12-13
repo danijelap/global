@@ -21,5 +21,3 @@ def detalji(request):
 	stan = Objekat.objects.get(id = id_stana);
 	context = {'stan' : stan}
 	return render(request, 'nekretnine/detalji.html', context)
-
-
