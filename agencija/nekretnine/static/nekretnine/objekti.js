@@ -2,7 +2,7 @@ $(function() {
 	$( "#slider-range" ).slider({
 		range: true,
 		min: 0,
-		max: 800,
+		max: 1000,
 		values: [ 75, 300 ],
 		slide: function( event, ui ) {
 			$( "#amount" ).val( ui.values[ 0 ] + "-" + ui.values[ 1 ] );
@@ -13,5 +13,9 @@ $(function() {
 });
 
 function vise(objekat_id) {
-	$("#prazan").load("/nekretnine/detalji?stan_id=" + objekat_id);
+	$("#prazan").load("/nekretnine/detalji?id_stana=" + objekat_id);
+}
+
+function filter(){
+	$("select").chosen();
 }
