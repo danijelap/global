@@ -10,12 +10,9 @@ $(function() {
 	});
 	$( "#amount" ).val( $( "#slider-range" ).slider( "values", 0 ) +
 		"-" + $( "#slider-range" ).slider( "values", 1 ) );
+	$("select").chosen();
 });
 
 function vise(objekat_id) {
 	$("#prazan").load("/nekretnine/detalji?id_stana=" + objekat_id);
-}
-
-function filter(){
-	$("select").chosen();
 }

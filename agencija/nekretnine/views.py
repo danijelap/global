@@ -32,9 +32,9 @@ def objekti(request):
 		
 	objekti = Objekat.objects.filter(**filter_dictionary)
 	
-	gradovi = Grad.objects.all();
-	namestenosti = Namestenost.objects.all();
-	tipovi_objekta = TipObjekta.objects.all();
+	gradovi = Grad.objects.all()
+	namestenosti = Namestenost.objects.all()
+	tipovi_objekta = TipObjekta.objects.all()
 	
 	context = {'objekti' : objekti, 'grad':grad, 'gradovi':gradovi,
 		'izabrana_namestenost': namestenost,'namestenosti': namestenosti, 

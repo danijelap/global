@@ -4,8 +4,8 @@
 	<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 	<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 	<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}" /> 
-	<script type="text/javascript" src="chosen/chosen.jquery.min.js"></script>
-	<link href="chosen/chosen.min.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="{% static 'nekretnine/chosen/chosen.jquery.min.js' %}"></script>
+	<link href="{% static 'nekretnine/chosen/chosen.min.css' %}" rel="stylesheet" type="text/css"/>
 
 	<script src="{% static 'nekretnine/objekti.js' %}"></script>
 	</head>
@@ -13,14 +13,14 @@
 		<div class = "filteri">
 			<form>
 				Grad:
-				<select name ="grad">
+				<select name="grad">
 					<option value="0">Izaberite...</option>
 					{% for grad in gradovi %}
-					<option value="{{ grad.id }}"{{ grad.naziv }}</option>
+					<option value="{{ grad.id }}">{{ grad.naziv }}</option>
 					{% endfor %}
 				</select>
 				Nameštenost:
-				<select name = "namestenost">
+				<select name="namestenost">
 					<option value="0">Izaberite...</option>
 					{% for namestenost in namestenosti %}
 					<option value="{{ namestenost.id }}"{% if izabrana_namestenost == namestenost.id %} selected{% endif %}>{{ namestenost.naziv }}</option>
