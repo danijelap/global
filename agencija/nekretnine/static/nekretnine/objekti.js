@@ -11,6 +11,7 @@ $(function() {
 	$( "#amount" ).val( $( "#slider-range" ).slider( "values", 0 ) +
 		"-" + $( "#slider-range" ).slider( "values", 1 ) );
 	$("select").chosen();
+	$("#spisak").load("/nekretnine/spisak");
 });
 
 function vise(objekat_id) {
