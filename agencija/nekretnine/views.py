@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from nekretnine.models import Drzava, Objekat
+from nekretnine.models import Drzava, Objekat, Grad, Namestenost, TipObjekta
 
 
 
@@ -11,7 +11,11 @@ def index(request):
 	
 
 def objekti(request):
-	context = {}
+	gradovi = Grad.objects.all()
+	namestenosti = Namestenost.objects.all()
+	tipovi_objekta = TipObjekta.objects.all()
+	context = {'gradovi':gradovi, 'namestenosti': namestenosti, 
+		'tipovi_objekta': tipovi_objekta}
 	return render(request, 'nekretnine/objekti.html', context)
 
 def detalji(request):
@@ -22,8 +26,26 @@ def detalji(request):
 	return render(request, 'nekretnine/detalji.html', context)
 	
 def spisak(request):
+	grad = int(request.GET.get('grad', 0))
+	namestenost = int(request.GET.get('namestenost', 0))
+	tip_objekta = int(request.GET.get('tip_objekta', 0))
+	broj_soba = request.GET.get('broj_soba', 'nista')
+
+	filter_dictionary = {}
 	
-	objekti = Objekat.objects.all();
+	if grad != 0:
+		filter_dictionary['deo_grada__grad_id'] = grad
+		
+	if namestenost != 0:
+		filter_dictionary['namestenost_id'] = namestenost
+		
+	if tip_objekta != 0:
+		filter_dictionary['tip_objekta_id'] = tip_objekta
+		
+	if broj_soba != 'nista':
+		filter_dictionary['broj_soba'] = broj_soba
+		
+	objekti = Objekat.objects.filter(**filter_dictionary)
 	context = {'objekti':objekti}
 	return render(request, 'nekretnine/spisak.html', context)
 	
