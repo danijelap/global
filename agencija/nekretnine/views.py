@@ -48,6 +48,10 @@ def spisak(request):
 	objekti = Objekat.objects.filter(**filter_dictionary)
 	context = {'objekti':objekti}
 	return render(request, 'nekretnine/spisak.html', context)
-	
-	
-	
+
+
+def filteri(request):
+	filteri = ('Gradovi', 'Namestenost')
+	context = {'filteri': filteri}
+	return render(request, 'nekretnine/filteri.html', context)
+

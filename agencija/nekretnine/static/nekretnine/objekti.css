@@ -116,3 +116,10 @@ touch-action: none;
 .plavo{
 	color:blue;
 }
+
+.novi_filteri {
+	display: none;
+	position: absolute;
+	background-color: blue;
+	color: white;
+}

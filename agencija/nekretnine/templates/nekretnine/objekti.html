@@ -11,8 +11,9 @@
 	</head>
 	<body>
 		<div class = "filteri">
-			<button class = "dodaj" >+</button>
-			<div class = "skloni_filter" id = "skloni_filter_1">
+			<button id="dugme_dodaj_filter" class = "dodaj" onclick="prikaziIzborNovogFiltera()" >+</button>
+			<div id="novi_filteri" class="novi_filteri"></div>
+			<div class = "skloni_filter" id = "filter_1">
 				Grad:
 				<select id="grad" onchange="ucitajSpisakStanova();">
 					<option value="0">Izaberite...</option>
@@ -20,9 +21,9 @@
 					<option value="{{ grad.id }}">{{ grad.naziv }}</option>
 					{% endfor %}
 				</select>
-				<button class = "skloni_1" onclick = "sakrij_filter_1()">x</button>
+				<button class = "skloni_1" onclick = "sakrijFilter('#filter_1')">x</button>
 			</div>
-			<div class = "skloni_filter" id = "skloni_filter_2">
+			<div class = "skloni_filter" id = "filter_2">
 				Nameštenost:
 					<select id="namestenost" onchange="ucitajSpisakStanova();">
 						<option value="0">Izaberite...</option>
@@ -30,9 +31,9 @@
 						<option value="{{ namestenost.id }}">{{ namestenost.naziv }}</option>
 						{% endfor %}
 					</select>
-					<button class = "skloni" onclick = "sakrij_filter_2()" >x</button>
+					<button class = "skloni" onclick = "sakrijFilter('#filter_2')" >x</button>
 				</div>
-			<div class = "skloni_filter" id = "skloni_filter_3">
+			<div class = "skloni_filter" id = "filter_3">
 				Broj soba:
 				<select id="broj_soba" onchange="ucitajSpisakStanova();">
 					<option value="nista">Izaberite...</option>
@@ -44,9 +45,9 @@
 					<option value="3.5">3.5</option>
 					<option value="4">4</option>
 				</select>
-				<button class = "skloni"  onclick = "sakrij_filter_3()">x</button>
+				<button class = "skloni"  onclick = "sakrijFilter('#filter_3')">x</button>
 			</div>
-			<div class = "skloni_filter" id = "skloni_filter_4">
+			<div class = "skloni_filter" id = "filter_4">
 				Tip objekta:
 				<select id="tip_objekta" onchange="ucitajSpisakStanova();">
 					<option value="0">Izaberite...</option>
@@ -54,7 +55,7 @@
 					<option value="{{ tip_objekta.id }}">{{ tip_objekta.naziv }}</option>
 					{% endfor %}
 				</select>
-				<button class = "skloni" onclick = "sakrij_filter_4()">x</button>
+				<button class = "skloni" onclick = "sakrijFilter('#filter_4')">x</button>
 			</div>
 			<div class = "cena">
 				<p>
