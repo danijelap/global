@@ -31,3 +31,15 @@ function ucitajSpisakStanova() {
 		$("#spisak").html(response)
 	});
 }
+function sakrij_filter_1() {
+	$("#skloni_filter_1").hide()
+}
+function sakrij_filter_2() {
+	$("#skloni_filter_2").hide()
+}
+function sakrij_filter_3() {
+	$("#skloni_filter_3").hide()
+}
+function sakrij_filter_4() {
+	$("#skloni_filter_4").hide()
+}
