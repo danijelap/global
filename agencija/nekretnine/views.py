@@ -51,7 +51,8 @@ def spisak(request):
 
 
 def filteri(request):
-	filteri = ('Gradovi', 'Namestenost')
+	filteri = ('Gradovi', 'Namestenost', 'Broj soba', 'Tip objekta')
 	context = {'filteri': filteri}
 	return render(request, 'nekretnine/filteri.html', context)
 
+	z
