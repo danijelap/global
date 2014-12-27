@@ -10,54 +10,10 @@
 	<script src="{% static 'nekretnine/objekti.js' %}"></script>
 	</head>
 	<body>
-		<div class = "filteri">
+		<div id="filteri" class = "filteri">
 			<button id="dugme_dodaj_filter" class = "dodaj" onclick="prikaziIzborNovogFiltera()" >+</button>
 			<div id="novi_filteri" class="novi_filteri"></div>
-			<div class = "skloni_filter" id = "filter_1">
-				Grad:
-				<select id="grad" onchange="ucitajSpisakStanova();">
-					<option value="0">Izaberite...</option>
-					{% for grad in gradovi %}
-					<option value="{{ grad.id }}">{{ grad.naziv }}</option>
-					{% endfor %}
-				</select>
-				<button class = "skloni_1" onclick = "sakrijFilter('#filter_1')">x</button>
-			</div>
-			<div class = "skloni_filter" id = "filter_2">
-				Nameštenost:
-					<select id="namestenost" onchange="ucitajSpisakStanova();">
-						<option value="0">Izaberite...</option>
-						{% for namestenost in namestenosti %}
-						<option value="{{ namestenost.id }}">{{ namestenost.naziv }}</option>
-						{% endfor %}
-					</select>
-					<button class = "skloni" onclick = "sakrijFilter('#filter_2')" >x</button>
-				</div>
-			<div class = "skloni_filter" id = "filter_3">
-				Broj soba:
-				<select id="broj_soba" onchange="ucitajSpisakStanova();">
-					<option value="nista">Izaberite...</option>
-					<option value="1">1</option>
-					<option value="1.5">1.5</option>
-					<option value="2">2</option>
-					<option value="2.5">2.5</option>
-					<option value="3">3</option>
-					<option value="3.5">3.5</option>
-					<option value="4">4</option>
-				</select>
-				<button class = "skloni"  onclick = "sakrijFilter('#filter_3')">x</button>
-			</div>
-			<div class = "skloni_filter" id = "filter_4">
-				Tip objekta:
-				<select id="tip_objekta" onchange="ucitajSpisakStanova();">
-					<option value="0">Izaberite...</option>
-					{% for tip_objekta in tipovi_objekta %}
-					<option value="{{ tip_objekta.id }}">{{ tip_objekta.naziv }}</option>
-					{% endfor %}
-				</select>
-				<button class = "skloni" onclick = "sakrijFilter('#filter_4')">x</button>
-			</div>
-			<div class = "cena">
+			<div class="cena">
 				<p>
 					<label for="amount">Opseg cena (€):</label>
 					<input type="text" id="cena" readonly style="border:0; color:#f6931f; font-weight:bold;" />

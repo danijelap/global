@@ -7,4 +7,5 @@ urlpatterns = patterns('',
 	url(r'^objekti/$', views.objekti, name='objekti'),
 	url(r'^spisak/$', views.spisak, name='spisak'),
 	url(r'^filteri/$', views.filteri, name='filteri'),
+	url(r'^napravi_filter/$', views.napravi_filter, name='napravi_filter'),
 )

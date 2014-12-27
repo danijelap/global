@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from nekretnine.models import Drzava, Objekat, Grad, Namestenost, TipObjekta
-
+from django.http import HttpResponse
 
 
 def index(request):
@@ -51,8 +51,27 @@ def spisak(request):
 
 
 def filteri(request):
-	filteri = ('Gradovi', 'Namestenost', 'Broj soba', 'Tip objekta')
+	filteri = request.GET.getlist('filteri[]')
 	context = {'filteri': filteri}
 	return render(request, 'nekretnine/filteri.html', context)
 
-	z
+def napravi_filter(request):
+	ime_filtera = request.GET.get('ime_filtera')
+	if ime_filtera == 'Gradovi':
+		id = 'grad'
+		naziv = 'grad'
+		stavke = Grad.objects.all()
+		template = 'nekretnine/filter_lista.html'
+	elif ime_filtera == 'Namestenost':
+		id = 'namestenost'
+		naziv = 'namestenost'
+		stavke = Namestenost.objects.all()
+		template = 'nekretnine/filter_lista.html'
+	elif ime_filtera == 'Tip objekta':
+		id = 'tip_objekta'
+		naziv = 'tip objekta'
+		stavke = TipObjekta.objects.all()
+		template = 'nekretnine/filter_lista.html'
+	
+	context = {'stavke': stavke, 'id': id, 'naziv': naziv}
+	return render(request, template, context)
