@@ -123,3 +123,18 @@ touch-action: none;
 	background-color: blue;
 	color: white;
 }
+
+.filter_range {
+	float: left;
+}
+.filter_range_slider {
+	display: none;
+	position: absolute;
+	width:150px; 
+	height:7px;
+}
+.filter_range_value {
+	border: 0; 
+	font-weight:bold;
+	width: 5em;
+}

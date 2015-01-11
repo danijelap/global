@@ -3,6 +3,12 @@ from django.shortcuts import render
 from nekretnine.models import Drzava, Objekat, Grad, Namestenost, TipObjekta
 from django.http import HttpResponse
 
+filters = {
+	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena', 'type': 'range'},
+	'tip_objekta': {'name': 'Tip objekta', 'title': 'tip objekta', 'model_filter_key': 'tip_objekta_id', 'type': 'exact', 'objects': TipObjekta.objects},
+	'grad': {'name': 'Gradovi', 'title': 'grad', 'model_filter_key': 'deo_grada__grad_id', 'type': 'exact', 'objects': Grad.objects},
+	'namestenost': {'name': 'Namestenost', 'title': 'namestenost', 'model_filter_key': 'namestenost_id', 'type': 'exact', 'objects': Namestenost.objects}
+}
 
 def index(request):
 	drzave = Drzava.objects.all().order_by('-naziv')
@@ -11,12 +17,7 @@ def index(request):
 	
 
 def objekti(request):
-	gradovi = Grad.objects.all()
-	namestenosti = Namestenost.objects.all()
-	tipovi_objekta = TipObjekta.objects.all()
-	context = {'gradovi':gradovi, 'namestenosti': namestenosti, 
-		'tipovi_objekta': tipovi_objekta}
-	return render(request, 'nekretnine/objekti.html', context)
+	return render(request, 'nekretnine/objekti.html')
 
 def detalji(request):
 
@@ -26,24 +27,15 @@ def detalji(request):
 	return render(request, 'nekretnine/detalji.html', context)
 	
 def spisak(request):
-	grad = int(request.GET.get('grad', 0))
-	namestenost = int(request.GET.get('namestenost', 0))
-	tip_objekta = int(request.GET.get('tip_objekta', 0))
-	broj_soba = request.GET.get('broj_soba', 'nista')
-
 	filter_dictionary = {}
-	
-	if grad != 0:
-		filter_dictionary['deo_grada__grad_id'] = grad
-		
-	if namestenost != 0:
-		filter_dictionary['namestenost_id'] = namestenost
-		
-	if tip_objekta != 0:
-		filter_dictionary['tip_objekta_id'] = tip_objekta
-		
-	if broj_soba != 'nista':
-		filter_dictionary['broj_soba'] = broj_soba
+	for filter in request.GET:
+		value = request.GET.get(filter)
+		if filters[filter]['type'] == 'exact':
+			filter_dictionary[filters[filter]['model_filter_key']] = value
+		else:
+			min_value, max_value = value.split('-')
+			filter_dictionary[filters[filter]['model_filter_key'] + "__gte"] = min_value
+			filter_dictionary[filters[filter]['model_filter_key'] + "__lte"] = max_value
 		
 	objekti = Objekat.objects.filter(**filter_dictionary)
 	context = {'objekti':objekti}
@@ -51,27 +43,22 @@ def spisak(request):
 
 
 def filteri(request):
-	filteri = request.GET.getlist('filteri[]')
-	context = {'filteri': filteri}
+	filters_to_show_get = request.GET.getlist('filteri[]')
+	filters_to_show_data = []
+	for filter_key in filters:
+		if filter_key in filters_to_show_get:
+			filters_to_show_data.append({'id': filter_key, 'name': filters[filter_key]['name']})
+	context = {'filteri': filters_to_show_data}
 	return render(request, 'nekretnine/filteri.html', context)
 
 def napravi_filter(request):
 	ime_filtera = request.GET.get('ime_filtera')
-	if ime_filtera == 'Gradovi':
-		id = 'grad'
-		naziv = 'grad'
-		stavke = Grad.objects.all()
+	context = {'id': ime_filtera, 'name': filters[ime_filtera]['name']}
+	if 'objects' in filters[ime_filtera]:
+		context['stavke'] = filters[ime_filtera]['objects'].all()
+	if filters[ime_filtera]['type'] == 'exact':
 		template = 'nekretnine/filter_lista.html'
-	elif ime_filtera == 'Namestenost':
-		id = 'namestenost'
-		naziv = 'namestenost'
-		stavke = Namestenost.objects.all()
-		template = 'nekretnine/filter_lista.html'
-	elif ime_filtera == 'Tip objekta':
-		id = 'tip_objekta'
-		naziv = 'tip objekta'
-		stavke = TipObjekta.objects.all()
-		template = 'nekretnine/filter_lista.html'
+	else:
+		template = 'nekretnine/filter_range.html'
 	
-	context = {'stavke': stavke, 'id': id, 'naziv': naziv}
 	return render(request, template, context)

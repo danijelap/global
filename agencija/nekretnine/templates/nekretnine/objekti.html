@@ -10,16 +10,10 @@
 	<script src="{% static 'nekretnine/objekti.js' %}"></script>
 	</head>
 	<body>
-		<div id="filteri" class = "filteri">
-			<button id="dugme_dodaj_filter" class = "dodaj" onclick="prikaziIzborNovogFiltera()" >+</button>
+		<div id="filteri" class="filteri">
+			<button id="dugme_dodaj_filter" class="dodaj" onclick="prikaziIzborNovogFiltera()" >+</button>
 			<div id="novi_filteri" class="novi_filteri"></div>
-			<div class="cena">
-				<p>
-					<label for="amount">Opseg cena (€):</label>
-					<input type="text" id="cena" readonly style="border:0; color:#f6931f; font-weight:bold;" />
-				</p>
-				<div id="slider-range" style = "width:150px; height:7px;"></div>
-			</div>	
+			<div class="filter_range_slider" id="filter_range_slider"></div>
 		</div>
 		<div class = "levo">
 			<div class = "favoriti">

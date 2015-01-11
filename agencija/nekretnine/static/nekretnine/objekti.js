@@ -1,31 +1,40 @@
 $(function() {
 	window.kliknuto_na_dugme = false;
-	$( "#slider-range" ).slider({
+	$("#filter_range_slider").slider({
 		range: true,
-		min: 0,
-		max: 1000,
-		values: [ 75, 300 ],
 		slide: function( event, ui ) {
-			$( "#cena" ).val( ui.values[ 0 ] + "-" + ui.values[ 1 ] );
+			$(window.active_filter_range + "_value").val( ui.values[ 0 ] + "-" + ui.values[ 1 ] );
 		}
 	});
-	$( "#cena" ).val( $( "#slider-range" ).slider( "values", 0 ) +
-		"-" + $( "#slider-range" ).slider( "values", 1 ) );
 	
 	ucitajSpisakStanova();
 	$(document).click(function(){
 		if (!window.kliknuto_na_dugme) {
 				$("#novi_filteri").hide();
+				$("#filter_range_slider").hide();
 		}
 		window.kliknuto_na_dugme = false;
 	});
 	
-	window.svi_filteri = ['Gradovi', 'Namestenost', 'Tip objekta']
-	window.prikazani_filteri = ['Gradovi', 'Namestenost']
-	for (i in window.prikazani_filteri) {
-		dodajFilter(window.prikazani_filteri[i])
-	}
+	window.svi_filteri = ['grad', 'namestenost', 'tip_objekta', 'cena']
+	window.prikazani_filteri = []
+	dodajFilter('grad');
+	dodajFilter('namestenost');
 });
+
+function init_filter_slider(slider_id) {
+	jq_filter_slider_id = "#" + slider_id;
+	$(jq_filter_slider_id).mouseover(function(){
+		var filter_position = $(jq_filter_slider_id).offset();
+		var new_slider_position = filter_position;
+		new_slider_position.top += 25;
+		$("#filter_range_slider").slider( "option", "max", $(jq_filter_slider_id + "_max").val());
+		$("#filter_range_slider").slider( "option", "min", $(jq_filter_slider_id + "_min").val());
+		$("#filter_range_slider").slider( "option", "values", $(jq_filter_slider_id + "_value").val().split('-'));
+		$("#filter_range_slider").show().css(new_slider_position);
+		window.active_filter_range = jq_filter_slider_id;
+	});
+}
 
 function vise(objekat_id) {
 	$("#prazan").load("/nekretnine/detalji?id_stana=" + objekat_id);
@@ -33,18 +42,25 @@ function vise(objekat_id) {
 
 function ucitajSpisakStanova() {
 	var filter_dictionary = {};
-	var grad = $("#select_grad").val();
-	var namestenost = $("#select_namestenost").val();
-	var tip_objekta = $("#select_tip_objekta").val();
-	if (grad != "0") filter_dictionary["grad"] = grad;
-	if (namestenost != "0") filter_dictionary["namestenost"] = namestenost;
-	if (tip_objekta != "0") filter_dictionary["tip_objekta"] = tip_objekta;
+	filters = $("#filteri").find("[id^=filter_]").filter("[id$=_value]");
+	filters.each(function(index, element) {
+		filter_id = element.id.substring(7, element.id.length-6);
+		filter_value = $(element).val();
+		if (filter_value != "0") {
+			console.log(filter_id + "=" + filter_value);
+			filter_dictionary[filter_id] = filter_value;
+		}
+	})
 	$.get("/nekretnine/spisak", filter_dictionary, function (response) {
 		$("#spisak").html(response);
 	});
 }
 function sakrijFilter(id_filtera) {
-	$(id_filtera).remove();
+	$("#filter_" + id_filtera).remove();
+	index_of_filter = window.prikazani_filteri.indexOf(id_filtera);
+	if (index_of_filter > -1) {
+		window.prikazani_filteri.splice(index_of_filter, 1);
+	}
 }
 
 function prikaziIzborNovogFiltera() {
