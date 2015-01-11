@@ -1,6 +1,6 @@
 <div class="skloni_filter" id="filter_{{ id }}">
 	<select id="filter_{{ id }}_value" onchange="ucitajSpisakStanova();">
-		<option value="0">Izaberite {{ naziv }}...</option>
+		<option value="0">Izaberite {{ name }}...</option>
 		{% for stavka in stavke %}
 		<option value="{{ stavka.id }}">{{ stavka.naziv }}</option>
 		{% endfor %}

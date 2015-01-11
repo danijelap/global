@@ -53,7 +53,7 @@ def filteri(request):
 
 def napravi_filter(request):
 	ime_filtera = request.GET.get('ime_filtera')
-	context = {'id': ime_filtera, 'name': filters[ime_filtera]['name']}
+	context = {'id': ime_filtera, 'name': filters[ime_filtera]['title']}
 	if 'objects' in filters[ime_filtera]:
 		context['stavke'] = filters[ime_filtera]['objects'].all()
 	if filters[ime_filtera]['type'] == 'exact':
