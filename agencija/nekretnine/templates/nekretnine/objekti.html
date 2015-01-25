@@ -6,10 +6,12 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}" /> 
 	<script type="text/javascript" src="{% static 'nekretnine/chosen/chosen.jquery.min.js' %}"></script>
 	<link href="{% static 'nekretnine/chosen/chosen.min.css' %}" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="{% static 'nekretnine/jquery.cookie.js' %}"></script>
 
 	<script src="{% static 'nekretnine/objekti.js' %}"></script>
 	</head>
 	<body>
+		{{ sd }}<br/>{{ ss }}
 		<div id="filteri" class="filteri">
 			<button id="dugme_dodaj_filter" class="dodaj" onclick="prikaziIzborNovogFiltera()" >+</button>
 			<div id="novi_filteri" class="novi_filteri"></div>

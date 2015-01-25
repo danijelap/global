@@ -1,6 +1,6 @@
 {% if filteri %}
 	{% for filter in filteri %}
-		<div class="filter_za_dodavanje" onclick="dodajFilter('{{filter.id}}')">{{filter.name}}</div>
+		<div class="filter_za_dodavanje" onclick="dodajFiltere(['{{filter.id}}'])">{{filter.name}}</div>
 	{% endfor %}
 {% else %}
 	<p>Nema vise filtera.</p>
