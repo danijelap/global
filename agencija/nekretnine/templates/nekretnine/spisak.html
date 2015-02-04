@@ -1,6 +1,6 @@
 				{% if objekti %}
 					{% for objekat in objekti %}
-					<div class = "jedan_stan">
+					<div class = "jedan_stan" id = "stan_{{objekat.id}}">
 						<div class = "slika">
 						</div>
 						<div class = "text">
@@ -22,6 +22,7 @@
 							</div>
 						</div>
 						<input type = "button" id = "dugme"  class = "dugme" value = "Vise" onclick="vise({{objekat.id}})" />
+						<input type = "button" id = "grugo_dugme"  class = "drugo_dugme" value = "Favorit" onclick = "dodaj_u_favorite()" />
 
 					</div>
 					{% endfor %}

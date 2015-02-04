@@ -13,6 +13,11 @@ $(function() {
 	ucitajSpisakStanova();
 });
 
+function dodaj_u_favorite() {
+	x = $("#stan_{{objekat.id}}").remove();
+	$("#favorits").append(x);
+});
+
 function init_slider_for_filters() {
 	$("#filter_range_slider").slider({
 		range: true,
