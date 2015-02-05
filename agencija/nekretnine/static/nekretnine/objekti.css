@@ -3,11 +3,16 @@
 	border:1px solid;
 	float:left;
 }
+body {
+    margin:0;
+	overflow:hidden;
+}
 .desno{
 	width:49%;
 	float:left;
 	float:left;
 	border-right:1px solid;
+	overflow-y:scroll;
 }
 .filteri{
 	width:100%;
@@ -38,6 +43,7 @@ touch-action: none;
 	padding-left:3px;
 	background-color:#E8E8E8 ;
 	border-top:1px solid;
+	overflow-y:scroll;
 }
 .slike{
 	height:305px;

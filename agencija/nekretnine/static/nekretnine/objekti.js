@@ -3,20 +3,34 @@ $(function() {
 	init_slider_for_filters();
 	init_document_click();
 	
+	detalji_css = $(window).height() - $("#filteri").height();
+	spisak_css = $(window).height() - $("#filteri").height() - $("#favoriti").height();
+	
+	
+	
 	window.svi_filteri = ['grad', 'namestenost', 'tip_objekta', 'cena', 'broj_soba'];
 	window.prikazani_filteri = [];
 	start_filters = $.cookie('filters');
 	if (typeof start_filters === 'undefined') {
 		start_filters = ['grad', 'namestenost'];
 	}
+	
 	dodajFiltere(start_filters);
 	ucitajSpisakStanova();
+	
+	$("#spisak").css(spisak_css);
+	$("#detalji").css(detalji_css);
 });
 
-function dodaj_u_favorite() {
-	x = $("#stan_{{objekat.id}}").remove();
-	$("#favorits").append(x);
-});
+function add_favorits(id_objekta) {
+	if ($("#stan_" + id_objekta).parents("#spisak").lenght == 1) {
+		x = $("#stan_" + id_objekta).remove();
+		$("#favoriti").append(x);
+	} else {
+		x = $("#stan_" + id_objekta).remove();
+		$("#spisak").append(x);
+	}
+}
 
 function init_slider_for_filters() {
 	$("#filter_range_slider").slider({
