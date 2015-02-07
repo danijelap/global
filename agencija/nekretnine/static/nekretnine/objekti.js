@@ -3,10 +3,8 @@ $(function() {
 	init_slider_for_filters();
 	init_document_click();
 	
-	detalji_css = $(window).height() - $("#filteri").height();
-	spisak_css = $(window).height() - $("#filteri").height() - $("#favoriti").height();
-	
-	
+	setHeightOfContainers();
+	$(window).resize(setHeightOfContainers);
 	
 	window.svi_filteri = ['grad', 'namestenost', 'tip_objekta', 'cena', 'broj_soba'];
 	window.prikazani_filteri = [];
@@ -18,18 +16,37 @@ $(function() {
 	dodajFiltere(start_filters);
 	ucitajSpisakStanova();
 	
-	$("#spisak").css(spisak_css);
-	$("#detalji").css(detalji_css);
 });
 
 function add_favorits(id_objekta) {
-	if ($("#stan_" + id_objekta).parents("#spisak").lenght == 1) {
+	if ($("#stan_" + id_objekta).parents("#spisak").length == 1) {
 		x = $("#stan_" + id_objekta).remove();
 		$("#favoriti").append(x);
 	} else {
 		x = $("#stan_" + id_objekta).remove();
 		$("#spisak").append(x);
 	}
+	favoriti = $("#favoriti").find("[id^=stan_]");
+	favorites_total_height = 0;
+	favoriti.each(function(index, element){
+		favorites_total_height += $(element).height();
+	});
+	maximum_height = 200
+	if (favorites_total_height <= maximum_height) {
+		$("#favoriti").css('height', favorites_total_height);
+	} else {
+		$("#favoriti").css('height', maximum_height);
+	}
+	setHeightOfContainers();
+}
+
+function setHeightOfContainers() {
+	// prvi nacin podesavanja css-a pomocu jQuery-ja. $(element).css(osobina, vrednost);
+	$("#spisak").css('height', $(window).height() - $("#filteri").height() - $("#favoriti").height());
+	// drugi nacin podesacanja css-a pomocu jQuery-ja. $(element).css(objekat_sa_osobinama);
+	// objekat_sa_osobinama je dictionary u koji moze da se stavi vise osobina.
+	detalji_css = { 'height' : $(window).height() - $("#filteri").height() };
+	$("#detalji").css(detalji_css);
 }
 
 function init_slider_for_filters() {

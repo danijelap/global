@@ -1,6 +1,6 @@
 .levo{
 	width:50%;
-	border:1px solid;
+	border-right:1px solid;
 	float:left;
 }
 body {
@@ -36,7 +36,8 @@ cursor: default;
 touch-action: none;
 }
 .favoriti{
-	height:200px;
+	height:0px;
+	overflow-y:auto;
 }
 .lista_stanova{
 	padding-top:3px;
