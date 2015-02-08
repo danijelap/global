@@ -1,3 +1,12 @@
+<div>
+{% if stan.images %}
+	{% for image in stan.images %}
+		<img src="{{ image.url }}" />
+	{% endfor %}
+{% else %}
+	Nema slika
+{% endif %}
+</div>
 <div class = "detalji_text">
 	<div class = "red_detalji" >
 		<div class = "plavo">

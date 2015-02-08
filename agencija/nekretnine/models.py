@@ -42,5 +42,17 @@ class Objekat(models.Model):
 	povrsina = models.IntegerField()
 	cena = models.IntegerField()
 	namestenost = models.ForeignKey(Namestenost)
+	@property
+	def images(self):
+		result = []
+		for object_image in self.objectimage_set.all():
+			result.append(object_image.image)
+		return result
 	def __str__(self):
 		return self.adresa
+
+class ObjectImage(models.Model):
+	def upload_path(self, filename):
+		return "objects/%s/%s" % (str(self.object.id), filename)
+	object = models.ForeignKey(Objekat)
+	image = models.ImageField(upload_to=upload_path)
