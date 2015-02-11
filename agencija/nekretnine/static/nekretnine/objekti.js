@@ -1,3 +1,23 @@
+window.sliderOptions=
+{
+	sliderId: "image_slider_big",
+	startSlide: 0,
+	effect: "13,17,13,13,5",
+	effectRandom: true,
+	pauseTime: 2600,
+	transitionTime: 500,
+	slices: 12,
+	boxes: 9,
+	hoverPause: 1,
+	autoAdvance: true,
+	captionOpacity: 1,
+	captionEffect: "fade",
+	thumbnailsWrapperId: "image_slider_small",
+	m: false,
+	license: "b6t80"
+};
+window.isImageSliderLoaded = false;
+
 $(function() {
 	$.cookie.json = true;
 	init_slider_for_filters();
@@ -88,7 +108,17 @@ function init_filter_slider(slider_id) {
 }
 
 function vise(objekat_id) {
-	$("#prazan").load("/nekretnine/detalji?id_stana=" + objekat_id);
+	$("#prazan").load("/nekretnine/detalji?id_stana=" + objekat_id, function() {
+		// initialize image slider when details are loaded
+		if (window.isImageSliderLoaded) { // if slider was already loaded then only reload images
+			window.imageSlider.reload();
+		} else { // create slider if it is not yet loaded
+			window.imageSlider = new mcImgSlider(window.sliderOptions);
+			window.isImageSliderLoaded = true;
+			window.imageSlider.reload();
+		}
+	});
+	
 }
 
 function ucitajSpisakStanova() {

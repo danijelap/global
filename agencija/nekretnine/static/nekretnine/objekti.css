@@ -46,10 +46,6 @@ touch-action: none;
 	border-top:1px solid;
 	overflow-y:scroll;
 }
-.slike{
-	height:305px;
-	border-bottom:1px solid;
-}
 .jedan_stan{
 	width:580px;
 	height:100px;
@@ -144,4 +140,7 @@ touch-action: none;
 	border: 0; 
 	font-weight:bold;
 	width: 5em;
+}
+.image_slider {
+	height: 350px;
 }

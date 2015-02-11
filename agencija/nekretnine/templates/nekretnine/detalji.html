@@ -1,9 +1,18 @@
 <div>
 {% if stan.images %}
+<div class="image_slider">
+	<div id="image_slider_big">
 	{% for image in stan.images %}
 		<img src="{{ image.url }}" />
 	{% endfor %}
-{% else %}
+	</div>
+	<div id="image_slider_small">
+	{% for image in stan.images %}
+		<img src="{{ image.url }}.small.jpg" />
+	{% endfor %}
+	</div>
+</div>
+	{% else %}
 	Nema slika
 {% endif %}
 </div>
