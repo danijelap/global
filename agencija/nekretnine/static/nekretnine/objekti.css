@@ -1,6 +1,6 @@
 .levo{
 	width:50%;
-	border-right:1px solid;
+	
 	float:left;
 }
 body {
@@ -8,16 +8,16 @@ body {
 	overflow:hidden;
 }
 .desno{
-	width:49%;
+	width:50%;
 	float:left;
 	float:left;
-	border-right:1px solid;
 	overflow-y:scroll;
+	background:#E0FFFF;
 }
 .filteri{
 	width:100%;
 	height:100px;
-	border:1px solid;
+	border:1px solid #B0C4DE;
 }
 .skloni_filter{
 	float:left;
@@ -27,59 +27,58 @@ body {
 	float:left;
 }
 .ui-slider .ui-slider-handle {
-position: absolute;
-z-index: 2;
-width: 0.5em;
-height: 0.7em;
-cursor: default;
--ms-touch-action: none;
-touch-action: none;
+	position: absolute;
+	z-index: 2;
+	width: 0.5em;
+	height: 0.7em;
+	cursor: default;
+	-ms-touch-action: none;
+	touch-action: none;
 }
 .favoriti{
 	height:0px;
 	overflow-y:auto;
+	background-color:#6C87A3;
 }
 .lista_stanova{
-	padding-top:3px;
+	padding-top:4px;
 	padding-left:3px;
 	background-color:#E8E8E8 ;
-	border-top:1px solid;
 	overflow-y:scroll;
 }
 .jedan_stan{
-	width:580px;
-	height:100px;
+	width:660px;
+	height:60px;
 	border:1px solid;
 	border-radius:7px;
 	border-color:#C0C0C0;
 	background-color:white;
 }
 .red{
-	clear:both;
-	height:25px;
+	margin-top:5px;
 }
 .slika{
 	float:left;
-	width:150px;
-	height:80px;
+	width:100px;
+	height:50px;
 	border:1px solid;
 	margin:5px;
 	background-color:white;
 }
 .text{
-	width:350px;
+	width:470px;
 	float:left;
+	
 }
 .osobina{
-	float:left;
-	margin-right:10px;
-	margin-left:20px;
+	margin-right:5px;
+	margin-left:15px;
 	width:70px;
 	text-align:right;
 	color:#505050; 
 }
 .podatak{
-	float:left;
+	margin-left:5px;
 }
 .dugme{
 	width:25px:
@@ -92,34 +91,29 @@ touch-action: none;
 	margin:5px;
 }
 .prazan_div{
-	width:400px;
+	width:450px;
 	height:420px;
-	position:relative;
-	left: 20%;
-	margin-top:40px;
-	
+	margin-left:20px;
+	margin-top:50px;
 }
-
 .detalji_parametri{
-	float:left;
+	
 	width:100;
 	height:28;
-	margin-right:7px;
-	margin-left:5px;
+	margin-right:5px;
+	margin-left:25px;
+	font-weight: bold;
+	font-style: italic;
 }
 .detalji_vrednosti{
-	float:right;
-	height:28px;
+	color:#005C5C;
+	height:10px;
 }
 .red_detalji{
-	margin-top:20px;
-	width:390px;
-	height:30px;
+	margin-top:10px;
+	width:450px;
+	height:20px;
 }
-.plavo{
-	color:blue;
-}
-
 .novi_filteri {
 	display: none;
 	position: absolute;

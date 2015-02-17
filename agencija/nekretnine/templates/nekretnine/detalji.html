@@ -18,38 +18,31 @@
 </div>
 <div class = "detalji_text">
 	<div class = "red_detalji" >
-		<div class = "plavo">
-			<div class = "detalji_parametri">Tip objekta</div>
-			<div class = "detalji_vrednosti">{{ stan.tip_objekta }}</div>
-		</div>	
+		<span class = "detalji_parametri">Lokacija:</span>
+		<span class = "detalji_vrednosti">{{ stan.deo_grada.grad }} ({{ stan.deo_grada }})</span>
 	</div>
 	<p class = "crta"><hr></p>
 	<div class = "red_detalji">
-		<div class = "detalji_parametri">Lokacija</div>
-		<div class = "detalji_vrednosti">{{ stan.deo_grada.grad }} ({{ stan.deo_grada }})</div>
+		<span class = "detalji_parametri">Tip objekta:</span>
+		<span class = "detalji_vrednosti">{{ stan.tip_objekta }}</span>
+		<span class = "detalji_parametri">Adresa:</span>
+		<span class = "detalji_vrednosti">{{ stan.adresa }}</span>
 	</div>
 	<div class = "red_detalji">
-		<div class = "detalji_parametri">Adresa</div>
-		<div class = "detalji_vrednosti">{{ stan.adresa }}</div>
+		<span class = "detalji_parametri">Površina:</span>
+		<span class = "detalji_vrednosti">{{ stan.povrsina }}m2</span>
+		<span class = "detalji_parametri">Broj soba:</span>
+		<span class = "detalji_vrednosti">{{ stan.broj_soba }}</span>
 	</div>
-	<div class = "red_detalji">
-		<div class = "detalji_parametri">Površina</div>
-		<div class = "detalji_vrednosti">{{ stan.povrsina }}m2</div>
-	</div>
-	<div class = "red_detalji">
-		<div class = "detalji_parametri">Broj soba</div>
-		<div class = "detalji_vrednosti">{{ stan.broj_soba }}</div>
-	</div>
+	
 	<p class = "crta"><hr></p>
-	<div class = "red_detalji" >
-		<div class = "plavo">
-			<div class = "detalji_parametri">Cena</div>
-			<div class = "detalji_vrednosti">{{ stan.cena }} €</div>
-		</div>
-	</div>
-	<p class = "crta"><hr></p>
+	
 	<div class = "red_detalji">
-		<div class = "detalji_parametri">Nameštenost</div>
-		<div class = "detalji_vrednosti">{{ stan.namestenost }}</div>
+		<span class = "detalji_parametri">Cena:</span>
+		<span class = "detalji_vrednosti">{{ stan.cena }} €</span>
+		<span class = "detalji_parametri">Nameštenost:</span>
+		<span class = "detalji_vrednosti">{{ stan.namestenost }}</span>
 	</div>
+	
+	
 </div>
