@@ -14,7 +14,7 @@ filters = {
 }
 
 def index(request):
-	drzave = Drzava.objects.all().order_by('-naziv')
+	drzave = Drzava.objects.all().order_by('-name')
 	context = {'drzave': drzave}
 	return render(request, 'nekretnine/index.html', context)
 	

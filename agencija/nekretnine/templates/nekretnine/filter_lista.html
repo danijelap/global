@@ -2,7 +2,7 @@
 	<select id="filter_{{ id }}_value" onchange="ucitajSpisakStanova();">
 		<option value="0">Izaberite {{ title }}...</option>
 		{% for stavka in stavke %}
-		<option value="{{ stavka.id }}">{{ stavka.naziv }}</option>
+		<option value="{{ stavka.id }}">{{ stavka.name }}</option>
 		{% endfor %}
 	</select>
 	<button class="skloni_{{ id }}" onclick="sakrijFilter('{{ id }}')">x</button>

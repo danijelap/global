@@ -2,37 +2,42 @@ from django.db import models
 
 # Create your models here.
 class Drzava(models.Model):
-	naziv = models.CharField(max_length=50)
+	name = models.CharField(max_length=50)
 	def __str__(self):
-		return self.naziv
+		return self.name
 	@property
 	def gradovi(self):
 		return self.grad_set.all()
 
 class Grad(models.Model):
-	naziv = models.CharField(max_length=50)
+	name = models.CharField(max_length=50)
 	drzava = models.ForeignKey(Drzava)
 	def __str__(self):
-		return self.naziv
+		return self.name
 	@property
 	def delovi_grada(self):
 		return self.deograda_set.all()
 
 class DeoGrada(models.Model):
-	naziv = models.CharField(max_length=50)
+	name = models.CharField(max_length=50)
 	grad = models.ForeignKey(Grad)
 	def __str__(self):
-		return self.naziv
+		return self.name
 
 class TipObjekta(models.Model):
-	naziv = models.TextField()
+	name = models.TextField()
 	def __str__(self):
-		return self.naziv
+		return self.name
 
 class Namestenost(models.Model):
-	naziv = models.TextField()
+	name = models.TextField()
 	def __str__(self):
-		return self.naziv
+		return self.name
+
+class Heating(models.Model):
+	name = models.TextField()
+	def __str__(self):
+		return self.name
 
 class Objekat(models.Model):
 	adresa = models.TextField()
@@ -42,6 +47,14 @@ class Objekat(models.Model):
 	povrsina = models.IntegerField()
 	cena = models.IntegerField()
 	namestenost = models.ForeignKey(Namestenost)
+	has_terrace = models.BooleanField(default=False)
+	has_air_conditioner = models.BooleanField(default=False)
+	has_cable = models.BooleanField(default=False)
+	has_elevator = models.BooleanField(default=False)
+	floor = models.IntegerField()
+	floors = models.IntegerField()
+	heating = models.ForeignKey(Heating)
+	
 	@property
 	def images(self):
 		result = []
