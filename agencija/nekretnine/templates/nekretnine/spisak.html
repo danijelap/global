@@ -1,32 +1,29 @@
-				{% if objekti %}
-					{% for objekat in objekti %}
-					<div class = "jedan_stan" id = "stan_{{objekat.id}}">
-						<div class = "slika">
-						</div>
-						<div class = "text">
-							<div class="red">
-								<div class = "osobina">Broj soba</div>
-								<div class = "podatak">{{ objekat.broj_soba }}</div>
-							</div>
-							<div class="red">
-								<div class = "osobina">Grad</div>
-								<div class = "podatak">{{ objekat.deo_grada.grad }} ({{ objekat.deo_grada }})</div>
-							</div>
-							<div class="red">
-								<div class = "osobina">Adresa</div>
-								<div class = "podatak">{{ objekat.adresa }}</div>
-							</div>
-							<div class="red">
-								<div class = "osobina">Povrsina</div>
-								<div class = "podatak">{{ objekat.povrsina }}m2</div>
-							</div>
-						</div>
-						<input type = "button" id = "dugme"  class = "dugme" value = "Vise" onclick="vise({{objekat.id}})" />
-						<input type = "button" id = "grugo_dugme"  class = "drugo_dugme" value = "Favorit" onclick = "add_favorits({{objekat.id}})" />
+{% for objekat in objekti %}
+<div class = "jedan_stan" id = "stan_{{objekat.id}}">
+	<div class = "slika">
+	</div>
+	<div class = "text">
+		<div class="red">
+			<div class = "osobina">Broj soba</div>
+			<div class = "podatak">{{ objekat.broj_soba }}</div>
+		</div>
+		<div class="red">
+			<div class = "osobina">Grad</div>
+			<div class = "podatak">{{ objekat.deo_grada.grad }} ({{ objekat.deo_grada }})</div>
+		</div>
+		<div class="red">
+			<div class = "osobina">Adresa</div>
+			<div class = "podatak">{{ objekat.adresa }}</div>
+		</div>
+		<div class="red">
+			<div class = "osobina">Povrsina</div>
+			<div class = "podatak">{{ objekat.povrsina }}m2</div>
+		</div>
+	</div>
+	<input type = "button" id = "dugme"  class = "dugme" value = "Vise" onclick="vise({{objekat.id}})" />
+	<input type = "button" id = "grugo_dugme"  class = "drugo_dugme" value = "Favorit" onclick = "add_favorits({{objekat.id}})" />
 
-					</div>
-					{% endfor %}
-				{% else %}
-						<p>Nema oglasa.</p>
-				{% endif %}
-			</div>
+</div>
+{% empty %}
+	<p>Nema oglasa.</p>
+{% endfor %}
