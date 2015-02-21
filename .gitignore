@@ -1,3 +1,6 @@
 .project
 
 agencija/media/object*
+
+agencija/nekretnine/migrations/__pycache__*
+agencija/nekretnine/__pycache__*

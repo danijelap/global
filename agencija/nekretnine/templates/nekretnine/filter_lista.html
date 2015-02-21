@@ -7,4 +7,11 @@
 	</select>
 	<button class="skloni_{{ id }}" onclick="sakrijFilter('{{ id }}')">x</button>
 </div>
-<script type="text/javascript">$("#filter_{{ id }}_value").chosen();</script>
+<script type="text/javascript">
+	$("#filter_{{ id }}_value").chosen();
+	{% if not stavke %}
+	{% endif %}
+	{% if depends_on %}
+	filter_depends_on('{{ id }}', '{{ depends_on }}');
+	{% endif %}
+</script>

@@ -8,4 +8,5 @@ urlpatterns = patterns('',
 	url(r'^spisak/$', views.spisak, name='spisak'),
 	url(r'^filteri/$', views.filteri, name='filteri'),
 	url(r'^napravi_filtere/$', views.napravi_filtere, name='napravi_filtere'),
+	url(r'^get_filter_content/$', views.get_filter_content, name='get_filter_content'),
 )

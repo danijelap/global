@@ -26,7 +26,7 @@ $(function() {
 	setHeightOfContainers();
 	$(window).resize(setHeightOfContainers);
 	
-	window.svi_filteri = ['grad', 'namestenost', 'tip_objekta', 'cena', 'broj_soba'];
+	window.svi_filteri = ['grad', 'namestenost', 'tip_objekta', 'cena', 'broj_soba', 'deo_grada'];
 	window.prikazani_filteri = [];
 	start_filters = $.cookie('filters');
 	if (typeof start_filters === 'undefined') {
@@ -171,5 +171,22 @@ function dodajFiltere(niz_filtera) {
 		}
 		$("#filteri").append(response);
 		$.cookie('filters', window.prikazani_filteri, {expires: 30});
+	});
+}
+
+function loadDependentFilter(dependent, depends_on_id) {
+	filter_dictionary = {
+		'filter_id': dependent,
+		'depends_on_id': depends_on_id
+	};
+	$.get("/nekretnine/get_filter_content", filter_dictionary, function (response) {
+		$("#filter_" + dependent + "_value").html(response);
+		$("#filter_" + dependent + "_value").trigger('chosen:updated');
+	});
+}
+
+function filter_depends_on(dependent, depends_on) {
+	$("#filter_" + depends_on + "_value").change(function() {
+		loadDependentFilter(dependent, $("#filter_" + depends_on + "_value").val());
 	});
 }

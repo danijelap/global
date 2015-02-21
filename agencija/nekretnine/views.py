@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template import RequestContext, loader
 
-from nekretnine.models import Drzava, Objekat, Grad, Namestenost, TipObjekta
+from nekretnine.models import Drzava, Objekat, Grad, Namestenost, TipObjekta, DeoGrada
 from django.http import HttpResponse
 import json
 
@@ -10,6 +10,7 @@ filters = {
 	'broj_soba': {'name': 'Broj soba', 'title': 'broja soba', 'model_filter_key': 'broj_soba', 'type': 'range', 'min_value': 0, 'max_value': 5, 'start_value': '0-3'},
 	'tip_objekta': {'name': 'Tip objekta', 'title': 'tip objekta', 'model_filter_key': 'tip_objekta_id', 'type': 'exact', 'objects': TipObjekta.objects},
 	'grad': {'name': 'Gradovi', 'title': 'grad', 'model_filter_key': 'deo_grada__grad_id', 'type': 'exact', 'objects': Grad.objects},
+	'deo_grada': {'name': 'Delovi grada', 'title': 'deo grada', 'model_filter_key': 'deo_grada_id', 'type': 'exact', 'objects': DeoGrada.objects, 'depends_on': 'grad', 'depends_on_filter_key': 'grad_id'},
 	'namestenost': {'name': 'Namestenost', 'title': 'namestenost', 'model_filter_key': 'namestenost_id', 'type': 'exact', 'objects': Namestenost.objects}
 }
 
@@ -59,10 +60,12 @@ def napravi_filtere(request):
 	response_content = '';
 	for ime_filtera in niz_filtera:
 		template_data = {'id': ime_filtera, 'title': filters[ime_filtera]['title']}
-		if 'objects' in filters[ime_filtera]:
-			template_data['stavke'] = filters[ime_filtera]['objects'].all()
 		if filters[ime_filtera]['type'] == 'exact':
 			template = loader.get_template('nekretnine/filter_lista.html')
+			if 'depends_on' in filters[ime_filtera]:
+				template_data['depends_on'] = filters[ime_filtera]['depends_on']
+			elif 'objects' in filters[ime_filtera]:
+				template_data['stavke'] = filters[ime_filtera]['objects'].all()
 		else:
 			template = loader.get_template('nekretnine/filter_range.html')
 			template_data['min_value'] = filters[ime_filtera]['min_value']
@@ -72,4 +75,11 @@ def napravi_filtere(request):
 		context = RequestContext(request, template_data)
 		response_content += template.render(context)
 	return HttpResponse(response_content)
-		
+
+def get_filter_content(request):
+	filter_id = request.GET.get('filter_id')
+	depends_on_id = request.GET.get('depends_on_id')
+	filter_dictionary = {filters[filter_id]['depends_on_filter_key']: depends_on_id}
+	items = filters[filter_id]['objects'].filter(**filter_dictionary)
+	context = {'items': items, 'title': filters[filter_id]['title']}
+	return render(request, 'nekretnine/filter_list_content.html', context)
