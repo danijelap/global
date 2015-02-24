@@ -7,6 +7,7 @@ urlpatterns = patterns('',
 	url(r'^objekti/$', views.objekti, name='objekti'),
 	url(r'^spisak/$', views.spisak, name='spisak'),
 	url(r'^filteri/$', views.filteri, name='filteri'),
-	url(r'^napravi_filtere/$', views.napravi_filtere, name='napravi_filtere'),
+	url(r'^make_filters/$', views.make_filters, name='make_filters'),
 	url(r'^get_filter_content/$', views.get_filter_content, name='get_filter_content'),
+	url(r'^get_filter_list/$', views.get_filter_list, name='get_filter_list'),
 )

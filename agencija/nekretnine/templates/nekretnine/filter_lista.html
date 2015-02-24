@@ -11,7 +11,4 @@
 	$("#filter_{{ id }}_value").chosen();
 	{% if not stavke %}
 	{% endif %}
-	{% if depends_on %}
-	filter_depends_on('{{ id }}', '{{ depends_on }}');
-	{% endif %}
 </script>

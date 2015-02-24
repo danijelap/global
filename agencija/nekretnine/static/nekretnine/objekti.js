@@ -18,6 +18,84 @@ window.sliderOptions=
 };
 window.isImageSliderLoaded = false;
 
+window.libFilter = {
+	loadAvailableFilters: function(onComplete) {
+		$.get("/nekretnine/get_filter_list/", function (response) {
+			window.libFilter.availableFilters = response;
+			window.libFilter.shownFilters = {};
+			onComplete();
+		}, 'json');
+	},
+	showFilters: function() {
+		startFilters = $.cookie('filters');
+		if (typeof startFilters === 'undefined') {
+			startFilters = {};
+			for (filter_id in this.availableFilters) {
+				if (this.availableFilters[filter_id]['default']) {
+					startFilters[filter_id] = 0;
+				}
+			}
+		}
+		this.appendFilters(startFilters);
+	},
+	appendFilters: function(filterDictionary) {
+		var filterArray = [];
+		for (filter_id in filterDictionary) {
+			filterArray.push(filter_id);
+		}
+		$.get("/nekretnine/make_filters", {'filter_array': filterArray}, function (response) {
+			$("#filters").append(response);
+			for (filter_id in filterDictionary) {
+				window.libFilter.shownFilters[filter_id] = filterDictionary[filter_id];
+				$("#filter_" + filter_id + "_value").val(filterDictionary[filter_id]).change(function(event){
+					element = event.target;
+					filter_id = element.id.substring(7, element.id.length - 6);
+					window.libFilter.shownFilters[filter_id] = $(element).val();
+					$.cookie('filters', window.libFilter.shownFilters, {expires: 30});
+				}).trigger("chosen:updated");
+				if (window.libFilter.availableFilters[filter_id]['depends_on']) {
+					dependsOnFilterId = window.libFilter.availableFilters[filter_id]['depends_on'];
+					$("#filter_" + dependsOnFilterId + "_value").change(function(event) {
+						dependsOnFilterElement = event.target;
+						dependsOnFilterId = dependsOnFilterElement.id.substring(7, dependsOnFilterElement.id.length - 6);
+						dependentFilterId = window.libFilter.getDependentFilter(dependsOnFilterId);
+						dependsOnFilterValue = $(dependsOnFilterElement).val();
+						window.libFilter.loadDependentFilter(dependentFilterId, dependsOnFilterValue);
+					});
+				}
+				
+				if (window.libFilter.availableFilters[filter_id]['depends_on']) {
+					dependsOnFilterId = window.libFilter.availableFilters[filter_id]['depends_on'];
+					dependsOnFilterValue = $("#filter_" + dependsOnFilterId + "_value").val()
+					window.libFilter.loadDependentFilter(filter_id, dependsOnFilterValue);
+				}
+			}
+			$.cookie('filters', window.libFilter.shownFilters, {expires: 30});
+		});
+	},
+	getDependentFilter: function(dependsOnFilterId) {
+		for (filter_id in this.availableFilters) {
+			if (this.availableFilters[filter_id]['depends_on'] == dependsOnFilterId) {
+				return filter_id;
+			}
+		}
+		return null;
+	},
+	loadDependentFilter: function(dependentFilterId, dependsOnFilterValue) {
+		filterDictionary = {
+			'dependent_filter_id': dependentFilterId,
+			'depends_on_filter_value': dependsOnFilterValue
+		};
+		$.get("/nekretnine/get_filter_content", filterDictionary, function (response) {
+			$("#filter_" + dependentFilterId + "_value").empty();
+			$("#filter_" + dependentFilterId + "_value").html(response);
+			$("#filter_" + dependentFilterId + "_value").val(window.libFilter.shownFilters[dependentFilterId])
+			$("#filter_" + dependentFilterId + "_value").trigger('chosen:updated').change();
+		});
+	}
+
+};
+
 $(function() {
 	$.cookie.json = true;
 	init_slider_for_filters();
@@ -26,15 +104,11 @@ $(function() {
 	setHeightOfContainers();
 	$(window).resize(setHeightOfContainers);
 	
-	window.svi_filteri = ['grad', 'namestenost', 'tip_objekta', 'cena', 'broj_soba', 'deo_grada'];
-	window.prikazani_filteri = [];
-	start_filters = $.cookie('filters');
-	if (typeof start_filters === 'undefined') {
-		start_filters = ['grad', 'namestenost'];
-	}
+	window.libFilter.loadAvailableFilters(function() {
+		window.libFilter.showFilters();
+		ucitajSpisakStanova();
+	});
 	
-	dodajFiltere(start_filters);
-	ucitajSpisakStanova();
 	
 });
 
@@ -62,10 +136,10 @@ function add_favorits(id_objekta) {
 
 function setHeightOfContainers() {
 	// prvi nacin podesavanja css-a pomocu jQuery-ja. $(element).css(osobina, vrednost);
-	$("#spisak").css('height', $(window).height() - $("#filteri").height() - $("#favoriti").height());
+	$("#spisak").css('height', $(window).height() - $("#filters").height() - $("#favoriti").height());
 	// drugi nacin podesacanja css-a pomocu jQuery-ja. $(element).css(objekat_sa_osobinama);
 	// objekat_sa_osobinama je dictionary u koji moze da se stavi vise osobina.
-	detalji_css = { 'height' : $(window).height() - $("#filteri").height() };
+	detalji_css = { 'height' : $(window).height() - $("#filters").height() };
 	$("#detalji").css(detalji_css);
 }
 
@@ -123,7 +197,7 @@ function vise(objekat_id) {
 
 function ucitajSpisakStanova() {
 	var filter_dictionary = {};
-	filters = $("#filteri").find("[id^=filter_]").filter("[id$=_value]");
+	filters = $("#filters").find("[id^=filter_]").filter("[id$=_value]");
 	filters.each(function(index, element) {
 		filter_id = element.id.substring(7, element.id.length-6);
 		filter_value = $(element).val();
@@ -161,15 +235,28 @@ function prikaziIzborNovogFiltera() {
 	
 }
 
-function dodajFiltere(niz_filtera) {
+function dodajFiltere(filter_dict) {
 	// pozvati $get kao u funkciji ucitajSpisakStanova, u filter_dictionary ubaciti promenljivu ime_filtera, a u view-u koji budes napravila treba da se napravi trazeni filter
 	// u funkciji koja obradjuje odgovor od view-a pozvati append umesto html (html brise sve i stavlja ovo sto si joj dala, a append dodaje)
+	var niz_filtera = [];
+	for (filter in filter_dict) {
+		niz_filtera.push(filter);
+	}
 	var filter_dictionary = {'niz_filtera': niz_filtera};
 	$.get("/nekretnine/napravi_filtere", filter_dictionary, function (response) {
-		for (filter in niz_filtera) {
-			window.prikazani_filteri.push(niz_filtera[filter]);
+		$("#filters").append(response);
+		for (filter in filter_dict) {
+			window.prikazani_filteri[filter] = filter_dict[filter];
+			$("#filter_" + filter + "_value").val(filter_dict[filter]).change(function(event){
+				element = event.target;
+				filter = element.id.substring(7, element.id.length-6);
+				window.prikazani_filteri[filter] = $(element).val();
+				$.cookie('filters', window.prikazani_filteri, {expires: 30});
+			}).trigger("chosen:updated");
+			if (filter != 'deo_grada') {
+				$("#filter_" + filter + "_value").change();
+			}
 		}
-		$("#filteri").append(response);
 		$.cookie('filters', window.prikazani_filteri, {expires: 30});
 	});
 }
@@ -180,8 +267,10 @@ function loadDependentFilter(dependent, depends_on_id) {
 		'depends_on_id': depends_on_id
 	};
 	$.get("/nekretnine/get_filter_content", filter_dictionary, function (response) {
+		$("#filter_" + dependent + "_value").empty();
 		$("#filter_" + dependent + "_value").html(response);
-		$("#filter_" + dependent + "_value").trigger('chosen:updated');
+		$("#filter_" + dependent + "_value").val(window.prikazani_filteri[dependent])
+		$("#filter_" + dependent + "_value").trigger('chosen:updated').change();
 	});
 }
 

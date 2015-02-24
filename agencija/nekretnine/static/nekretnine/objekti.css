@@ -4,7 +4,7 @@
 	float:left;
 }
 body {
-    margin:0;
+	margin:0;
 	overflow:hidden;
 }
 .desno{
@@ -14,7 +14,7 @@ body {
 	overflow-y:scroll;
 	background:#E0FFFF;
 }
-.filteri{
+.filters{
 	width:100%;
 	height:100px;
 	border:1px solid #B0C4DE;
