@@ -5,7 +5,7 @@
 		<option value="{{ stavka.id }}">{{ stavka.name }}</option>
 		{% endfor %}
 	</select>
-	<button class="skloni_{{ id }}" onclick="sakrijFilter('{{ id }}')">x</button>
+	<button class="skloni_{{ id }}" onclick="window.libFilter.removeFilter('{{ id }}')">x</button>
 </div>
 <script type="text/javascript">
 	$("#filter_{{ id }}_value").chosen();

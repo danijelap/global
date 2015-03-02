@@ -18,6 +18,14 @@ window.sliderOptions=
 };
 window.isImageSliderLoaded = false;
 
+function getObjectKeys(obj) {
+	var keys = [];
+	for(var key in obj){
+		keys.push(key);
+	}
+	return keys;
+}
+
 window.libFilter = {
 	loadAvailableFilters: function(onComplete) {
 		$.get("/nekretnine/get_filter_list/", function (response) {
@@ -87,18 +95,50 @@ window.libFilter = {
 			'depends_on_filter_value': dependsOnFilterValue
 		};
 		$.get("/nekretnine/get_filter_content", filterDictionary, function (response) {
-			$("#filter_" + dependentFilterId + "_value").empty();
-			$("#filter_" + dependentFilterId + "_value").html(response);
-			$("#filter_" + dependentFilterId + "_value").val(window.libFilter.shownFilters[dependentFilterId])
-			$("#filter_" + dependentFilterId + "_value").trigger('chosen:updated').change();
+			$("#filter_" + dependentFilterId + "_value").empty()
+				.html(response)
+				.val(window.libFilter.shownFilters[dependentFilterId])
+				.trigger('chosen:updated').change();
 		});
+	},
+	initSlider: function() {
+		$("#filter_range_slider").slider({
+			range: true,
+			slide: function(event, ui) {
+				$(window.active_filter_range + "_value").val( ui.values[ 0 ] + "-" + ui.values[ 1 ] );
+			},
+			stop: function(event, ui) {
+				ucitajSpisakStanova();
+			}
+		});
+	},
+	addFilterChoice: function() {
+		this.addFilterChoiceButtonClicked = true;
+		var buttonPosition = $("#dugme_dodaj_filter").offset();
+		var choicePosition = buttonPosition;
+		choicePosition.left += 30;
+		choicePosition.top += 25;
+		
+		var newFilters = $(getObjectKeys(window.libFilter.availableFilters)).not(getObjectKeys(window.libFilter.shownFilters)).get();
+		var filter_dictionary = {'filters': newFilters};
+		$.get('/nekretnine/get_filter_choice', filter_dictionary, function(response){
+			$("#novi_filteri").show()
+				.css(choicePosition)
+				.html(response);
+		});
+		
+	},
+	removeFilter: function(id_filtera) {
+		$("#filter_" + id_filtera).remove();
+		delete window.libFilter.shownFilters[id_filtera];
+		$.cookie('filters', window.libFilter.shownFilters, {expires: 30});
 	}
 
 };
 
 $(function() {
 	$.cookie.json = true;
-	init_slider_for_filters();
+	window.libFilter.initSlider();
 	init_document_click();
 	
 	setHeightOfContainers();
@@ -143,26 +183,14 @@ function setHeightOfContainers() {
 	$("#detalji").css(detalji_css);
 }
 
-function init_slider_for_filters() {
-	$("#filter_range_slider").slider({
-		range: true,
-		slide: function(event, ui) {
-			$(window.active_filter_range + "_value").val( ui.values[ 0 ] + "-" + ui.values[ 1 ] );
-		},
-		stop: function(event, ui) {
-			ucitajSpisakStanova();
-		}
-	});
-}
-
 function init_document_click(){
-	window.new_filters_button_clicked = false;
+	window.libFilter.addFilterChoiceButtonClicked = false;
 	$(document).click(function(){
-		if (!window.new_filters_button_clicked) {
+		if (!window.libFilter.addFilterChoiceButtonClicked) {
 			$("#novi_filteri").hide();
 			$("#filter_range_slider").hide();
 		}
-		window.new_filters_button_clicked = false;
+		window.libFilter.addFilterChoiceButtonClicked = false;
 	});
 }
 
@@ -207,75 +235,5 @@ function ucitajSpisakStanova() {
 	})
 	$.get("/nekretnine/spisak", filter_dictionary, function (response) {
 		$("#spisak").html(response);
-	});
-}
-function sakrijFilter(id_filtera) {
-	$("#filter_" + id_filtera).remove();
-	index_of_filter = window.prikazani_filteri.indexOf(id_filtera);
-	if (index_of_filter > -1) {
-		window.prikazani_filteri.splice(index_of_filter, 1);
-		$.cookie('filters', window.prikazani_filteri, {expires: 30});
-	}
-}
-
-function prikaziIzborNovogFiltera() {
-	window.new_filters_button_clicked = true;
-	var pozicija_dugmeta = $("#dugme_dodaj_filter").offset();
-	var pozicija_izbora = pozicija_dugmeta;
-	pozicija_izbora.left += 30;
-	pozicija_izbora.top += 25;
-	
-	var novi_filteri = $(window.svi_filteri).not(window.prikazani_filteri).get();
-	var filter_dictionary = {'filteri': novi_filteri};
-	$.get('/nekretnine/filteri', filter_dictionary, function(response){
-		$("#novi_filteri").show()
-			.css(pozicija_izbora)
-			.html(response);
-	});
-	
-}
-
-function dodajFiltere(filter_dict) {
-	// pozvati $get kao u funkciji ucitajSpisakStanova, u filter_dictionary ubaciti promenljivu ime_filtera, a u view-u koji budes napravila treba da se napravi trazeni filter
-	// u funkciji koja obradjuje odgovor od view-a pozvati append umesto html (html brise sve i stavlja ovo sto si joj dala, a append dodaje)
-	var niz_filtera = [];
-	for (filter in filter_dict) {
-		niz_filtera.push(filter);
-	}
-	var filter_dictionary = {'niz_filtera': niz_filtera};
-	$.get("/nekretnine/napravi_filtere", filter_dictionary, function (response) {
-		$("#filters").append(response);
-		for (filter in filter_dict) {
-			window.prikazani_filteri[filter] = filter_dict[filter];
-			$("#filter_" + filter + "_value").val(filter_dict[filter]).change(function(event){
-				element = event.target;
-				filter = element.id.substring(7, element.id.length-6);
-				window.prikazani_filteri[filter] = $(element).val();
-				$.cookie('filters', window.prikazani_filteri, {expires: 30});
-			}).trigger("chosen:updated");
-			if (filter != 'deo_grada') {
-				$("#filter_" + filter + "_value").change();
-			}
-		}
-		$.cookie('filters', window.prikazani_filteri, {expires: 30});
-	});
-}
-
-function loadDependentFilter(dependent, depends_on_id) {
-	filter_dictionary = {
-		'filter_id': dependent,
-		'depends_on_id': depends_on_id
-	};
-	$.get("/nekretnine/get_filter_content", filter_dictionary, function (response) {
-		$("#filter_" + dependent + "_value").empty();
-		$("#filter_" + dependent + "_value").html(response);
-		$("#filter_" + dependent + "_value").val(window.prikazani_filteri[dependent])
-		$("#filter_" + dependent + "_value").trigger('chosen:updated').change();
-	});
-}
-
-function filter_depends_on(dependent, depends_on) {
-	$("#filter_" + depends_on + "_value").change(function() {
-		loadDependentFilter(dependent, $("#filter_" + depends_on + "_value").val());
 	});
 }

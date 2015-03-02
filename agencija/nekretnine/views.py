@@ -46,14 +46,14 @@ def spisak(request):
 	return render(request, 'nekretnine/spisak.html', context)
 
 
-def filteri(request):
-	filters_to_show_get = request.GET.getlist('filteri[]')
+def get_filter_choice(request):
+	filters_to_show_get = request.GET.getlist('filters[]')
 	filters_to_show_data = []
 	for filter_key in filters:
 		if filter_key in filters_to_show_get:
 			filters_to_show_data.append({'id': filter_key, 'name': filters[filter_key]['name']})
 	context = {'filteri': filters_to_show_data}
-	return render(request, 'nekretnine/filteri.html', context)
+	return render(request, 'nekretnine/get_filter_choice.html', context)
 
 def make_filters(request):
 	niz_filtera = request.GET.getlist('filter_array[]')
