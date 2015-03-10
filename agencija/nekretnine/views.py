@@ -51,7 +51,8 @@ def get_filter_choice(request):
 	filters_to_show_data = []
 	for filter_key in filters:
 		if filter_key in filters_to_show_get:
-			filters_to_show_data.append({'id': filter_key, 'name': filters[filter_key]['name']})
+			start_value = filters[filter_key].get('start_value', 0)
+			filters_to_show_data.append({'id': filter_key, 'name': filters[filter_key]['name'], 'start_value': start_value})
 	context = {'filteri': filters_to_show_data}
 	return render(request, 'nekretnine/get_filter_choice.html', context)
 
@@ -92,5 +93,7 @@ def get_filter_list(request):
 			filter_object['default'] = True
 		if 'depends_on' in filters[filter_id]:
 			filter_object['depends_on'] = filters[filter_id]['depends_on']
+		if 'start_value' in filters[filter_id]:
+			filter_object['start_value'] = filters[filter_id]['start_value']
 		result[filter_id] = filter_object
 	return HttpResponse(json.dumps(result))

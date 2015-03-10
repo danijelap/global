@@ -5,4 +5,4 @@
 	<input type="hidden" id="filter_{{ id }}_max" value="{{ max_value }}" />
 	<button class="skloni_{{ id }}" onclick="window.libFilter.removeFilter('{{ id }}')">x</button>
 </div>
-<script type="text/javascript">init_filter_slider("filter_{{ id }}");</script>
+<script type="text/javascript">window.libFilter.initFilterSlider("filter_{{ id }}");</script>
