@@ -52,27 +52,32 @@ window.libFilter = {
 	},
 	appendFilters: function(filterDictionary) {
 		var filterArray = [];
-		for (filter_id in filterDictionary) {
+		for (var filter_id in filterDictionary) {
 			filterArray.push(filter_id);
 		}
-		$.get("/nekretnine/make_filters", {'filter_array': filterArray}, function (response) {
+		$.get("/nekretnine/make_filters/", {'filter_array': filterArray}, function (response) {
 			$("#filters").append(response);
-			for (filter_id in filterDictionary) {
+			for (var filter_id in filterDictionary) {
 				window.libFilter.shownFilters[filter_id] = filterDictionary[filter_id];
 				$("#filter_" + filter_id + "_value").val(filterDictionary[filter_id]).change(function(event){
-					element = event.target;
-					filter_id = element.id.substring(7, element.id.length - 6);
+					var element = event.target;
+					var filter_id = element.id.substring(7, element.id.length - 6);
 					window.libFilter.shownFilters[filter_id] = $(element).val();
 					$.cookie('filters', window.libFilter.shownFilters, {expires: 30});
-				}).trigger("chosen:updated");
-				if (window.libFilter.availableFilters[filter_id]['depends_on']) {
-					dependsOnFilterId = window.libFilter.availableFilters[filter_id]['depends_on'];
-					$("#filter_" + dependsOnFilterId + "_value").change(window.libFilter.dependsOnFilterChange);
-					dependsOnFilterId = window.libFilter.availableFilters[filter_id]['depends_on'];
-					dependsOnFilterValue = $("#filter_" + dependsOnFilterId + "_value").val()
-					window.libFilter.loadDependentFilter(filter_id, dependsOnFilterValue);
-				} else if (window.libFilter.getDependentFilter(filter_id)) {
-					$("#filter_" + dependsOnFilterId + "_value").change(window.libFilter.dependsOnFilterChange);
+				});
+				var dependsOnFilterId = window.libFilter.availableFilters[filter_id]['depends_on'];
+				if (dependsOnFilterId) {
+					if (dependsOnFilterId in window.libFilter.shownFilters) {
+						$("#filter_" + dependsOnFilterId + "_value").change(window.libFilter.dependsOnFilterChange);
+						dependsOnFilterValue = $("#filter_" + dependsOnFilterId + "_value").val()
+						window.libFilter.loadDependentFilter(filter_id, dependsOnFilterValue);
+					}
+				} else {
+					if (window.libFilter.getDependentFilter(filter_id)) {
+						var dependentFilterId = window.libFilter.getDependentFilter(filter_id);
+						$("#filter_" + filter_id + "_value").change(window.libFilter.dependsOnFilterChange);
+					}
+					$("#filter_" + filter_id + "_value").trigger("chosen:updated").change();
 				}
 			}
 			$.cookie('filters', window.libFilter.shownFilters, {expires: 30});
@@ -87,8 +92,8 @@ window.libFilter = {
 		window.libFilter.loadDependentFilter(dependentFilterId, dependsOnFilterValue);
 	},
 	getDependentFilter: function(dependsOnFilterId) {
-		for (filter_id in this.availableFilters) {
-			if (this.availableFilters[filter_id]['depends_on'] == dependsOnFilterId) {
+		for (var filter_id in window.libFilter.availableFilters) {
+			if (window.libFilter.availableFilters[filter_id]['depends_on'] == dependsOnFilterId) {
 				return filter_id;
 			}
 		}
@@ -168,7 +173,7 @@ $(function() {
 	
 	window.libFilter.loadAvailableFilters(function() {
 		window.libFilter.showFilters();
-		ucitajSpisakStanova();
+//		ucitajSpisakStanova();
 	});
 	
 	
@@ -231,6 +236,7 @@ function vise(objekat_id) {
 }
 
 function ucitajSpisakStanova() {
+	// TODO: add delay
 	var filter_dictionary = {};
 	filters = $("#filters").find("[id^=filter_]").filter("[id$=_value]");
 	filters.each(function(index, element) {
