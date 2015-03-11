@@ -1,3 +1,4 @@
+from PIL import Image
 from django.db import models
 
 # Create your models here.
@@ -67,5 +68,16 @@ class Objekat(models.Model):
 class ObjectImage(models.Model):
 	def upload_path(self, filename):
 		return "objects/%s/%s" % (str(self.object.id), filename)
+	
 	object = models.ForeignKey(Objekat)
 	image = models.ImageField(upload_to=upload_path)
+	
+	def save(self, *args, **kwargs):
+		if self.image:
+			super(ObjectImage, self).save()
+			new_image = Image.open(self.image)
+			new_size = (700, 500)
+			new_image.resize(new_size).save(self.image.path)
+#			thumb_size = (70, 50)
+#			new_image.resize(thumb_size).save(self.image.path + '.small.jpg')
+			

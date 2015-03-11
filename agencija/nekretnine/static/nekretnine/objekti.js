@@ -1,6 +1,6 @@
 window.sliderOptions=
 {
-	sliderId: "image_slider_big",
+	sliderId: "slider",
 	startSlide: 0,
 	effect: "13,17,13,13,5",
 	effectRandom: true,
@@ -12,9 +12,7 @@ window.sliderOptions=
 	autoAdvance: true,
 	captionOpacity: 1,
 	captionEffect: "fade",
-	thumbnailsWrapperId: "image_slider_small",
-	m: false,
-	license: "b6t80"
+	m: false
 };
 window.isImageSliderLoaded = false;
 
