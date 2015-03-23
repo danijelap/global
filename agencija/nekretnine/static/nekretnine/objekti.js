@@ -26,7 +26,7 @@ function getObjectKeys(obj) {
 
 window.libFilter = {
 	loadAvailableFilters: function(onComplete) {
-		$.get("/nekretnine/get_filter_list/", function (response) {
+		$.get("/get_filter_list/", function (response) {
 			window.libFilter.availableFilters = response;
 			window.libFilter.shownFilters = {};
 			onComplete();
@@ -53,7 +53,7 @@ window.libFilter = {
 		for (var filter_id in filterDictionary) {
 			filterArray.push(filter_id);
 		}
-		$.get("/nekretnine/make_filters/", {'filter_array': filterArray}, function (response) {
+		$.get("/make_filters/", {'filter_array': filterArray}, function (response) {
 			$("#filters").append(response);
 			for (var filter_id in filterDictionary) {
 				window.libFilter.shownFilters[filter_id] = filterDictionary[filter_id];
@@ -102,7 +102,7 @@ window.libFilter = {
 			'dependent_filter_id': dependentFilterId,
 			'depends_on_filter_value': dependsOnFilterValue
 		};
-		$.get("/nekretnine/get_filter_content", filterDictionary, function (response) {
+		$.get("/get_filter_content", filterDictionary, function (response) {
 			$("#filter_" + dependentFilterId + "_value").empty()
 				.html(response)
 				.val(window.libFilter.shownFilters[dependentFilterId])
@@ -131,7 +131,7 @@ window.libFilter = {
 		
 		var newFilters = $(getObjectKeys(window.libFilter.availableFilters)).not(getObjectKeys(window.libFilter.shownFilters)).get();
 		var filter_dictionary = {'filters': newFilters};
-		$.get('/nekretnine/get_filter_choice', filter_dictionary, function(response){
+		$.get('/get_filter_choice', filter_dictionary, function(response){
 			$("#novi_filteri").show()
 				.css(choicePosition)
 				.html(response);
@@ -220,7 +220,7 @@ function init_document_click(){
 }
 
 function vise(objekat_id) {
-	$("#prazan").load("/nekretnine/detalji?id_stana=" + objekat_id, function() {
+	$("#prazan").load("/detalji?id_stana=" + objekat_id, function() {
 		// initialize image slider when details are loaded
 		if (window.isImageSliderLoaded) { // if slider was already loaded then only reload images
 			window.imageSlider.reload();
@@ -244,7 +244,7 @@ function ucitajSpisakStanova() {
 			filter_dictionary[filter_id] = filter_value;
 		}
 	})
-	$.get("/nekretnine/spisak", filter_dictionary, function (response) {
+	$.get("/spisak", filter_dictionary, function (response) {
 		$("#spisak").html(response);
 	});
 }

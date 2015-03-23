@@ -14,6 +14,9 @@ filters = {
 	'namestenost': {'name': 'Namestenost', 'title': 'namestenost', 'model_filter_key': 'namestenost_id', 'type': 'exact', 'objects': Namestenost.objects}
 }
 
+def construction(request):
+	return render(request, 'nekretnine/construction.html')
+
 def index(request):
 	drzave = Drzava.objects.all().order_by('-name')
 	context = {'drzave': drzave}

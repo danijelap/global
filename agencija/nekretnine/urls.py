@@ -10,4 +10,5 @@ urlpatterns = patterns('',
 	url(r'^make_filters/$', views.make_filters, name='make_filters'),
 	url(r'^get_filter_content/$', views.get_filter_content, name='get_filter_content'),
 	url(r'^get_filter_list/$', views.get_filter_list, name='get_filter_list'),
+	url(r'^$', views.construction, name='construction'),
 )
