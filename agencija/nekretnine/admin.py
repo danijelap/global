@@ -1,5 +1,5 @@
 from django.contrib import admin
-from nekretnine.models import Drzava, Grad, Objekat, ObjectImage, DeoGrada, Namestenost, TipObjekta, Heating
+from nekretnine.models import *
 
 class GradInline(admin.TabularInline):
 	model = Grad
@@ -26,3 +26,5 @@ admin.site.register(DeoGrada)
 admin.site.register(Namestenost)
 admin.site.register(TipObjekta)
 admin.site.register(Heating)
+admin.site.register(Owner)
+admin.site.register(Ad)

@@ -1,5 +1,6 @@
 from PIL import Image
 from django.db import models
+from django.core.validators import validate_email
 
 # Create your models here.
 class Drzava(models.Model):
@@ -40,6 +41,13 @@ class Heating(models.Model):
 	def __str__(self):
 		return self.name
 
+class Owner(models.Model):
+	name = models.TextField()
+	email = models.TextField(validators = [validate_email])
+	phone = models.TextField()
+	def __str__(self):
+		return self.name
+
 class Objekat(models.Model):
 	adresa = models.TextField()
 	tip_objekta = models.ForeignKey(TipObjekta)
@@ -55,6 +63,7 @@ class Objekat(models.Model):
 	floor = models.IntegerField()
 	floors = models.IntegerField()
 	heating = models.ForeignKey(Heating)
+	owner = models.ForeignKey(Owner)
 	
 	@property
 	def images(self):
@@ -63,7 +72,7 @@ class Objekat(models.Model):
 			result.append(object_image.image)
 		return result
 	def __str__(self):
-		return self.adresa
+		return "{0} ({1} m2, {2} €)".format(self.deo_grada.name, self.povrsina, self.cena)
 
 class ObjectImage(models.Model):
 	def upload_path(self, filename):
@@ -76,8 +85,16 @@ class ObjectImage(models.Model):
 		if self.image:
 			super(ObjectImage, self).save()
 			new_image = Image.open(self.image)
-			new_size = (700, 500)
+			new_size = (800, 450)
 			new_image.resize(new_size).save(self.image.path)
-#			thumb_size = (70, 50)
+#			thumb_size = (80, 45)
 #			new_image.resize(thumb_size).save(self.image.path + '.small.jpg')
-			
+
+class Ad(models.Model):
+	object = models.ForeignKey(Objekat)
+	created_at = models.DateTimeField()
+	updated_at = models.DateTimeField()
+	active = models.BooleanField(default=True)
+	
+	def __str__(self):
+		return self.object.__str__()

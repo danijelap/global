@@ -34,7 +34,7 @@ def detalji(request):
 	return render(request, 'nekretnine/detalji.html', context)
 	
 def spisak(request):
-	filter_dictionary = {}
+	filter_dictionary = {'ad__active': True}
 	for filter in request.GET:
 		value = request.GET.get(filter)
 		if filters[filter]['type'] == 'exact':
