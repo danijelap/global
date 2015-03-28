@@ -1,0 +1,9 @@
+https://www.pythonanywhere.com/wiki/VirtualEnvForNewerDjango
+
+inside virtual env install mysql connector
+https://www.pythonanywhere.com/wiki/UsingMySQL
+This is the only command needed from this page (pip3.4 --user is not needed if you run it inside of virtualenv): 
+pip install https://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-2.0.1.tar.gz
+
+when you run migrations run it from virtualenv
+python manage.py migrate
