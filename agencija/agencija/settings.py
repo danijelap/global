@@ -60,8 +60,12 @@ WSGI_APPLICATION = 'agencija.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'mysql.connector.django', 
+        'NAME': 'bim$nekretnine',
+        'USER': 'bim',
+        'PASSWORD': 'PASSWORD',
+        'HOST': 'mysql.server',   # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
     }
 }
 
