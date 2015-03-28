@@ -62,7 +62,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'mysql.connector.django', 
         'NAME': 'nekretnine',
-        'USER': 'bim',
+        'USER': 'bim$nekretnine',
         'PASSWORD': 'PASSWORD',
         'HOST': 'mysql.server',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
