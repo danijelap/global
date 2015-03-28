@@ -5,5 +5,26 @@ https://www.pythonanywhere.com/wiki/UsingMySQL
 This is the only command needed from this page (pip3.4 --user is not needed if you run it inside of virtualenv): 
 pip install https://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-2.0.1.tar.gz
 
+Type this path as virtualenv in web tab in dashboard:
+/home/bim/.virtualenvs/django17
+
+set up static directory
+mkdir /var/www/static/
+cp -a /home/bim/.virtualenvs/django17/lib/python3.4/site-packages/django/contrib/admin/static/admin/ /var/www/static/
+
+Type '/static/' for URL and '/var/www/static/' for Directory as Static files settings in web tab in dashboard
+
+Enter this code into WSGI configuration file. You can find its path in web tab in dashboard.
+path = '/home/bim'
+if path not in sys.path:
+  sys.path.append(path)
+os.environ['DJANGO_SETTINGS_MODULE'] = 'agencija.settings'
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
+
+On each release run command:
+cp -a /home/bim/nekretnine/static/* /var/www/static/
+
+
 when you run migrations run it from virtualenv
 python manage.py migrate
