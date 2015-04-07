@@ -138,3 +138,7 @@ body {
 .image_slider {
 	height: 350px;
 }
+
+.report {
+	display: none;
+}

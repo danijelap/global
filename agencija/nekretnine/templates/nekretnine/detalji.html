@@ -3,7 +3,7 @@
 <div class="sliderFrame">
 	<div id="slider">
 	{% for image in stan.images %}
-		<img src="{{ image.url }}" />
+		<img src="{{ image.large_image.url }}" />
 	{% endfor %}
 	</div>
 </div>
@@ -39,5 +39,10 @@
 		<span class = "detalji_vrednosti">{{ stan.namestenost }}</span>
 	</div>
 	
-	
+	<input id="reportingButton" type="button" onclick="reportInactive({{ stan.id }})" value="Prijavite da je stan izdat" />
+	<span id="thanksForReporting" class="report">Hvala, Vaša prijava je zabeležena</span>
+	<span id="reportingFailed" class="report">Vaša prijava nije prihvaćena. Pokušajte kasnije ponovo.</span>
+	{% if ad.reported_as_inactive_counter > 1 %}
+	<div class="reported_inactive">Ovaj stan je verovatno izdat. Broj prijava: {{ ad.reported_as_inactive_counter }}.</div>
+	{% endif %}
 </div>

@@ -1,3 +1,4 @@
+import os
 from PIL import Image
 from django.db import models
 from django.core.validators import validate_email
@@ -69,7 +70,8 @@ class Objekat(models.Model):
 	def images(self):
 		result = []
 		for object_image in self.objectimage_set.all():
-			result.append(object_image.image)
+			extension = os.path.splitext(object_image.image.path)[1]
+			result.append({'large_image': object_image.image, 'small_url': object_image.image.url + 'small' + extension})
 		return result
 	def __str__(self):
 		return "{0} ({1} m2, {2} €)".format(self.deo_grada.name, self.povrsina, self.cena)
@@ -87,14 +89,24 @@ class ObjectImage(models.Model):
 			new_image = Image.open(self.image)
 			new_size = (800, 450)
 			new_image.resize(new_size).save(self.image.path)
-#			thumb_size = (80, 45)
-#			new_image.resize(thumb_size).save(self.image.path + '.small.jpg')
+			extension = os.path.splitext(self.image.path)[1]
+			thumb_size = (80, 45)
+			new_image.resize(thumb_size).save(self.image.path + '.small' + extension)
 
 class Ad(models.Model):
 	object = models.ForeignKey(Objekat)
 	created_at = models.DateTimeField()
 	updated_at = models.DateTimeField()
 	active = models.BooleanField(default=True)
+	reported_as_inactive_counter = models.IntegerField(default = 0)
 	
 	def __str__(self):
-		return self.object.__str__()
+		return "{0}, active: {1}, reported inactive: {2} times".format(self.object, self.active, self.reported_as_inactive_counter)
+	
+	class Meta:
+		ordering = ['-active', '-reported_as_inactive_counter']
+
+class AdReporter(models.Model):
+	ad = models.ForeignKey(Ad)
+	reporter_token = models.IntegerField()
+	reporter_ip_address = models.TextField()

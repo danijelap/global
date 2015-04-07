@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template import RequestContext, loader
 
-from nekretnine.models import Drzava, Objekat, Grad, Namestenost, TipObjekta, DeoGrada
+from nekretnine.models import *
 from django.http import HttpResponse
 import json
 
@@ -13,6 +13,14 @@ filters = {
 	'deo_grada': {'name': 'Delovi grada', 'title': 'deo grada', 'model_filter_key': 'deo_grada_id', 'type': 'exact', 'objects': DeoGrada.objects, 'depends_on': 'grad', 'depends_on_filter_key': 'grad_id', 'default': True},
 	'namestenost': {'name': 'Namestenost', 'title': 'namestenost', 'model_filter_key': 'namestenost_id', 'type': 'exact', 'objects': Namestenost.objects}
 }
+
+def get_client_ip(request):
+	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+	if x_forwarded_for:
+		ip = x_forwarded_for.split(',')[-1].strip()
+	else:
+		ip = request.META.get('REMOTE_ADDR')
+	return ip
 
 def construction(request):
 	return render(request, 'nekretnine/construction.html')
@@ -29,8 +37,9 @@ def objekti(request):
 def detalji(request):
 
 	id_stana = request.GET.get('id_stana')
-	stan = Objekat.objects.get(id = id_stana);
-	context = {'stan' : stan}
+	stan = Objekat.objects.get(id = id_stana)
+	ad = Ad.objects.get(object = stan)
+	context = {'stan' : stan, 'ad': ad}
 	return render(request, 'nekretnine/detalji.html', context)
 	
 def spisak(request):
@@ -100,3 +109,14 @@ def get_filter_list(request):
 			filter_object['start_value'] = filters[filter_id]['start_value']
 		result[filter_id] = filter_object
 	return HttpResponse(json.dumps(result))
+
+def report_inactive(request):
+	ad = Ad.objects.get(object__id = request.POST.get('object_id'))
+	my_token = request.POST.get('my_token')
+	ad_reporters = AdReporter.objects.filter(ad = ad, reporter_token = my_token)
+	if len(ad_reporters) == 0:
+		ad_reporter = AdReporter(ad = ad, reporter_token = my_token, reporter_ip_address = get_client_ip(request))
+		ad_reporter.save()
+		ad.reported_as_inactive_counter += 1
+		ad.save()
+	return HttpResponse("OK")

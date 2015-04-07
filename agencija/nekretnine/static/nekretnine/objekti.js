@@ -161,6 +161,27 @@ window.libFilter = {
 
 };
 
+window.getMyToken = function() {
+	var mytoken = $.cookie('mytoken');
+	if (typeof mytoken === 'undefined') {
+		mytoken = Math.floor(Math.random() * 100000000); 
+		$.cookie('mytoken', mytoken, {expires: 365});
+	}
+	return mytoken;
+}
+var csrftoken = $.cookie('csrftoken');
+function csrfSafeMethod(method) {
+	// these HTTP methods do not require CSRF protection
+	return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+	beforeSend: function(xhr, settings) {
+		if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+			xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		}
+	}
+});
+
 $(function() {
 	$.cookie.json = true;
 	window.libFilter.initSlider();
@@ -173,7 +194,6 @@ $(function() {
 		window.libFilter.showFilters();
 //		ucitajSpisakStanova();
 	});
-	
 	
 });
 
@@ -246,5 +266,15 @@ function ucitajSpisakStanova() {
 	})
 	$.get("/spisak", filter_dictionary, function (response) {
 		$("#spisak").html(response);
+	});
+}
+
+function reportInactive(object_id) {
+	params = {'object_id': object_id, 'my_token': window.getMyToken()}
+	$.post("/report_inactive/", params).done(function (response) {
+		$("#reportingButton").hide();
+		$("#thanksForReporting").show();
+	}).fail(function(response) {
+		$("#reportingFailed").show();
 	});
 }
