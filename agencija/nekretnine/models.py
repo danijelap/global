@@ -101,7 +101,10 @@ class Ad(models.Model):
 	reported_as_inactive_counter = models.IntegerField(default = 0)
 	
 	def __str__(self):
-		return self.object.__str__()
+		return "{0}, active: {1}, reported inactive: {2} times".format(self.object, self.active, self.reported_as_inactive_counter)
+	
+	class Meta:
+		ordering = ['-active', '-reported_as_inactive_counter']
 
 class AdReporter(models.Model):
 	ad = models.ForeignKey(Ad)
