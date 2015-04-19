@@ -11,5 +11,7 @@ urlpatterns = patterns('',
 	url(r'^get_filter_content/$', views.get_filter_content, name='get_filter_content'),
 	url(r'^get_filter_list/$', views.get_filter_list, name='get_filter_list'),
 	url(r'^report_inactive/$', views.report_inactive, name='report_inactive'),
+	url(r'^register/$', views.register, name='register'),
+	url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'nekretnine/login.html'}),
 	url(r'^$', views.construction, name='construction'),
 )

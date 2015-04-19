@@ -2,6 +2,7 @@ import os
 from PIL import Image
 from django.db import models
 from django.core.validators import validate_email
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Drzava(models.Model):
@@ -43,11 +44,9 @@ class Heating(models.Model):
 		return self.name
 
 class Owner(models.Model):
-	name = models.TextField()
-	email = models.TextField(validators = [validate_email])
-	phone = models.TextField()
+	user = models.ForeignKey(User)
 	def __str__(self):
-		return self.name
+		return "{0} {1}".format(self.user.first_name, self.user.last_name)
 
 class Objekat(models.Model):
 	adresa = models.TextField()

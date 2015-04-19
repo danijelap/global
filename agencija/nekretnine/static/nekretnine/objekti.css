@@ -1,6 +1,10 @@
+div.logo {
+	height: 68px;
+	width: 156px;
+}
+
 .levo{
 	width:50%;
-	
 	float:left;
 }
 body {
@@ -40,29 +44,25 @@ body {
 	overflow-y:auto;
 	background-color:#6C87A3;
 }
-.lista_stanova{
-	padding-top:4px;
-	padding-left:3px;
-	background-color:#E8E8E8 ;
-	overflow-y:scroll;
+.object_list {
+	background-color: #C0DEED ;
+	overflow-y: auto;
 }
-.jedan_stan{
-	width:660px;
+div.object {
 	height:60px;
-	border:1px solid;
-	border-radius:7px;
-	border-color:#C0C0C0;
-	background-color:white;
+	background-color: white;
+	margin-top: 2px;
 }
-.red{
+
+.red {
 	margin-top:5px;
 }
-.slika{
+.slika {
 	float:left;
 	width:100px;
 	height:50px;
 	border:1px solid;
-	margin:5px;
+	margin:4px;
 	background-color:white;
 }
 .text{

@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.template import RequestContext, loader
 
+from django import forms
+from nekretnine.forms import UserRegistrationForm, UserLoginForm
+from django.http import HttpResponseRedirect, HttpResponse
+
 from nekretnine.models import *
-from django.http import HttpResponse
 import json
 
 filters = {
@@ -13,6 +16,30 @@ filters = {
 	'deo_grada': {'name': 'Delovi grada', 'title': 'deo grada', 'model_filter_key': 'deo_grada_id', 'type': 'exact', 'objects': DeoGrada.objects, 'depends_on': 'grad', 'depends_on_filter_key': 'grad_id', 'default': True},
 	'namestenost': {'name': 'Namestenost', 'title': 'namestenost', 'model_filter_key': 'namestenost_id', 'type': 'exact', 'objects': Namestenost.objects}
 }
+
+def register(request):
+	if request.method == 'POST':
+		form = UserRegistrationForm(request.POST)
+		if form.is_valid():
+			new_user, new_owner = form.save()
+			return HttpResponseRedirect("/admin/")
+	else:
+		form = UserRegistrationForm()
+	return render(request, "nekretnine/register.html", {
+		'form': form,
+	})
+
+def login(request):
+	if request.method == 'POST':
+		form = UserLoginForm(request.POST)
+		user = form.login(request)
+		if user is not None:
+			return HttpResponseRedirect("/objekti/")
+	else:
+		form = UserLoginForm()
+	return render(request, "nekretnine/login.html", {
+		'form': form,
+	})
 
 def get_client_ip(request):
 	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
