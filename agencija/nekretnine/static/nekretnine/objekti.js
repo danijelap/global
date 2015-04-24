@@ -278,3 +278,10 @@ function reportInactive(object_id) {
 		$("#reportingFailed").show();
 	});
 }
+function mouseover(){
+	$("#filter_name").mouseover(function(){
+        $("#filter_name").addClass("overmouse_color");
+		});	
+	}
+$(mouseover);
+

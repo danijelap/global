@@ -115,10 +115,20 @@ div.object {
 	height:20px;
 }
 .novi_filteri {
-	display: none;
-	position: absolute;
-	background-color: blue;
-	color: white;
+	display:none;
+	position:absolute;
+	background-color: white ;
+	color:#5B626A;
+	border:1px solid #5B626A;;
+	text-decoration: underline;
+	padding:7px;
+	text-transform: uppercase;
+}
+.filter_name{
+	margin-bottom:7px;
+}
+.overmouse_color{
+	background-color:#ECECEC;
 }
 
 .filter_range {
@@ -141,4 +151,9 @@ div.object {
 
 .report {
 	display: none;
+}
+
+form.register p label {
+	margin-left: 200px;
+	color: blue;
 }

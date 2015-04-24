@@ -1,5 +1,14 @@
-<form action="" method="post">
-	{% csrf_token %}
-	{{ form.as_p }}
-	<input type="submit" value="Prijavi se">
-</form>
+<!DOCTYPE html>
+<html>
+	<head>
+		{% load staticfiles %}
+		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}" /> 
+	</head>
+	<body>
+		<form action="" method="post" class="login">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<input type="submit" value="Prijavi se">
+		</form>
+	</body>
+</html>
