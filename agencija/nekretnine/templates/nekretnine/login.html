@@ -6,9 +6,11 @@
 	</head>
 	<body>
 		<form action="" method="post" class="login">
-			{% csrf_token %}
-			{{ form.as_p }}
-			<input type="submit" value="Prijavi se">
+			<div class="login_form">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<input type="submit" value="Prijavi se">
+			</div>
 		</form>
 	</body>
 </html>
