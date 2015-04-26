@@ -97,7 +97,7 @@ class UserLoginForm(forms.Form):
 			)
 		return user
 
-class CreateObjectForm(forms.ModelForm):
+class ObjectForm(forms.ModelForm):
 	error_messages = {
 		'account_disabled': _("Vaš nalog nije aktiviran. Proverite email i ispratite uputstva."),
 	}
@@ -124,8 +124,18 @@ class CreateObjectForm(forms.ModelForm):
 			'heating': _("Grejanje"),
 		}
 
-class CreateObjectImageForm(forms.ModelForm):
+class ObjectImageForm(forms.ModelForm):
 	class Meta:
 		model = ObjectImage
 		fields = [ 'image' ]
+		labels = {
+			'image': 'Slika',
+		}
 
+class AdForm(forms.ModelForm):
+	class Meta:
+		model = Ad
+		fields = [ 'active' ]
+		labels = {
+			'active': 'Aktivan',
+		}

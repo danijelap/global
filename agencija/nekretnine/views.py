@@ -26,7 +26,7 @@ menu_items = {
 	'personal_info': {'text': 'lični podaci'}, 
 	'change_pass': {'text': 'promena lozinke'}, 
 	'my_ads': {'text': 'moji oglasi'}, 
-	'create_ad': {'text': 'unos oglasa'}
+	'ad': {'text': 'unos oglasa'}
 }
 
 def register(request):
@@ -48,43 +48,70 @@ def login(request):
 			if form.is_valid():
 				user = form.login(request)
 				if user is not None:
-					return HttpResponseRedirect("/create_ad/")
+					return HttpResponseRedirect("/ad/")
 		else:
 			form = UserLoginForm()
 		return render(request, "nekretnine/login.html", {'form': form})
 	else:
-		return HttpResponseRedirect("/create_ad/")
+		return HttpResponseRedirect("/ad/")
 
 @login_required
-def create_ad(request):
+def ad(request):
+	context = {}
 	if request.method == 'POST':
-		object_form = CreateObjectForm(request.POST)
-		image_form = CreateObjectImageForm(request.POST, request.FILES)
-		if object_form.is_valid() and image_form.is_valid():
-			user = request.user
-			if user.is_authenticated():
-				owner = Owner.objects.get(user=request.user)
-				new_object = object_form.save(commit=False)
-				new_object.owner = owner
-				new_object.save()
-				new_image = image_form.save(commit=False)
-				new_image.object = new_object
-				new_image.save()
-				ad = Ad(object=new_object)
-				ad.save()
-				return HttpResponseRedirect("/objekti/")
+		user = request.user
+		if user.is_authenticated():
+			object_id = request.POST.get('object_id')
+			if object_id is not None:
+				object = Objekat.objects.get(pk=object_id)
+				object_form = ObjectForm(request.POST, instance=object)
+				image_form = ObjectImageForm(request.POST, request.FILES, instance=object.objectimage_set.first())
+				ad_form = AdForm(request.POST, instance=object.ad_set.first())
+				if object_form.is_valid() and image_form.is_valid() and ad_form.is_valid():
+					object_form.save()
+					image_form.save()
+					ad_form.save()
+					return HttpResponseRedirect("/login/")
+				else:
+					context['object_form'] = object_form
+					context['image_form'] = image_form
+					context['ad_form'] = ad_form
+					context['object_id'] = object_id
 			else:
-				raise forms.ValidationError(
-					"Vaš nalog nije aktiviran. Proverite email i ispratite uputstva.",
-					code='account_disabled',
-				)
+				object_form = ObjectForm(request.POST)
+				image_form = ObjectImageForm(request.POST, request.FILES)
+				if object_form.is_valid() and image_form.is_valid():
+					owner = Owner.objects.get(user=request.user)
+					object = object_form.save(commit=False)
+					object.owner = owner
+					object.save()
+					image = image_form.save(commit=False)
+					image.object = object
+					image.save()
+					ad = Ad(object=object)
+					ad.save()
+				return HttpResponseRedirect("/objekti/")
+		else:
+			raise forms.ValidationError(
+				"Vaš nalog nije aktiviran. Proverite email i ispratite uputstva.",
+				code='account_disabled',
+			)
 	else:
-		object_form = CreateObjectForm()
-		image_form = CreateObjectImageForm()
+		object_id = request.GET.get('id')
+		if object_id is not None:
+			object = Objekat.objects.get(pk=object_id)
+			context['object_form'] = ObjectForm(instance=object)
+			context['image_form'] = ObjectImageForm(instance=object.objectimage_set.first())
+			context['ad_form'] = AdForm(instance=object.ad_set.first())
+			context['object_id'] = object_id
+		else:
+			context['object_form'] = ObjectForm()
+			context['image_form'] = ObjectImageForm()
 		
 	items = menu_items
-	items['create_ad']['selected'] = True
-	return render(request, "nekretnine/create_ad.html", {'menu_items': menu_items.values(), 'object_form': object_form, 'image_form': image_form})
+	items['ad']['selected'] = True
+	context['menu_items'] = items.values()
+	return render(request, "nekretnine/ad.html", context)
 
 def logout_view(request):
 	logout(request)
