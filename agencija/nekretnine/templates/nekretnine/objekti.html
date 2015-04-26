@@ -23,6 +23,17 @@
 			<div id="novi_filteri" class="novi_filteri"></div>
 			<div class="filter_range_slider" id="filter_range_slider"></div>
 		</div>
+		<div class="account">
+			{% if user.is_authenticated %}
+				<p>Prijavljeni ste kao {{ user.username }}</p>
+				<p><a href="/ad/">Postavite oglas</a></p>
+				<p><a href="/ads/">Uredite svoje oglase</a></p>
+				<p><a href="/logout/">Odjavite se</a></p>
+			{% else %}
+				<p>Imate stan za izdavanje?</p>
+				<p><a href="/login/">Prijavite se i postavite oglas besplatno!</a></p>
+			{% endif %}
+		</div>
 		<div class = "levo">
 			<div class="favoriti" id="favoriti">
 				

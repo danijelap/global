@@ -8,7 +8,19 @@ div.logo {
 .levo{
 	width:50%;
 	float:left;
+	clear: left;
 }
+.account {
+	float: right;
+	text-align: right;
+}
+.account p {
+	margin: 0;
+	font-family: Trebuchet MS;
+	font-size: 12px;
+	padding-right: 5px;
+}
+
 body {
 	margin:0;
 }
@@ -26,7 +38,7 @@ body.objects {
 
 .filters{
 	height:70px;
-	border:1px solid #B0C4DE;
+	float: left;
 }
 .filter_list{
 	float:left;
@@ -69,6 +81,10 @@ body.objects {
 
 .account_content {
 	float: left;
+}
+
+.ad {
+	border: 1px solid;
 }
 
 .favoriti{

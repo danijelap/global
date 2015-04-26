@@ -9,6 +9,7 @@ from nekretnine.forms import *
 from nekretnine.models import *
 
 import json
+import copy
 from datetime import datetime
 
 filters = {
@@ -22,12 +23,13 @@ filters = {
 	'heating': {'name': 'Grejanje', 'title': 'grejanje', 'model_filter_key': 'heating_id', 'type': 'exact', 'objects': Heating.objects},
 }
 
-menu_items = {
-	'personal_info': {'text': 'lični podaci'}, 
-	'change_pass': {'text': 'promena lozinke'}, 
-	'my_ads': {'text': 'moji oglasi'}, 
-	'ad': {'text': 'unos oglasa'}
-}
+menu_items = [
+	{'text': 'početna strana', 'id': 'home_page', 'href': '/objekti/'}, 
+	{'text': 'lični podaci', 'id': 'personal_info'}, 
+	{'text': 'promena lozinke', 'id': 'change_pass'}, 
+	{'text': 'moji oglasi', 'id': 'ads', 'href': '/ads/'}, 
+	{'text': 'unos oglasa', 'id': 'ad', 'href': '/ad/'}
+]
 
 def register(request):
 	if request.method == 'POST':
@@ -41,8 +43,8 @@ def register(request):
 		'form': form,
 	})
 
-def login(request):
-	if not request.user.is_authenticated(): ############# DOESN'T WORK!!!
+def login(request): ############# NOT USED!!!
+	if not request.user.is_authenticated():
 		if request.method == 'POST':
 			form = UserLoginForm(request.POST)
 			if form.is_valid():
@@ -51,7 +53,7 @@ def login(request):
 					return HttpResponseRedirect("/ad/")
 		else:
 			form = UserLoginForm()
-		return render(request, "nekretnine/login.html", {'form': form})
+		return render(request, "nekretnine/login.html")
 	else:
 		return HttpResponseRedirect("/ad/")
 
@@ -108,10 +110,14 @@ def ad(request):
 			context['object_form'] = ObjectForm()
 			context['image_form'] = ObjectImageForm()
 		
-	items = menu_items
-	items['ad']['selected'] = True
-	context['menu_items'] = items.values()
+	context['selected_item'] = 'ad'
+	context['menu_items'] = menu_items
 	return render(request, "nekretnine/ad.html", context)
+
+@login_required
+def ads(request):
+	ads = Ad.objects.filter(object__owner__user=request.user)
+	return render(request, "nekretnine/ads.html", {'menu_items': menu_items, 'selected_item': 'ads', 'ads': ads})
 
 def logout_view(request):
 	logout(request)
