@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from django.template import RequestContext, loader
-
-from django import forms
-from nekretnine.forms import UserRegistrationForm, UserLoginForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 from django.http import HttpResponseRedirect, HttpResponse
+from django import forms
 
+from nekretnine.forms import *
 from nekretnine.models import *
+
 import json
+from datetime import datetime
 
 filters = {
 	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
@@ -19,12 +22,19 @@ filters = {
 	'heating': {'name': 'Grejanje', 'title': 'grejanje', 'model_filter_key': 'heating_id', 'type': 'exact', 'objects': Heating.objects},
 }
 
+menu_items = {
+	'personal_info': {'text': 'lični podaci'}, 
+	'change_pass': {'text': 'promena lozinke'}, 
+	'my_ads': {'text': 'moji oglasi'}, 
+	'create_ad': {'text': 'unos oglasa'}
+}
+
 def register(request):
 	if request.method == 'POST':
 		form = UserRegistrationForm(request.POST)
 		if form.is_valid():
 			new_user, new_owner = form.save()
-			return HttpResponseRedirect("/admin/")
+			return HttpResponseRedirect("/login/")
 	else:
 		form = UserRegistrationForm()
 	return render(request, "nekretnine/register.html", {
@@ -32,16 +42,53 @@ def register(request):
 	})
 
 def login(request):
-	if request.method == 'POST':
-		form = UserLoginForm(request.POST)
-		user = form.login(request)
-		if user is not None:
-			return HttpResponseRedirect("/objekti/")
+	if not request.user.is_authenticated(): ############# DOESN'T WORK!!!
+		if request.method == 'POST':
+			form = UserLoginForm(request.POST)
+			if form.is_valid():
+				user = form.login(request)
+				if user is not None:
+					return HttpResponseRedirect("/create_ad/")
+		else:
+			form = UserLoginForm()
+		return render(request, "nekretnine/login.html", {'form': form})
 	else:
-		form = UserLoginForm()
-	return render(request, "nekretnine/login.html", {
-		'form': form,
-	})
+		return HttpResponseRedirect("/create_ad/")
+
+@login_required
+def create_ad(request):
+	if request.method == 'POST':
+		object_form = CreateObjectForm(request.POST)
+		image_form = CreateObjectImageForm(request.POST, request.FILES)
+		if object_form.is_valid() and image_form.is_valid():
+			user = request.user
+			if user.is_authenticated():
+				owner = Owner.objects.get(user=request.user)
+				new_object = object_form.save(commit=False)
+				new_object.owner = owner
+				new_object.save()
+				new_image = image_form.save(commit=False)
+				new_image.object = new_object
+				new_image.save()
+				ad = Ad(object=new_object)
+				ad.save()
+				return HttpResponseRedirect("/objekti/")
+			else:
+				raise forms.ValidationError(
+					"Vaš nalog nije aktiviran. Proverite email i ispratite uputstva.",
+					code='account_disabled',
+				)
+	else:
+		object_form = CreateObjectForm()
+		image_form = CreateObjectImageForm()
+		
+	items = menu_items
+	items['create_ad']['selected'] = True
+	return render(request, "nekretnine/create_ad.html", {'menu_items': menu_items.values(), 'object_form': object_form, 'image_form': image_form})
+
+def logout_view(request):
+	logout(request)
+	return HttpResponseRedirect('/objekti/')
 
 def get_client_ip(request):
 	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')

@@ -94,8 +94,8 @@ class ObjectImage(models.Model):
 
 class Ad(models.Model):
 	object = models.ForeignKey(Objekat)
-	created_at = models.DateTimeField()
-	updated_at = models.DateTimeField()
+	created_at = models.DateTimeField(auto_now=True)
+	updated_at = models.DateTimeField(auto_now=True)
 	active = models.BooleanField(default=True)
 	reported_as_inactive_counter = models.IntegerField(default = 0)
 	

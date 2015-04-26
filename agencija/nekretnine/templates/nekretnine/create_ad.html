@@ -1,0 +1,12 @@
+{% extends 'nekretnine/account.html' %}
+
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">
+	<div class="form">
+		{% csrf_token %}
+		{{ object_form.as_p }}
+		{{ image_form.as_p }}
+		<input type="submit" value="Napravi oglas">
+	</div>
+</form>
+{% endblock %}

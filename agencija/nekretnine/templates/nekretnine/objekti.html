@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		
+		<title>Moj kutak - nađite stan bez posrednika</title>
 		{% load staticfiles %}
 		<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 		<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
@@ -15,10 +15,10 @@
 
 		<script src="{% static 'nekretnine/objekti.js' %}"></script>
 	</head>
-	<body>
+	<body class="objects">
 		
+		<div class="logo"></div>
 		<div id="filters" class="filters">
-			<div class="logo" style="background-image: {% static 'nekretnine/logo13.jpg' %}"></div>
 			<button id="dugme_dodaj_filter" class="dodaj" onclick="window.libFilter.addFilterChoice()" >+</button>
 			<div id="novi_filteri" class="novi_filteri"></div>
 			<div class="filter_range_slider" id="filter_range_slider"></div>

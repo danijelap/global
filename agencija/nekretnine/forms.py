@@ -1,23 +1,24 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
-from nekretnine.models import Owner
+from django.contrib.auth import authenticate, login as auth_login
+from django.utils.translation import ugettext_lazy as _
+from nekretnine.models import *
 
 class UserRegistrationForm(forms.Form):
 	
 	error_messages = {
-		'password_mismatch': "Lozinke se ne poklapaju.",
-		'user_exists': 'Postoji nalog sa ovom email adresom.'
+		'password_mismatch': _("Lozinke se ne poklapaju."),
+		'user_exists': _("Postoji nalog sa ovom email adresom.")
 	}
 	
-	email = forms.EmailField(label = "Email adresa")
-	password1 = forms.CharField(label = "Lozinka",
+	email = forms.EmailField(label = _("Email adresa"))
+	password1 = forms.CharField(label = _("Lozinka"),
 		widget=forms.PasswordInput)
-	password2 = forms.CharField(label = "Ponovite lozinku",
+	password2 = forms.CharField(label = _("Ponovite lozinku"),
 		widget=forms.PasswordInput,
-		help_text = "Unesite istu lozinku ponovo, zbog potvrde.")
-	first_name = forms.CharField(label = "Ime")
-	last_name = forms.CharField(label = "Prezime")
+		help_text = _("Unesite istu lozinku ponovo, zbog potvrde."))
+	first_name = forms.CharField(label=_("Ime"))
+	last_name = forms.CharField(label=_("Prezime"))
 	
 	def clean_email(self):
 		email = self.cleaned_data.get("email")
@@ -58,21 +59,32 @@ class UserRegistrationForm(forms.Form):
 
 class UserLoginForm(forms.Form):
 	error_messages = {
-		'wrong_user_name_or_password': "Pogrešna email adresa ili lozinka!",
-		'account_disabled': "Vaš nalog nije aktiviran. Proverite email i ispratite uputstva.",
+		'wrong_user_name_or_password': _("Pogrešna email adresa ili lozinka!"),
+		'account_disabled': _("Vaš nalog nije aktiviran. Proverite email i ispratite uputstva."),
 	}
-	email = forms.EmailField(label = "Email adresa")
-	password = forms.CharField(label = "Lozinka",
+	email = forms.EmailField(label = _("Email adresa"))
+	password = forms.CharField(label = _("Lozinka"),
 		widget=forms.PasswordInput)
 
 	def clean_password(self):
 		email = self.cleaned_data.get("email")
 		password = self.cleaned_data.get("password")
+		if len(User.objects.filter(username=email, password=password)) == 1:
+			# User is valid, active and authenticated
+			return password
+		else:
+			raise forms.ValidationError(
+				self.error_messages['wrong_user_name_or_password'],
+				code='wrong_user_name_or_password',
+			)
+	
+	def login(self, request):
+		email = self.cleaned_data.get("email")
+		password = self.cleaned_data.get("password")
 		user = authenticate(username = email, password = password)
 		if user is not None:
-			if user.is_active:
-				# User is valid, active and authenticated
-				return user
+			if user.is_active():
+				auth_login(request, user)
 			else:
 				raise forms.ValidationError(
 					self.error_messages['account_disabled'],
@@ -83,3 +95,37 @@ class UserLoginForm(forms.Form):
 				self.error_messages['wrong_user_name_or_password'],
 				code='wrong_user_name_or_password',
 			)
+		return user
+
+class CreateObjectForm(forms.ModelForm):
+	error_messages = {
+		'account_disabled': _("Vaš nalog nije aktiviran. Proverite email i ispratite uputstva."),
+	}
+	
+	class Meta:
+		model = Objekat
+		fields = [ 'adresa', 'tip_objekta', 'deo_grada', 'broj_soba', 'povrsina', 
+			'cena', 'namestenost', 'has_terrace', 'has_air_conditioner', 'has_cable', 
+			'has_elevator', 'floor', 'floors', 'heating' ]
+		labels = {
+			'adresa': _("Adresa"),
+			'tip_objekta': _("Tip objekta"),
+			'deo_grada': _("Deo grada"),
+			'broj_soba': _("Broj soba"),
+			'povrsina': _("Površina"),
+			'cena': _("Cena"),
+			'namestenost': _("Nameštenost"),
+			'has_terrace': _("Terasa"),
+			'has_air_conditioner': _("Klima uređaj"),
+			'has_cable': _("Kablovska TV"),
+			'has_elevator': _("Lift"),
+			'floor': _("Sprat"),
+			'floors': _("Spratnost zgrade"),
+			'heating': _("Grejanje"),
+		}
+
+class CreateObjectImageForm(forms.ModelForm):
+	class Meta:
+		model = ObjectImage
+		fields = [ 'image' ]
+

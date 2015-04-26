@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Moj kutak - nađite stan bez posrednika</title>
+		{% load staticfiles %}
+		<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}" /> 
+	</head>
+	<body>
+		<div class="logo"></div>
+		<div class="menu">
+			Prijavljen kao {{ user.username }}. Dobrodošli!
+			{% for menu_item in menu_items %}
+			<div class="menu_item{% if menu_item.selected %} menu_item_selected{% endif %}" onmouseover="$(this).addClass('menu_item_hover')" onmouseout="$(this).removeClass('menu_item_hover')">{{ menu_item.text }}</div>
+			{% endfor %}
+		</div>
+		<div class="account_content">
+			{% block content %}{% endblock %}
+		</div>
+	</body>
+</html>
