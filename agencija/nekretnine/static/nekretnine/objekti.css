@@ -119,13 +119,14 @@ div.object {
 	position:absolute;
 	background-color: white ;
 	color:#5B626A;
-	border:1px solid #5B626A;;
-	text-decoration: underline;
-	padding:7px;
+	border-right:1px solid #5B626A;
+	border-left:1px solid #5B626A;
+	border-top:1px solid #5B626A;
 	text-transform: uppercase;
 }
 .filter_name{
-	margin-bottom:7px;
+	border-bottom: 1px solid;
+	padding:7px;
 }
 .overmouse_color{
 	background-color:#ECECEC;
@@ -167,4 +168,11 @@ div.login_form {
 	margin: auto;
 	text-align: left;
 	width: 700px;
+}
+.dodaj{
+	background-color:#C0DEED;
+	color:#545757;
+	width:100px;
+	height:24px;
+	border: 2px outset #B6B7B7;
 }
