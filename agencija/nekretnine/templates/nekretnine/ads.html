@@ -1,0 +1,9 @@
+{% extends 'nekretnine/account.html' %}
+
+{% block content %}
+{% for ad in ads %}
+<a href="/ad/?id={{ ad.object.id }}">
+	<div class="ad">{{ ad }}</div>
+</a>
+{% endfor %}
+{% endblock %}

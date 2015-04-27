@@ -219,13 +219,20 @@ function add_favorits(id_objekta) {
 	setHeightOfContainers();
 }
 
+var heightTimeout = null;
+function setHeightOfContainersDelayed() {
+	if (heightTimeout) clearTimeout(heightTimeout);
+	heightTimeout = setTimeout(setHeightOfContainers, 500);
+}
 function setHeightOfContainers() {
 	// prvi nacin podesavanja css-a pomocu jQuery-ja. $(element).css(osobina, vrednost);
 	$("#spisak").css('height', $(window).height() - $("#filters").height() - $("#favoriti").height());
 	// drugi nacin podesacanja css-a pomocu jQuery-ja. $(element).css(objekat_sa_osobinama);
 	// objekat_sa_osobinama je dictionary u koji moze da se stavi vise osobina.
 	detalji_css = { 'height' : $(window).height() - $("#filters").height() };
-	$("#detalji").css(detalji_css);
+	$("#right").css(detalji_css);
+	
+	$("#left").css('width', $(window).width() - $("#right").width());
 }
 
 function init_document_click(){

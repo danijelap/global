@@ -1,12 +1,16 @@
 from django.shortcuts import render
 from django.template import RequestContext, loader
-
-from django import forms
-from nekretnine.forms import UserRegistrationForm, UserLoginForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 from django.http import HttpResponseRedirect, HttpResponse
+from django import forms
 
+from nekretnine.forms import *
 from nekretnine.models import *
+
 import json
+import copy
+from datetime import datetime
 
 filters = {
 	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
@@ -19,29 +23,105 @@ filters = {
 	'heating': {'name': 'Grejanje', 'title': 'grejanje', 'model_filter_key': 'heating_id', 'type': 'exact', 'objects': Heating.objects},
 }
 
+menu_items = [
+	{'text': 'početna strana', 'id': 'home_page', 'href': '/objekti/'}, 
+	{'text': 'lični podaci', 'id': 'personal_info'}, 
+	{'text': 'promena lozinke', 'id': 'change_pass'}, 
+	{'text': 'moji oglasi', 'id': 'ads', 'href': '/ads/'}, 
+	{'text': 'unos oglasa', 'id': 'ad', 'href': '/ad/'}
+]
+
 def register(request):
 	if request.method == 'POST':
 		form = UserRegistrationForm(request.POST)
 		if form.is_valid():
 			new_user, new_owner = form.save()
-			return HttpResponseRedirect("/admin/")
+			return HttpResponseRedirect("/login/")
 	else:
 		form = UserRegistrationForm()
 	return render(request, "nekretnine/register.html", {
 		'form': form,
 	})
 
-def login(request):
-	if request.method == 'POST':
-		form = UserLoginForm(request.POST)
-		user = form.login(request)
-		if user is not None:
-			return HttpResponseRedirect("/objekti/")
+def login(request): ############# NOT USED!!!
+	if not request.user.is_authenticated():
+		if request.method == 'POST':
+			form = UserLoginForm(request.POST)
+			if form.is_valid():
+				user = form.login(request)
+				if user is not None:
+					return HttpResponseRedirect("/ad/")
+		else:
+			form = UserLoginForm()
+		return render(request, "nekretnine/login.html")
 	else:
-		form = UserLoginForm()
-	return render(request, "nekretnine/login.html", {
-		'form': form,
-	})
+		return HttpResponseRedirect("/ad/")
+
+@login_required
+def ad(request):
+	context = {}
+	if request.method == 'POST':
+		user = request.user
+		if user.is_authenticated():
+			object_id = request.POST.get('object_id')
+			if object_id is not None:
+				object = Objekat.objects.get(pk=object_id)
+				object_form = ObjectForm(request.POST, instance=object)
+				image_form = ObjectImageForm(request.POST, request.FILES, instance=object.objectimage_set.first())
+				ad_form = AdForm(request.POST, instance=object.ad_set.first())
+				if object_form.is_valid() and image_form.is_valid() and ad_form.is_valid():
+					object_form.save()
+					image_form.save()
+					ad_form.save()
+					return HttpResponseRedirect("/login/")
+				else:
+					context['object_form'] = object_form
+					context['image_form'] = image_form
+					context['ad_form'] = ad_form
+					context['object_id'] = object_id
+			else:
+				object_form = ObjectForm(request.POST)
+				image_form = ObjectImageForm(request.POST, request.FILES)
+				if object_form.is_valid() and image_form.is_valid():
+					owner = Owner.objects.get(user=request.user)
+					object = object_form.save(commit=False)
+					object.owner = owner
+					object.save()
+					image = image_form.save(commit=False)
+					image.object = object
+					image.save()
+					ad = Ad(object=object)
+					ad.save()
+				return HttpResponseRedirect("/objekti/")
+		else:
+			raise forms.ValidationError(
+				"Vaš nalog nije aktiviran. Proverite email i ispratite uputstva.",
+				code='account_disabled',
+			)
+	else:
+		object_id = request.GET.get('id')
+		if object_id is not None:
+			object = Objekat.objects.get(pk=object_id)
+			context['object_form'] = ObjectForm(instance=object)
+			context['image_form'] = ObjectImageForm(instance=object.objectimage_set.first())
+			context['ad_form'] = AdForm(instance=object.ad_set.first())
+			context['object_id'] = object_id
+		else:
+			context['object_form'] = ObjectForm()
+			context['image_form'] = ObjectImageForm()
+		
+	context['selected_item'] = 'ad'
+	context['menu_items'] = menu_items
+	return render(request, "nekretnine/ad.html", context)
+
+@login_required
+def ads(request):
+	ads = Ad.objects.filter(object__owner__user=request.user)
+	return render(request, "nekretnine/ads.html", {'menu_items': menu_items, 'selected_item': 'ads', 'ads': ads})
+
+def logout_view(request):
+	logout(request)
+	return HttpResponseRedirect('/objekti/')
 
 def get_client_ip(request):
 	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')

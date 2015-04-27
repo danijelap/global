@@ -1,35 +1,53 @@
 div.logo {
-	height: 68px;
-	width: 156px;
+	height: 70px;
+	width: 160px;
+	background-image: url('logo13.jpg');
+	float: left;
 }
 
-.levo{
-	width:50%;
+.levo {
+	min-width:500px;
 	float:left;
+	clear: left;
 }
+.account {
+	float: right;
+	text-align: right;
+}
+.account p {
+	margin: 0;
+	font-size: 12px;
+	padding-right: 5px;
+}
+
 body {
 	margin:0;
+	font-family: Trebuchet MS;
+	font-size: 14px;
+}
+body.objects {
 	overflow:hidden;
 }
-.desno{
-	width:50%;
-	float:left;
-	float:left;
-	overflow-y:scroll;
-	background:#E0FFFF;
+
+.objects_container {
+	min-width: 2000px;
 }
-.filters{
-	width:100%;
-	height:100px;
-	border:1px solid #B0C4DE;
+
+.desno {
+	width: 750px;
+	float: left;
+	overflow-y: auto;
 }
-.skloni_filter{
+
+.filters {
+	height:70px;
+	float: left;
+}
+.filter_list {
 	float:left;
-	margin-right:10px;
+	margin-left:10px;
 }
-.filter_grad{
-	float:left;
-}
+
 .ui-slider .ui-slider-handle {
 	position: absolute;
 	z-index: 2;
@@ -39,7 +57,40 @@ body {
 	-ms-touch-action: none;
 	touch-action: none;
 }
-.favoriti{
+
+.menu {
+	clear: left;
+	float: left;
+	width: 160px;
+	padding-top: 50px;
+	border-bottom-style: solid;
+	border-width: 1px;
+}
+.menu_item {
+	border-width: 1px;
+	border-left-style: solid;
+	border-top-style: solid;
+	border-right-style: solid;
+	padding-left: 10px;
+	cursor: pointer;
+}
+.menu_item_selected {
+	border-right-style: none;
+	background-color: #C0DEED
+}
+.menu_item_hover {
+	background-color: #00DEED
+}
+
+.account_content {
+	float: left;
+}
+
+.ad {
+	border: 1px solid;
+}
+
+.favoriti {
 	height:0px;
 	overflow-y:auto;
 	background-color:#6C87A3;
@@ -52,6 +103,8 @@ div.object {
 	height:60px;
 	background-color: white;
 	margin-top: 2px;
+	margin-left: 2px;
+	margin-right: 2px;
 }
 
 .red {
@@ -65,22 +118,21 @@ div.object {
 	margin:4px;
 	background-color:white;
 }
-.text{
-	width:470px;
-	float:left;
+.list_text {
+	float: left;
 	
 }
-.osobina{
+.osobina {
 	margin-right:5px;
 	margin-left:15px;
 	width:70px;
 	text-align:right;
 	color:#505050; 
 }
-.podatak{
+.podatak {
 	margin-left:5px;
 }
-.dugme{
+.dugme {
 	width:25px:
 	background-color:blue;
 	background-color:blue;
@@ -90,28 +142,25 @@ div.object {
 	float:right;
 	margin:5px;
 }
-.prazan_div{
-	width:450px;
-	height:420px;
-	margin-left:20px;
-	margin-top:50px;
+.details {
+	min-width:450px;
 }
-.detalji_parametri{
-	
+.details_text {
+	margin-top: 50px;
+}
+.details_parameters {
 	width:100;
 	height:28;
 	margin-right:5px;
 	margin-left:25px;
 	font-weight: bold;
-	font-style: italic;
 }
-.detalji_vrednosti{
+.details_values {
 	color:#005C5C;
 	height:10px;
 }
-.red_detalji{
+.details_row{
 	margin-top:10px;
-	width:450px;
 	height:20px;
 }
 .novi_filteri {
@@ -163,7 +212,7 @@ form p label {
 	width: 200px;
 	float: left;
 }
-div.login_form {
+div.form {
 	clear: left;
 	margin: auto;
 	text-align: left;
