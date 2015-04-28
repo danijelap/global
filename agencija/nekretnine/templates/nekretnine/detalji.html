@@ -33,7 +33,7 @@
 	<div class="details_row">
 	</div>
 	
-	<input id="reportingButton" type="button" onclick="reportInactive({{ stan.id }})" value="Prijavite da je stan izdat" />
+	<input id="reportingButton"  class = "reportingButton" type="button" onclick="reportInactive({{ stan.id }})" value="Prijavite da je stan izdat" />
 	<span id="thanksForReporting" class="report">Hvala, Vaša prijava je zabeležena</span>
 	<span id="reportingFailed" class="report">Vaša prijava nije prihvaćena. Pokušajte kasnije ponovo.</span>
 	{% if ad.reported_as_inactive_counter > 1 %}

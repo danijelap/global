@@ -42,6 +42,7 @@ body.objects {
 .filters {
 	height:70px;
 	float: left;
+	padding:3px;
 }
 .filter_list {
 	float:left;
@@ -133,14 +134,14 @@ div.object {
 	margin-left:5px;
 }
 .dugme {
-	width:25px:
-	background-color:blue;
-	background-color:blue;
-	border-radius: 7px;
-	color:white;
-	height:20px;
+	width:45px;
+	color:#545757;
+	height:22px;
 	float:right;
 	margin:5px;
+	border: 3px outset #C0C0C0;
+	background-color:white;
+	text-align:center;
 }
 .details {
 	min-width:450px;
@@ -171,7 +172,6 @@ div.object {
 	border-right:1px solid #5B626A;
 	border-left:1px solid #5B626A;
 	border-top:1px solid #5B626A;
-	text-transform: uppercase;
 }
 .filter_name{
 	border-bottom: 1px solid;
@@ -219,9 +219,15 @@ div.form {
 	width: 700px;
 }
 .dodaj{
-	background-color:#C0DEED;
+	background-color:white;
 	color:#545757;
 	width:100px;
 	height:24px;
-	border: 2px outset #B6B7B7;
+	border: 3px outset#C0C0C0 ; 
+	margin-left:5px;
+}
+.reportingButton{
+	margin-left:25px;
+	border: 3px outset #C0C0C0 ;
+	background-color:white;
 }
