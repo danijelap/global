@@ -145,6 +145,10 @@ div.object {
 }
 .details {
 	min-width:450px;
+	text-align:center;
+	padding-top:200px;
+	font-size: 17px;
+	
 }
 .details_text {
 	margin-top: 50px;
@@ -231,3 +235,5 @@ div.form {
 	border: 3px outset #C0C0C0 ;
 	background-color:white;
 }
+
+
