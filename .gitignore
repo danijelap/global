@@ -3,3 +3,5 @@
 agencija/media/object*
 
 *__pycache__*
+
+.idea/*
