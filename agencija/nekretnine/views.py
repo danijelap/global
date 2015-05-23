@@ -25,7 +25,7 @@ filters = {
 
 menu_items = [
 	{'text': 'početna strana', 'id': 'home_page', 'href': '/objekti/'}, 
-	{'text': 'lični podaci', 'id': 'personal_info'}, 
+	{'text': 'lični podaci', 'id': 'personal_info', 'href': '/personal_info/'},
 	{'text': 'promena lozinke', 'id': 'change_pass'}, 
 	{'text': 'moji oglasi', 'id': 'ads', 'href': '/ads/'}, 
 	{'text': 'unos oglasa', 'id': 'ad', 'href': '/ad/'}
@@ -118,6 +118,26 @@ def ad(request):
 def ads(request):
 	ads = Ad.objects.filter(object__owner__user=request.user)
 	return render(request, "nekretnine/ads.html", {'menu_items': menu_items, 'selected_item': 'ads', 'ads': ads})
+
+@login_required
+def personal_info(request):
+	owner = Owner.objects.get(user=request.user)
+	if request.method == 'POST':
+		owner_form = OwnerForm(request.POST, instance=owner)
+		user_form = UserForm(request.POST, instance=owner.user)
+		if owner_form.is_valid() and user_form.is_valid():
+			owner_form.save()
+			user_form.save()
+		return HttpResponseRedirect("/personal_info/")
+	else:
+		owner_form = OwnerForm(instance=owner)
+		user_form = UserForm(instance=owner.user)
+		context = {'owner_form': owner_form, 'user_form': user_form}
+		context['selected_item'] = 'personal_info'
+		context['menu_items'] = menu_items
+		return render(request, 'nekretnine/personal_info.html', context)
+
+
 
 def logout_view(request):
 	logout(request)

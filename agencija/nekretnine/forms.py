@@ -27,7 +27,7 @@ class UserRegistrationForm(forms.Form):
 				self.error_messages['user_exists'],
 				code='user_exists',
 			)
-		return username
+		return email
 	
 	def clean_password2(self):
 		password1 = self.cleaned_data.get("password1")
@@ -127,7 +127,7 @@ class ObjectForm(forms.ModelForm):
 class ObjectImageForm(forms.ModelForm):
 	class Meta:
 		model = ObjectImage
-		fields = [ 'image' ]
+		fields = ['image']
 		labels = {
 			'image': 'Slika',
 		}
@@ -135,7 +135,25 @@ class ObjectImageForm(forms.ModelForm):
 class AdForm(forms.ModelForm):
 	class Meta:
 		model = Ad
-		fields = [ 'active' ]
+		fields = ['active']
 		labels = {
 			'active': 'Aktivan',
+		}
+
+class UserForm(forms.ModelForm):
+	class Meta:
+		model = User
+		fields = ['email', 'first_name', 'last_name']
+		labels = {
+			'email': _("Email adresa"),
+			'first_name': _("Ime"),
+			'last_name': _("Prezime"),
+		}
+
+class OwnerForm(forms.ModelForm):
+	class Meta:
+		model = Owner
+		fields = ['phone']
+		labels = {
+			'phone': _("Telefon"),
 		}

@@ -1,8 +1,12 @@
 import os
 from PIL import Image
 from django.db import models
-from django.core.validators import validate_email
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+
+def validate_positive_number(value):
+	if value <= 0:
+		raise ValidationError("{0} is not positive number")
 
 # Create your models here.
 class Drzava(models.Model):
@@ -45,6 +49,7 @@ class Heating(models.Model):
 
 class Owner(models.Model):
 	user = models.ForeignKey(User)
+	phone = models.BigIntegerField(validators=[validate_positive_number])
 	def __str__(self):
 		return "{0} {1}".format(self.user.first_name, self.user.last_name)
 
