@@ -2,6 +2,7 @@
 
 agencija/media/object*
 
-*__pycache__*
+**/__pycache__/**
 
 .idea/*
+agencija/.idea/*
