@@ -26,7 +26,7 @@ filters = {
 menu_items = [
 	{'text': 'početna strana', 'id': 'home_page', 'href': '/objekti/'}, 
 	{'text': 'lični podaci', 'id': 'personal_info', 'href': '/personal_info/'},
-	{'text': 'promena lozinke', 'id': 'change_pass'}, 
+	{'text': 'promena lozinke', 'id': 'change_pass', 'href': '/change_pass/'},
 	{'text': 'moji oglasi', 'id': 'ads', 'href': '/ads/'}, 
 	{'text': 'unos oglasa', 'id': 'ad', 'href': '/ad/'}
 ]
@@ -137,6 +137,19 @@ def personal_info(request):
 		context['menu_items'] = menu_items
 		return render(request, 'nekretnine/personal_info.html', context)
 
+@login_required
+def change_password(request):
+	if request.method == 'POST':
+		change_pass_form = ChangePasswordForm(request.POST, user=request.user)
+		if change_pass_form.is_valid():
+			change_pass_form.save()
+			return HttpResponseRedirect("/objekti/")
+	else:
+		change_pass_form = ChangePasswordForm(user=request.user)
+	context = {'change_pass_form': change_pass_form}
+	context['selected_item'] = 'change_pass'
+	context['menu_items'] = menu_items
+	return render(request, 'nekretnine/change_pass.html', context)
 
 
 def logout_view(request):

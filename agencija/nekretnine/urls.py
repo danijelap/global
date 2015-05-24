@@ -16,6 +16,7 @@ urlpatterns = patterns('',
 	url(r'^ad/$', views.ad, name='ad'),
 	url(r'^ads/$', views.ads, name='ads'),
 	url(r'^personal_info/$', views.personal_info, name='personal_info'),
+	url(r'^change_pass/$', views.change_password, name='change_pass'),
 	url(r'^logout/$', views.logout_view, name='logout'),
 	url(r'^$', views.construction, name='construction'),
 )

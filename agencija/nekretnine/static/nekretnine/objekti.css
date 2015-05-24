@@ -85,6 +85,7 @@ body.objects {
 
 .account_content {
 	float: left;
+	margin-left: 10px;
 }
 
 .ad {

@@ -157,3 +157,41 @@ class OwnerForm(forms.ModelForm):
 		labels = {
 			'phone': _("Telefon"),
 		}
+		widgets = {
+			'phone': forms.TextInput(attrs={'size': 15, 'title': _("Broj telefona")}),
+		}
+
+class ChangePasswordForm(forms.Form):
+
+	error_messages = {
+		'password_mismatch': _("Lozinke se ne poklapaju."),
+	}
+
+	old_password = forms.CharField(label = _("Stara lozinka"),
+		widget=forms.PasswordInput)
+	new_password1 = forms.CharField(label = _("Nova lozinka"),
+		widget=forms.PasswordInput)
+	new_password2 = forms.CharField(label = _("Ponovite lozinku"),
+		widget=forms.PasswordInput)
+
+	def __init__(self, *args, **kwargs):
+		self.user = kwargs.pop('user', None)
+		super(ChangePasswordForm, self).__init__(*args, **kwargs)
+
+	def clean(self):
+		old_password = self.cleaned_data.get("old_password")
+		new_password1 = self.cleaned_data.get("new_password1")
+		new_password2 = self.cleaned_data.get("new_password2")
+		if not (old_password and self.user and
+				self.user.check_password(old_password) and
+				new_password1 and new_password2 and
+				new_password1 == new_password2):
+			raise forms.ValidationError(
+				self.error_messages['password_mismatch'],
+				code='password_mismatch',
+			)
+
+	def save(self):
+		self.user.set_password(self.cleaned_data['new_password1'])
+		self.user.save()
+
