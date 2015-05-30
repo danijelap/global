@@ -1,6 +1,7 @@
 {% for objekat in objekti %}
 <div class = "object" id = "stan_{{objekat.id}}">
-	<div class = "slika">
+	<div class = "thumb">
+		<img src="{{ objekat.thumb }}" />
 	</div>
 	<div class = "list_text">
 		<div class="red">
@@ -12,7 +13,7 @@
 			<span class = "osobina">Cena</span> <span class = "podatak">{{ objekat.cena }}</span>
 		</div>
 	</div>
-	<input type = "button" id = "dugme"  class = "dugme" value = "Vise" onclick="vise({{objekat.id}})" />
+	<div class="button" onclick="vise({{objekat.id}})">Detalji</div>
 	<input type = "button" id = "grugo_dugme"  class = "drugo_dugme" value = "Favorit" onclick = "add_favorits({{objekat.id}})" />
 
 </div>

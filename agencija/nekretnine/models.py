@@ -75,8 +75,15 @@ class Objekat(models.Model):
 		result = []
 		for object_image in self.objectimage_set.all():
 			extension = os.path.splitext(object_image.image.path)[1]
-			result.append({'large_image': object_image.image, 'small_url': object_image.image.url + 'small' + extension})
+			result.append({'large_image': object_image.image, 'small_url': object_image.image.url + '.small' + extension})
 		return result
+
+	@property
+	def thumb(self):
+		img = self.objectimage_set.first().image
+		extension = os.path.splitext(img.path)[1]
+		return img.url + '.small' + extension
+
 	def __str__(self):
 		return "{0} ({1} m2, {2} €)".format(self.deo_grada.name, self.povrsina, self.cena)
 
