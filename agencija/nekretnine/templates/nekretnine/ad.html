@@ -6,7 +6,11 @@
 		{% csrf_token %}
 		<input type="hidden" name="object_id" value="{{ object_id }}" />
 		{{ object_form.as_p }}
-		{{ image_form.as_p }}
+		{% for image in images %}
+		<img src="{{ image.url }}" />
+		<input type="checkbox" name="delete_images[]" value="{{ image.id }}" /> Obrisi
+		{% endfor %}
+		{{ new_images_form.as_p }}
 		{% if ad_form %}{{ ad_form.as_p }}{% endif %}
 		<input type="submit" value="Napravi oglas">
 	</div>

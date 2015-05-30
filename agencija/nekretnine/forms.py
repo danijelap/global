@@ -124,13 +124,24 @@ class ObjectForm(forms.ModelForm):
 			'heating': _("Grejanje"),
 		}
 
-class ObjectImageForm(forms.ModelForm):
-	class Meta:
-		model = ObjectImage
-		fields = ['image']
-		labels = {
-			'image': 'Slika',
-		}
+class NewImagesForm(forms.Form):
+
+	image1 = forms.ImageField(required=False, label=_("Dodajte sliku"))
+	image2 = forms.ImageField(required=False, label=_("Dodajte sliku"))
+	image3 = forms.ImageField(required=False, label=_("Dodajte sliku"))
+	image4 = forms.ImageField(required=False, label=_("Dodajte sliku"))
+
+	def get_images(self):
+		images = []
+		image1 = self.cleaned_data.get("image1")
+		if image1: images.append(ObjectImage(image=image1))
+		image2 = self.cleaned_data.get("image2")
+		if image2: images.append(ObjectImage(image=image2))
+		image3 = self.cleaned_data.get("image3")
+		if image3: images.append(ObjectImage(image=image3))
+		image4 = self.cleaned_data.get("image4")
+		if image4: images.append(ObjectImage(image=image4))
+		return images
 
 class AdForm(forms.ModelForm):
 	class Meta:

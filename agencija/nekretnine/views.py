@@ -64,35 +64,39 @@ def ad(request):
 		user = request.user
 		if user.is_authenticated():
 			object_id = request.POST.get('object_id')
-			if object_id is not None:
+			if object_id is not None:  # saving edited ad
 				object = Objekat.objects.get(pk=object_id)
 				object_form = ObjectForm(request.POST, instance=object)
-				image_form = ObjectImageForm(request.POST, request.FILES, instance=object.objectimage_set.first())
+				new_images_form = NewImagesForm(request.POST, request.FILES)
 				ad_form = AdForm(request.POST, instance=object.ad_set.first())
-				if object_form.is_valid() and image_form.is_valid() and ad_form.is_valid():
+				if object_form.is_valid() and ad_form.is_valid() and new_images_form.is_valid():
 					object_form.save()
-					image_form.save()
 					ad_form.save()
-					return HttpResponseRedirect("/login/")
+					for image in new_images_form.get_images():
+						image.object = object
+						image.save()
+					for object_image_id in request.POST.getlist("delete_images[]"):
+						ObjectImage.objects.get(pk=object_image_id).delete()
+					return HttpResponseRedirect("/ad/?id=" + object_id)
 				else:
 					context['object_form'] = object_form
-					context['image_form'] = image_form
+					context['new_images_form'] = new_images_form
 					context['ad_form'] = ad_form
 					context['object_id'] = object_id
-			else:
+			else:  # saving new ad
 				object_form = ObjectForm(request.POST)
-				image_form = ObjectImageForm(request.POST, request.FILES)
-				if object_form.is_valid() and image_form.is_valid():
+				new_images_form = NewImagesForm(request.POST, request.FILES)
+				if object_form.is_valid() and new_images_form.is_valid():
 					owner = Owner.objects.get(user=request.user)
 					object = object_form.save(commit=False)
 					object.owner = owner
 					object.save()
-					image = image_form.save(commit=False)
-					image.object = object
-					image.save()
+					for image in new_images_form.get_images():
+						image.object = object
+						image.save()
 					ad = Ad(object=object)
 					ad.save()
-				return HttpResponseRedirect("/objekti/")
+				return HttpResponseRedirect("/ads/")
 		else:
 			raise forms.ValidationError(
 				"Vaš nalog nije aktiviran. Proverite email i ispratite uputstva.",
@@ -100,16 +104,19 @@ def ad(request):
 			)
 	else:
 		object_id = request.GET.get('id')
-		if object_id is not None:
+		if object_id is not None:  # edit an existing ad
 			object = Objekat.objects.get(pk=object_id)
 			context['object_form'] = ObjectForm(instance=object)
-			context['image_form'] = ObjectImageForm(instance=object.objectimage_set.first())
+			context['images'] = []
+			for object_image in object.objectimage_set.all():
+				context['images'].append({'url': object_image.image.url, 'id': object_image.id})
+			context['new_images_form'] = NewImagesForm()
 			context['ad_form'] = AdForm(instance=object.ad_set.first())
 			context['object_id'] = object_id
-		else:
+		else:  # create new ad
 			context['object_form'] = ObjectForm()
-			context['image_form'] = ObjectImageForm()
-		
+			context['new_images_form'] = NewImagesForm()
+
 	context['selected_item'] = 'ad'
 	context['menu_items'] = menu_items
 	return render(request, "nekretnine/ad.html", context)
