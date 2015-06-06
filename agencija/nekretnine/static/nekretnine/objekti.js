@@ -208,8 +208,9 @@ function add_favorits(id_objekta) {
 	favoriti = $("#favoriti").find("[id^=stan_]");
 	favorites_total_height = 0;
 	favoriti.each(function(index, element){
-		favorites_total_height += $(element).height();
+		favorites_total_height += $(element).outerHeight(true);
 	});
+	if (favorites_total_height > 0) favorites_total_height += 2;
 	maximum_height = 200
 	if (favorites_total_height <= maximum_height) {
 		$("#favoriti").css('height', favorites_total_height);

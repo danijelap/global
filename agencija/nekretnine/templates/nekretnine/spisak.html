@@ -14,8 +14,7 @@
 		</div>
 	</div>
 	<div class="button" onclick="vise({{objekat.id}})">Detalji</div>
-	<input type = "button" id = "grugo_dugme"  class = "drugo_dugme" value = "Favorit" onclick = "add_favorits({{objekat.id}})" />
-
+	<div class="favourite" onclick="add_favorits({{objekat.id}})"></div>
 </div>
 {% empty %}
 	<p>Nema oglasa.</p>

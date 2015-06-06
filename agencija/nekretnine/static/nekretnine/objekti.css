@@ -97,6 +97,18 @@ body.objects {
 	overflow-y:auto;
 	background-color:#6C87A3;
 }
+.favourite {
+	height: 20px;
+	width: 20px;
+	background-image: url('favourite-empty.png');
+	float: right;
+	margin-top: 4px;
+	margin-right: 5px;
+}
+.favoriti .favourite {
+	background-image: url('favourite-blue.png');
+}
+
 .object_list {
 	background-color: #C0DEED ;
 	overflow-y: auto;

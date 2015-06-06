@@ -64,7 +64,7 @@ def ad(request):
 		user = request.user
 		if user.is_authenticated():
 			object_id = request.POST.get('object_id')
-			if object_id is not None:  # saving edited ad
+			if object_id != "":  # saving edited ad
 				object = Objekat.objects.get(pk=object_id)
 				object_form = ObjectForm(request.POST, instance=object)
 				new_images_form = NewImagesForm(request.POST, request.FILES)
