@@ -5,12 +5,12 @@
 	</div>
 	<div class = "list_text">
 		<div class="red">
-			<span class = "osobina">Broj soba</span> <span class = "podatak">{{ objekat.broj_soba }}</span><span>;</span>
+			<span class = "osobina">Broj soba</span> <span class = "podatak">{{ objekat.broj_soba|stringformat:"g" }}</span><span>;</span>
 			<span class = "osobina">Grad </span> <span class = "podatak">{{ objekat.deo_grada.grad }} ({{ objekat.deo_grada }})</span>
 		</div>
 		<div class="red">
-			<span class = "osobina">Povrsina</span> <span class = "podatak">{{ objekat.povrsina }}m2</span><span>;</span>
-			<span class = "osobina">Cena</span> <span class = "podatak">{{ objekat.cena }}</span>
+			<span class = "osobina">Površina</span> <span class = "podatak">{{ objekat.povrsina }} m<sup>2</sup></span><span>;</span>
+			<span class = "osobina">Cena</span> <span class = "podatak">{{ objekat.cena }} €</span>
 		</div>
 	</div>
 	<div class="button" onclick="vise({{objekat.id}})">Detalji</div>

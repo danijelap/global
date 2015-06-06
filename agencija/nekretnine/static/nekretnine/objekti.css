@@ -1,12 +1,12 @@
 div.logo {
 	height: 70px;
 	width: 160px;
-	background-image: url('logo13.jpg');
+	background-image: url('logo.png');
 	float: left;
 }
 
 .levo {
-	min-width:500px;
+	width:600px;
 	float:left;
 	clear: left;
 }
@@ -26,11 +26,13 @@ body {
 	font-size: 14px;
 }
 body.objects {
-	overflow:hidden;
+	overflow-y:hidden;
 }
 
 .objects_container {
-	min-width: 2000px;
+	width: 1350px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .desno {

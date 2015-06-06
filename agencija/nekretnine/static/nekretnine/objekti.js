@@ -232,8 +232,6 @@ function setHeightOfContainers() {
 	// objekat_sa_osobinama je dictionary u koji moze da se stavi vise osobina.
 	detalji_css = { 'height' : $(window).height() - $("#filters").height() };
 	$("#right").css(detalji_css);
-	
-	$("#left").css('width', $(window).width() - $("#right").width());
 }
 
 function init_document_click(){
