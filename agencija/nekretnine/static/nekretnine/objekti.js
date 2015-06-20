@@ -208,8 +208,9 @@ function add_favorits(id_objekta) {
 	favoriti = $("#favoriti").find("[id^=stan_]");
 	favorites_total_height = 0;
 	favoriti.each(function(index, element){
-		favorites_total_height += $(element).height();
+		favorites_total_height += $(element).outerHeight(true);
 	});
+	if (favorites_total_height > 0) favorites_total_height += 2;
 	maximum_height = 200
 	if (favorites_total_height <= maximum_height) {
 		$("#favoriti").css('height', favorites_total_height);
@@ -219,13 +220,18 @@ function add_favorits(id_objekta) {
 	setHeightOfContainers();
 }
 
+var heightTimeout = null;
+function setHeightOfContainersDelayed() {
+	if (heightTimeout) clearTimeout(heightTimeout);
+	heightTimeout = setTimeout(setHeightOfContainers, 500);
+}
 function setHeightOfContainers() {
 	// prvi nacin podesavanja css-a pomocu jQuery-ja. $(element).css(osobina, vrednost);
 	$("#spisak").css('height', $(window).height() - $("#filters").height() - $("#favoriti").height());
 	// drugi nacin podesacanja css-a pomocu jQuery-ja. $(element).css(objekat_sa_osobinama);
 	// objekat_sa_osobinama je dictionary u koji moze da se stavi vise osobina.
 	detalji_css = { 'height' : $(window).height() - $("#filters").height() };
-	$("#detalji").css(detalji_css);
+	$("#right").css(detalji_css);
 }
 
 function init_document_click(){
@@ -278,3 +284,10 @@ function reportInactive(object_id) {
 		$("#reportingFailed").show();
 	});
 }
+function mouseover(){
+	$("#filter_name").mouseover(function(){
+        $("#filter_name").addClass("overmouse_color");
+		});	
+	}
+$(mouseover);
+

@@ -28,3 +28,9 @@ cp -a /home/bim/nekretnine/static/* /var/www/static/
 
 when you run migrations run it from virtualenv
 python manage.py migrate
+
+list migrations
+python manage.py migrate --list
+
+fake migration
+python manage.py migrate nekretnine 0010 --fake

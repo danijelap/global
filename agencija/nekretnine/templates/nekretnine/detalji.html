@@ -11,35 +11,29 @@
 	Nema slika
 {% endif %}
 </div>
-<div class = "detalji_text">
-	<div class = "red_detalji" >
-		<span class = "detalji_parametri">Lokacija:</span>
-		<span class = "detalji_vrednosti">{{ stan.deo_grada.grad }} ({{ stan.deo_grada }})</span>
+<div class="details_text">
+	<div class="details_row" >
+		<span class="details_parameters">Lokacija:</span>
+		<span class="details_values">{{ stan.deo_grada.grad }} ({{ stan.deo_grada }})</span>
 	</div>
-	<p class = "crta"><hr></p>
-	<div class = "red_detalji">
-		<span class = "detalji_parametri">Tip objekta:</span>
-		<span class = "detalji_vrednosti">{{ stan.tip_objekta }}</span>
-		<span class = "detalji_parametri">Adresa:</span>
-		<span class = "detalji_vrednosti">{{ stan.adresa }}</span>
+	<div class="details_row">
+		<span class="details_parameters">Tip objekta:</span>
+		<span class="details_values">{{ stan.tip_objekta }} ({{ stan.namestenost }})</span>
+		<span class="details_parameters">Površina:</span>
+		<span class="details_values">{{ stan.povrsina }}m2</span>
+		<span class="details_parameters">Broj soba:</span>
+		<span class="details_values">{{ stan.broj_soba }}</span>
+		<span class="details_parameters">Cena:</span>
+		<span class="details_values">{{ stan.cena }} €</span>
 	</div>
-	<div class = "red_detalji">
-		<span class = "detalji_parametri">Površina:</span>
-		<span class = "detalji_vrednosti">{{ stan.povrsina }}m2</span>
-		<span class = "detalji_parametri">Broj soba:</span>
-		<span class = "detalji_vrednosti">{{ stan.broj_soba }}</span>
+	<div class="details_row">
+		<span class="details_parameters">Adresa:</span>
+		<span class="details_values">{{ stan.adresa }}</span>
 	</div>
-	
-	<p class = "crta"><hr></p>
-	
-	<div class = "red_detalji">
-		<span class = "detalji_parametri">Cena:</span>
-		<span class = "detalji_vrednosti">{{ stan.cena }} €</span>
-		<span class = "detalji_parametri">Nameštenost:</span>
-		<span class = "detalji_vrednosti">{{ stan.namestenost }}</span>
+	<div class="details_row">
 	</div>
 	
-	<input id="reportingButton" type="button" onclick="reportInactive({{ stan.id }})" value="Prijavite da je stan izdat" />
+	<input id="reportingButton"  class = "reportingButton" type="button" onclick="reportInactive({{ stan.id }})" value="Prijavite da je stan izdat" />
 	<span id="thanksForReporting" class="report">Hvala, Vaša prijava je zabeležena</span>
 	<span id="reportingFailed" class="report">Vaša prijava nije prihvaćena. Pokušajte kasnije ponovo.</span>
 	{% if ad.reported_as_inactive_counter > 1 %}

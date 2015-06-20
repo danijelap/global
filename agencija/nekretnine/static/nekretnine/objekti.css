@@ -1,31 +1,56 @@
-.levo{
-	width:50%;
-	
-	float:left;
+div.logo {
+	height: 70px;
+	width: 160px;
+	background-image: url('logo.png');
+	float: left;
 }
+
+.levo {
+	width:600px;
+	float:left;
+	clear: left;
+}
+.account {
+	float: right;
+	text-align: right;
+}
+.account p {
+	margin: 0;
+	font-size: 12px;
+	padding-right: 5px;
+}
+
 body {
 	margin:0;
-	overflow:hidden;
+	font-family: Trebuchet MS;
+	font-size: 14px;
 }
-.desno{
-	width:50%;
+body.objects {
+	overflow-y:hidden;
+}
+
+.objects_container {
+	width: 1350px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.desno {
+	width: 750px;
+	float: left;
+	overflow-y: auto;
+}
+
+.filters {
+	height:70px;
+	float: left;
+	padding:3px;
+}
+.filter_list {
 	float:left;
-	float:left;
-	overflow-y:scroll;
-	background:#E0FFFF;
+	margin-left:10px;
 }
-.filters{
-	width:100%;
-	height:100px;
-	border:1px solid #B0C4DE;
-}
-.skloni_filter{
-	float:left;
-	margin-right:10px;
-}
-.filter_grad{
-	float:left;
-}
+
 .ui-slider .ui-slider-handle {
 	position: absolute;
 	z-index: 2;
@@ -35,90 +60,154 @@ body {
 	-ms-touch-action: none;
 	touch-action: none;
 }
-.favoriti{
+
+.menu {
+	clear: left;
+	float: left;
+	width: 160px;
+	padding-top: 50px;
+	border-bottom-style: solid;
+	border-width: 1px;
+}
+.menu_item {
+	border-width: 1px;
+	border-left-style: solid;
+	border-top-style: solid;
+	border-right-style: solid;
+	padding-left: 10px;
+	cursor: pointer;
+}
+.menu_item_selected {
+	border-right-style: none;
+	background-color: #C0DEED
+}
+.menu_item_hover {
+	background-color: #00DEED
+}
+
+.account_content {
+	float: left;
+	margin-left: 10px;
+}
+
+.ad {
+	border: 1px solid;
+}
+
+.favoriti {
 	height:0px;
 	overflow-y:auto;
 	background-color:#6C87A3;
 }
-.lista_stanova{
-	padding-top:4px;
-	padding-left:3px;
-	background-color:#E8E8E8 ;
-	overflow-y:scroll;
+.favourite {
+	height: 20px;
+	width: 20px;
+	background-image: url('favourite-empty.png');
+	float: right;
+	margin-top: 4px;
+	margin-right: 5px;
+	cursor: pointer;
 }
-.jedan_stan{
-	width:660px;
-	height:60px;
-	border:1px solid;
-	border-radius:7px;
-	border-color:#C0C0C0;
-	background-color:white;
+.favoriti .favourite {
+	background-image: url('favourite-blue.png');
 }
-.red{
+
+.object_list {
+	background-color: #C0DEED ;
+	overflow-y: auto;
+}
+div.object {
+	height:55px;
+	background-color: white;
+	margin-top: 2px;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
+div.button {
+	width: 100px;
+	border: 1px solid;
+	background-color: #C0DEED;
+	text-align: center;
+	float: right;
+	cursor: pointer;
+	margin-top: 5px;
+	margin-right: 5px;
+}
+
+.red {
 	margin-top:5px;
 }
-.slika{
-	float:left;
-	width:100px;
-	height:50px;
-	border:1px solid;
-	margin:5px;
-	background-color:white;
+.thumb {
+	float: left;
+	width: 80px;
+	height: 45px;
+	overflow: hidden;
+	border: 1px solid;
+	margin: 4px;
 }
-.text{
-	width:470px;
-	float:left;
+.list_text {
+	float: left;
 	
 }
-.osobina{
+.osobina {
 	margin-right:5px;
 	margin-left:15px;
 	width:70px;
 	text-align:right;
 	color:#505050; 
 }
-.podatak{
+.podatak {
 	margin-left:5px;
 }
-.dugme{
-	width:25px:
-	background-color:blue;
-	background-color:blue;
-	border-radius: 7px;
-	color:white;
-	height:20px;
+.dugme {
+	width:45px;
+	color:#545757;
+	height:22px;
 	float:right;
 	margin:5px;
+	border: 3px outset #C0C0C0;
+	background-color:white;
+	text-align:center;
 }
-.prazan_div{
-	width:450px;
-	height:420px;
-	margin-left:20px;
-	margin-top:50px;
+.details {
+	min-width:450px;
+	text-align:center;
+	font-size: 17px;
 }
-.detalji_parametri{
-	
+.details_text {
+	margin-top: 50px;
+}
+.details_parameters {
 	width:100;
 	height:28;
 	margin-right:5px;
 	margin-left:25px;
 	font-weight: bold;
-	font-style: italic;
 }
-.detalji_vrednosti{
+.details_values {
 	color:#005C5C;
 	height:10px;
 }
-.red_detalji{
+.details_row{
 	margin-top:10px;
-	width:450px;
 	height:20px;
 }
 .novi_filteri {
-	display: none;
-	position: absolute;
-	background-color: blue;
-	color: white;
+	display:none;
+	position:absolute;
+	background-color: white ;
+	color:#5B626A;
+	border-right:1px solid #5B626A;
+	border-left:1px solid #5B626A;
+	border-top:1px solid #5B626A;
+}
+.filter_name{
+	border-bottom: 1px solid;
+	padding:7px;
+}
+.overmouse_color{
+	background-color:#ECECEC;
 }
 
 .filter_range {
@@ -142,3 +231,34 @@ body {
 .report {
 	display: none;
 }
+
+form {
+	margin: 0px;
+	padding: 0px;
+}
+form p label {
+	display: block;
+	width: 200px;
+	float: left;
+}
+div.form {
+	clear: left;
+	margin: auto;
+	text-align: left;
+	width: 700px;
+}
+.dodaj{
+	background-color:white;
+	color:#545757;
+	width:100px;
+	height:24px;
+	border: 3px outset#C0C0C0 ; 
+	margin-left:5px;
+}
+.reportingButton{
+	margin-left:25px;
+	border: 3px outset #C0C0C0 ;
+	background-color:white;
+}
+
+

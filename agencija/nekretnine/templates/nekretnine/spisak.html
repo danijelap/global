@@ -1,20 +1,20 @@
 {% for objekat in objekti %}
-<div class = "jedan_stan" id = "stan_{{objekat.id}}">
-	<div class = "slika">
+<div class = "object" id = "stan_{{objekat.id}}">
+	<div class = "thumb">
+		<img src="{{ objekat.thumb }}" />
 	</div>
-	<div class = "text">
+	<div class = "list_text">
 		<div class="red">
-			<span class = "osobina">Broj soba</span> <span class = "podatak">{{ objekat.broj_soba }}</span><span>;</span>
+			<span class = "osobina">Broj soba</span> <span class = "podatak">{{ objekat.broj_soba|stringformat:"g" }}</span><span>;</span>
 			<span class = "osobina">Grad </span> <span class = "podatak">{{ objekat.deo_grada.grad }} ({{ objekat.deo_grada }})</span>
 		</div>
 		<div class="red">
-			<span class = "osobina">Povrsina</span> <span class = "podatak">{{ objekat.povrsina }}m2</span><span>;</span>
-			<span class = "osobina">Cena</span> <span class = "podatak">{{ objekat.cena }}</span>
+			<span class = "osobina">Površina</span> <span class = "podatak">{{ objekat.povrsina }} m<sup>2</sup></span><span>;</span>
+			<span class = "osobina">Cena</span> <span class = "podatak">{{ objekat.cena }} €</span>
 		</div>
 	</div>
-	<input type = "button" id = "dugme"  class = "dugme" value = "Vise" onclick="vise({{objekat.id}})" />
-	<input type = "button" id = "grugo_dugme"  class = "drugo_dugme" value = "Favorit" onclick = "add_favorits({{objekat.id}})" />
-
+	<div class="button" onclick="vise({{objekat.id}})">Detalji</div>
+	<div class="favourite" onclick="add_favorits({{objekat.id}})"></div>
 </div>
 {% empty %}
 	<p>Nema oglasa.</p>

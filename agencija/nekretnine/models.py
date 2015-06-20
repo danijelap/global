@@ -1,7 +1,12 @@
 import os
 from PIL import Image
 from django.db import models
-from django.core.validators import validate_email
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+
+def validate_positive_number(value):
+	if value <= 0:
+		raise ValidationError("{0} is not positive number")
 
 # Create your models here.
 class Drzava(models.Model):
@@ -43,11 +48,10 @@ class Heating(models.Model):
 		return self.name
 
 class Owner(models.Model):
-	name = models.TextField()
-	email = models.TextField(validators = [validate_email])
-	phone = models.TextField()
+	user = models.ForeignKey(User)
+	phone = models.BigIntegerField(validators=[validate_positive_number])
 	def __str__(self):
-		return self.name
+		return "{0} {1}".format(self.user.first_name, self.user.last_name)
 
 class Objekat(models.Model):
 	adresa = models.TextField()
@@ -71,8 +75,15 @@ class Objekat(models.Model):
 		result = []
 		for object_image in self.objectimage_set.all():
 			extension = os.path.splitext(object_image.image.path)[1]
-			result.append({'large_image': object_image.image, 'small_url': object_image.image.url + 'small' + extension})
+			result.append({'large_image': object_image.image, 'small_url': object_image.image.url + '.small' + extension})
 		return result
+
+	@property
+	def thumb(self):
+		img = self.objectimage_set.first().image
+		extension = os.path.splitext(img.path)[1]
+		return img.url + '.small' + extension
+
 	def __str__(self):
 		return "{0} ({1} m2, {2} €)".format(self.deo_grada.name, self.povrsina, self.cena)
 
@@ -95,8 +106,8 @@ class ObjectImage(models.Model):
 
 class Ad(models.Model):
 	object = models.ForeignKey(Objekat)
-	created_at = models.DateTimeField()
-	updated_at = models.DateTimeField()
+	created_at = models.DateTimeField(auto_now=True)
+	updated_at = models.DateTimeField(auto_now=True)
 	active = models.BooleanField(default=True)
 	reported_as_inactive_counter = models.IntegerField(default = 0)
 	

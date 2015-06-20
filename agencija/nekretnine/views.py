@@ -1,9 +1,16 @@
 from django.shortcuts import render
 from django.template import RequestContext, loader
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from django.http import HttpResponseRedirect, HttpResponse
+from django import forms
 
+from nekretnine.forms import *
 from nekretnine.models import *
-from django.http import HttpResponse
+
 import json
+import copy
+from datetime import datetime
 
 filters = {
 	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
@@ -11,8 +18,150 @@ filters = {
 	'tip_objekta': {'name': 'Tip objekta', 'title': 'tip objekta', 'model_filter_key': 'tip_objekta_id', 'type': 'exact', 'objects': TipObjekta.objects},
 	'grad': {'name': 'Gradovi', 'title': 'grad', 'model_filter_key': 'deo_grada__grad_id', 'type': 'exact', 'objects': Grad.objects, 'default': True},
 	'deo_grada': {'name': 'Delovi grada', 'title': 'deo grada', 'model_filter_key': 'deo_grada_id', 'type': 'exact', 'objects': DeoGrada.objects, 'depends_on': 'grad', 'depends_on_filter_key': 'grad_id', 'default': True},
-	'namestenost': {'name': 'Namestenost', 'title': 'namestenost', 'model_filter_key': 'namestenost_id', 'type': 'exact', 'objects': Namestenost.objects}
+	'namestenost': {'name': 'Nameštenost', 'title': 'nameštenost', 'model_filter_key': 'namestenost_id', 'type': 'exact', 'objects': Namestenost.objects},
+	'povrsina': {'name': 'Površina', 'title': 'površina', 'model_filter_key': 'povrsina', 'type': 'range', 'min_value': 0, 'max_value': 400, 'start_value': '50-100'},
+	'heating': {'name': 'Grejanje', 'title': 'grejanje', 'model_filter_key': 'heating_id', 'type': 'exact', 'objects': Heating.objects},
 }
+
+menu_items = [
+	{'text': 'početna strana', 'id': 'home_page', 'href': '/objekti/'}, 
+	{'text': 'lični podaci', 'id': 'personal_info', 'href': '/personal_info/'},
+	{'text': 'promena lozinke', 'id': 'change_pass', 'href': '/change_pass/'},
+	{'text': 'moji oglasi', 'id': 'ads', 'href': '/ads/'}, 
+	{'text': 'unos oglasa', 'id': 'ad', 'href': '/ad/'}
+]
+
+def register(request):
+	if request.method == 'POST':
+		form = UserRegistrationForm(request.POST)
+		if form.is_valid():
+			new_user, new_owner = form.save()
+			return HttpResponseRedirect("/login/")
+	else:
+		form = UserRegistrationForm()
+	return render(request, "nekretnine/register.html", {
+		'form': form,
+	})
+
+def login(request): ############# NOT USED!!!
+	if not request.user.is_authenticated():
+		if request.method == 'POST':
+			form = UserLoginForm(request.POST)
+			if form.is_valid():
+				user = form.login(request)
+				if user is not None:
+					return HttpResponseRedirect("/ad/")
+		else:
+			form = UserLoginForm()
+		return render(request, "nekretnine/login.html")
+	else:
+		return HttpResponseRedirect("/ad/")
+
+@login_required
+def ad(request):
+	context = {}
+	if request.method == 'POST':
+		user = request.user
+		if user.is_authenticated():
+			object_id = request.POST.get('object_id')
+			if object_id != "":  # saving edited ad
+				object = Objekat.objects.get(pk=object_id)
+				object_form = ObjectForm(request.POST, instance=object)
+				new_images_form = NewImagesForm(request.POST, request.FILES)
+				ad_form = AdForm(request.POST, instance=object.ad_set.first())
+				if object_form.is_valid() and ad_form.is_valid() and new_images_form.is_valid():
+					object_form.save()
+					ad_form.save()
+					for image in new_images_form.get_images():
+						image.object = object
+						image.save()
+					for object_image_id in request.POST.getlist("delete_images[]"):
+						ObjectImage.objects.get(pk=object_image_id).delete()
+					return HttpResponseRedirect("/ad/?id=" + object_id)
+				else:
+					context['object_form'] = object_form
+					context['new_images_form'] = new_images_form
+					context['ad_form'] = ad_form
+					context['object_id'] = object_id
+			else:  # saving new ad
+				object_form = ObjectForm(request.POST)
+				new_images_form = NewImagesForm(request.POST, request.FILES)
+				if object_form.is_valid() and new_images_form.is_valid():
+					owner = Owner.objects.get(user=request.user)
+					object = object_form.save(commit=False)
+					object.owner = owner
+					object.save()
+					for image in new_images_form.get_images():
+						image.object = object
+						image.save()
+					ad = Ad(object=object)
+					ad.save()
+				return HttpResponseRedirect("/ads/")
+		else:
+			raise forms.ValidationError(
+				"Vaš nalog nije aktiviran. Proverite email i ispratite uputstva.",
+				code='account_disabled',
+			)
+	else:
+		object_id = request.GET.get('id')
+		if object_id is not None:  # edit an existing ad
+			object = Objekat.objects.get(pk=object_id)
+			context['object_form'] = ObjectForm(instance=object)
+			context['images'] = []
+			for object_image in object.objectimage_set.all():
+				context['images'].append({'url': object_image.image.url, 'id': object_image.id})
+			context['new_images_form'] = NewImagesForm()
+			context['ad_form'] = AdForm(instance=object.ad_set.first())
+			context['object_id'] = object_id
+		else:  # create new ad
+			context['object_form'] = ObjectForm()
+			context['new_images_form'] = NewImagesForm()
+
+	context['selected_item'] = 'ad'
+	context['menu_items'] = menu_items
+	return render(request, "nekretnine/ad.html", context)
+
+@login_required
+def ads(request):
+	ads = Ad.objects.filter(object__owner__user=request.user)
+	return render(request, "nekretnine/ads.html", {'menu_items': menu_items, 'selected_item': 'ads', 'ads': ads})
+
+@login_required
+def personal_info(request):
+	owner = Owner.objects.get(user=request.user)
+	if request.method == 'POST':
+		owner_form = OwnerForm(request.POST, instance=owner)
+		user_form = UserForm(request.POST, instance=owner.user)
+		if owner_form.is_valid() and user_form.is_valid():
+			owner_form.save()
+			user_form.save()
+		return HttpResponseRedirect("/personal_info/")
+	else:
+		owner_form = OwnerForm(instance=owner)
+		user_form = UserForm(instance=owner.user)
+		context = {'owner_form': owner_form, 'user_form': user_form}
+		context['selected_item'] = 'personal_info'
+		context['menu_items'] = menu_items
+		return render(request, 'nekretnine/personal_info.html', context)
+
+@login_required
+def change_password(request):
+	if request.method == 'POST':
+		change_pass_form = ChangePasswordForm(request.POST, user=request.user)
+		if change_pass_form.is_valid():
+			change_pass_form.save()
+			return HttpResponseRedirect("/objekti/")
+	else:
+		change_pass_form = ChangePasswordForm(user=request.user)
+	context = {'change_pass_form': change_pass_form}
+	context['selected_item'] = 'change_pass'
+	context['menu_items'] = menu_items
+	return render(request, 'nekretnine/change_pass.html', context)
+
+
+def logout_view(request):
+	logout(request)
+	return HttpResponseRedirect('/objekti/')
 
 def get_client_ip(request):
 	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')

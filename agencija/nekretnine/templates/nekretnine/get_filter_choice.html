@@ -1,6 +1,6 @@
 {% if filteri %}
 	{% for filter in filteri %}
-		<div class="filter_za_dodavanje" onclick="window.libFilter.appendFilters({'{{filter.id}}': '{{filter.start_value}}'})">{{filter.name}}</div>
+		<div class="filter_za_dodavanje" onclick="window.libFilter.appendFilters({'{{filter.id}}': '{{filter.start_value}}'})"><div id = "filter_name" class = "filter_name">{{filter.name}}</div></div>
 	{% endfor %}
 {% else %}
 	<p>Nema vise filtera.</p>
