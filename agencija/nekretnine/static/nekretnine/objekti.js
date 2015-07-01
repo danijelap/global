@@ -1,3 +1,11 @@
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-64564624-1', 'auto');
+ga('send', 'pageview');
+
 window.sliderOptions=
 {
 	sliderId: "slider",
@@ -31,6 +39,7 @@ window.libFilter = {
 			window.libFilter.shownFilters = {};
 			onComplete();
 		}, 'json');
+		ga('send', 'event', 'user_request', 'load', 'filters');
 	},
 	showFilters: function() {
 		startFilters = $.cookie('filters');
@@ -47,6 +56,8 @@ window.libFilter = {
 			}
 		}
 		this.appendFilters(startFilters);
+
+		ga('send', 'event', 'site_response', 'show', 'filters', getObjectKeys(startFilters).length);
 	},
 	appendFilters: function(filterDictionary) {
 		var filterArray = [];
@@ -75,10 +86,14 @@ window.libFilter = {
 						var dependentFilterId = window.libFilter.getDependentFilter(filter_id);
 						$("#filter_" + filter_id + "_value").change(window.libFilter.dependsOnFilterChange);
 					}
-					$("#filter_" + filter_id + "_value").trigger("chosen:updated").change();
+					if ($("#filter_" + filter_id + "_value")[0].sumo) {
+						$("#filter_" + filter_id + "_value")[0].sumo.reload();
+					}
+					$("#filter_" + filter_id + "_value").change();
 				}
 			}
 			$.cookie('filters', window.libFilter.shownFilters, {expires: 30});
+			ga('send', 'event', 'site_response', 'show', 'new_filters', getObjectKeys(filterDictionary).length);
 		});
 	},
 	dependsOnFilterChange: function(event) {
@@ -105,8 +120,9 @@ window.libFilter = {
 		$.get("/get_filter_content", filterDictionary, function (response) {
 			$("#filter_" + dependentFilterId + "_value").empty()
 				.html(response)
-				.val(window.libFilter.shownFilters[dependentFilterId])
-				.trigger('chosen:updated').change();
+				.val(window.libFilter.shownFilters[dependentFilterId]);
+			$("#filter_" + dependentFilterId + "_value")[0].sumo.reload();
+			$("#filter_" + dependentFilterId + "_value").change();
 		});
 	},
 	initSlider: function() {
@@ -132,7 +148,7 @@ window.libFilter = {
 		var newFilters = $(getObjectKeys(window.libFilter.availableFilters)).not(getObjectKeys(window.libFilter.shownFilters)).get();
 		var filter_dictionary = {'filters': newFilters};
 		$.get('/get_filter_choice', filter_dictionary, function(response){
-			$("#novi_filteri").show()
+			$("#new_filters").show()
 				.css(choicePosition)
 				.html(response);
 		});
@@ -142,6 +158,7 @@ window.libFilter = {
 		$("#filter_" + id_filtera).remove();
 		delete window.libFilter.shownFilters[id_filtera];
 		$.cookie('filters', window.libFilter.shownFilters, {expires: 30});
+		ga('send', 'event', 'user_request', 'remove', 'filter');
 	},
 	initFilterSlider: function(slider_id) {
 		jq_filter_slider_id = "#" + slider_id;
@@ -150,8 +167,8 @@ window.libFilter = {
 			var filter_position = $(filter_id).offset();
 			var new_slider_position = filter_position;
 			new_slider_position.top += 25;
-			$("#filter_range_slider").slider( "option", "max", $(filter_id + "_max").val());
-			$("#filter_range_slider").slider( "option", "min", $(filter_id + "_min").val());
+			$("#filter_range_slider").slider( "option", "max", parseFloat($(filter_id + "_max").val()));
+			$("#filter_range_slider").slider( "option", "min", parseFloat($(filter_id + "_min").val()));
 			$("#filter_range_slider").slider( "option", "values", $(filter_id + "_value").val().split('-'));
 			$("#filter_range_slider").show().css(new_slider_position);
 			window.libFilter.activeFilterRange = this.id.substring(7, this.id.length);
@@ -201,9 +218,11 @@ function add_favorits(id_objekta) {
 	if ($("#stan_" + id_objekta).parents("#spisak").length == 1) {
 		x = $("#stan_" + id_objekta).remove();
 		$("#favoriti").append(x);
+		ga('send', 'event', 'user_request', 'add', 'favourite');
 	} else {
 		x = $("#stan_" + id_objekta).remove();
 		$("#spisak").append(x);
+		ga('send', 'event', 'user_request', 'remove', 'favourite');
 	}
 	favoriti = $("#favoriti").find("[id^=stan_]");
 	favorites_total_height = 0;
@@ -238,7 +257,7 @@ function init_document_click(){
 	window.libFilter.addFilterChoiceButtonClicked = false;
 	$(document).click(function(){
 		if (!window.libFilter.addFilterChoiceButtonClicked) {
-			$("#novi_filteri").hide();
+			$("#new_filters").hide();
 			$("#filter_range_slider").hide();
 		}
 		window.libFilter.addFilterChoiceButtonClicked = false;
@@ -255,8 +274,10 @@ function vise(objekat_id) {
 			window.isImageSliderLoaded = true;
 			window.imageSlider.reload();
 		}
+		ga('send', 'event', 'site_response', 'show', 'details');
 	});
 	
+	ga('send', 'event', 'user_request', 'load', 'details');
 }
 
 function ucitajSpisakStanova() {
@@ -280,9 +301,12 @@ function reportInactive(object_id) {
 	$.post("/report_inactive/", params).done(function (response) {
 		$("#reportingButton").hide();
 		$("#thanksForReporting").show();
+		ga('send', 'event', 'site_response', 'show', 'report_inactive_accepted');
 	}).fail(function(response) {
 		$("#reportingFailed").show();
+		ga('send', 'event', 'site_response', 'show', 'report_inactive_failed');
 	});
+	ga('send', 'event', 'user_request', 'report', 'inactive');
 }
 function mouseover(){
 	$("#filter_name").mouseover(function(){

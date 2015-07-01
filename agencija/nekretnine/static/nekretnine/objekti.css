@@ -16,7 +16,7 @@ div.logo {
 }
 .account p {
 	margin: 0;
-	font-size: 12px;
+#	font-size: 12px;
 	padding-right: 5px;
 }
 
@@ -27,6 +27,7 @@ body {
 }
 body.objects {
 	overflow-y:hidden;
+	min-width: 1350px;
 }
 
 .objects_container {
@@ -42,13 +43,35 @@ body.objects {
 }
 
 .filters {
-	height:70px;
+	min-height: 70px;
+	width: 900px;
 	float: left;
-	padding:3px;
+	padding: 3px;
 }
 .filter_list {
-	float:left;
-	margin-left:10px;
+	float: left;
+	margin-left: 10px;
+	height: 30px;
+}
+
+.filter_range {
+	float: left;
+	height: 30px;
+	margin-left: 10px;
+}
+.filter_range_slider {
+	display: none;
+	position: absolute;
+	width:150px;
+	height:7px;
+}
+.filter_range_value {
+	border: 0;
+	font-weight:bold;
+	width: 5em;
+}
+.image_slider {
+	height: 350px;
 }
 
 .ui-slider .ui-slider-handle {
@@ -171,8 +194,8 @@ div.button {
 	text-align:center;
 }
 .details {
-	min-width:450px;
-	text-align:center;
+	min-width: 450px;
+	text-align: left;
 	font-size: 17px;
 }
 .details_text {
@@ -193,7 +216,7 @@ div.button {
 	margin-top:10px;
 	height:20px;
 }
-.novi_filteri {
+.new_filters {
 	display:none;
 	position:absolute;
 	background-color: white ;
@@ -201,31 +224,19 @@ div.button {
 	border-right:1px solid #5B626A;
 	border-left:1px solid #5B626A;
 	border-top:1px solid #5B626A;
+	cursor: pointer;
 }
+
+.new_filter_active {
+	background-color: #C0DEED;
+}
+
 .filter_name{
 	border-bottom: 1px solid;
 	padding:7px;
 }
 .overmouse_color{
 	background-color:#ECECEC;
-}
-
-.filter_range {
-	float: left;
-}
-.filter_range_slider {
-	display: none;
-	position: absolute;
-	width:150px; 
-	height:7px;
-}
-.filter_range_value {
-	border: 0; 
-	font-weight:bold;
-	width: 5em;
-}
-.image_slider {
-	height: 350px;
 }
 
 .report {
@@ -251,14 +262,25 @@ div.form {
 	background-color:white;
 	color:#545757;
 	width:100px;
-	height:24px;
+	height: 30px;
 	border: 3px outset#C0C0C0 ; 
 	margin-left:5px;
+	font-size: 13px;
 }
-.reportingButton{
+.reporting_button{
 	margin-left:25px;
 	border: 3px outset #C0C0C0 ;
 	background-color:white;
 }
 
+.welcome_message {
+	margin-top: 200px;
+	text-align: center;
+}
 
+.free_message {
+	margin-left: 25px;
+	margin-top: 25px;
+	margin-bottom: 25px;
+	font-style: italic;
+}

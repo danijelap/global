@@ -4,13 +4,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django import forms
+from django.db.models import Q
+from django.forms.models import model_to_dict
 
 from nekretnine.forms import *
 from nekretnine.models import *
 
 import json
-import copy
-from datetime import datetime
 
 filters = {
 	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
@@ -21,6 +21,8 @@ filters = {
 	'namestenost': {'name': 'Nameštenost', 'title': 'nameštenost', 'model_filter_key': 'namestenost_id', 'type': 'exact', 'objects': Namestenost.objects},
 	'povrsina': {'name': 'Površina', 'title': 'površina', 'model_filter_key': 'povrsina', 'type': 'range', 'min_value': 0, 'max_value': 400, 'start_value': '50-100'},
 	'heating': {'name': 'Grejanje', 'title': 'grejanje', 'model_filter_key': 'heating_id', 'type': 'exact', 'objects': Heating.objects},
+	'floor': {'name': 'Sprat', 'title': 'sprat', 'model_filter_key': 'floor', 'type': 'range', 'min_value': 0, 'max_value': 30, 'start_value': '1-4'},
+	'additional_features': {'name': 'Prateći objekti', 'title': 'prateće objekte', 'model_filter_key': 'additional_features', 'type': 'multi', 'objects': AdditionalFeatures.objects},
 }
 
 menu_items = [
@@ -192,18 +194,41 @@ def detalji(request):
 	return render(request, 'nekretnine/detalji.html', context)
 	
 def spisak(request):
-	filter_dictionary = {'ad__active': True}
-	for filter in request.GET:
-		value = request.GET.get(filter)
-		if filters[filter]['type'] == 'exact':
-			filter_dictionary[filters[filter]['model_filter_key']] = value
-		else:
+	query = Q(ad__active=True)
+	many_to_many_filters = {}
+	for filter_name in request.GET:
+		if filter_name[-2:] == '[]':
+			filter_name = filter_name[:-2]
+		if filters[filter_name]['type'] == 'exact':
+			value = request.GET.get(filter_name)
+			query_filter = {filters[filter_name]['model_filter_key']: value}
+			query = query & Q(**query_filter)
+		elif filters[filter_name]['type'] == 'range':
+			value = request.GET.get(filter_name)
 			min_value, max_value = value.split('-')
-			filter_dictionary[filters[filter]['model_filter_key'] + "__gte"] = min_value
-			filter_dictionary[filters[filter]['model_filter_key'] + "__lte"] = max_value
-		
-	objekti = Objekat.objects.filter(**filter_dictionary)
-	context = {'objekti':objekti}
+			query_filter = {
+				filters[filter_name]['model_filter_key'] + "__gte": min_value,
+				filters[filter_name]['model_filter_key'] + "__lte": max_value
+			}
+			query = query & Q(**query_filter)
+		elif filters[filter_name]['type'] == 'multi':
+			values = request.GET.getlist(filter_name + '[]')
+			many_to_many_filters[filters[filter_name]['model_filter_key']] = set([int(value) for value in values])
+
+	objects_to_exclude = []
+	objects = Objekat.objects.filter(query)
+
+	for model_filter_key, values_to_filter in many_to_many_filters.items():
+		for one_object in objects:
+			object_values = set(model_to_dict(one_object, model_filter_key)[model_filter_key])
+			if not values_to_filter.issubset(object_values):
+				objects_to_exclude.append(one_object.id)
+
+	if len(objects_to_exclude) > 0:
+		context = {'objekti': objects.exclude(id__in=objects_to_exclude)}
+	else:
+		context = {'objekti': objects}
+
 	return render(request, 'nekretnine/spisak.html', context)
 
 
@@ -222,12 +247,13 @@ def make_filters(request):
 	response_content = '';
 	for ime_filtera in niz_filtera:
 		template_data = {'id': ime_filtera, 'title': filters[ime_filtera]['title']}
-		if filters[ime_filtera]['type'] == 'exact':
+		if filters[ime_filtera]['type'] in ('exact', 'multi'):
 			template = loader.get_template('nekretnine/filter_lista.html')
 			if 'depends_on' in filters[ime_filtera]:
 				template_data['depends_on'] = filters[ime_filtera]['depends_on']
 			elif 'objects' in filters[ime_filtera]:
 				template_data['stavke'] = filters[ime_filtera]['objects'].all()
+			template_data['type'] = filters[ime_filtera]['type']
 		else:
 			template = loader.get_template('nekretnine/filter_range.html')
 			template_data['min_value'] = filters[ime_filtera]['min_value']

@@ -47,6 +47,11 @@ class Heating(models.Model):
 	def __str__(self):
 		return self.name
 
+class AdditionalFeatures(models.Model):
+	name = models.TextField()
+	def __str__(self):
+		return self.name
+
 class Owner(models.Model):
 	user = models.ForeignKey(User)
 	phone = models.BigIntegerField(validators=[validate_positive_number])
@@ -60,11 +65,11 @@ class Objekat(models.Model):
 	broj_soba = models.FloatField()
 	povrsina = models.IntegerField()
 	cena = models.IntegerField()
+	deposit = models.IntegerField()
+	construction_year = models.IntegerField()
+	free_message = models.TextField()
 	namestenost = models.ForeignKey(Namestenost)
-	has_terrace = models.BooleanField(default=False)
-	has_air_conditioner = models.BooleanField(default=False)
-	has_cable = models.BooleanField(default=False)
-	has_elevator = models.BooleanField(default=False)
+	additional_features = models.ManyToManyField(AdditionalFeatures)
 	floor = models.IntegerField()
 	floors = models.IntegerField()
 	heating = models.ForeignKey(Heating)

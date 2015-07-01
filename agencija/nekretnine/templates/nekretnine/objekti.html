@@ -7,8 +7,8 @@
 		<script type="text/javascript" src="{% static 'nekretnine/jquery/jquery-1.10.2.js' %}"></script>
 		<script type="text/javascript" src="{% static 'nekretnine/jquery/jquery-ui-1.11.4.min.js' %}"></script>
 		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}" />
-		<script type="text/javascript" src="{% static 'nekretnine/chosen/chosen.jquery.min.js' %}"></script>
-		<link href="{% static 'nekretnine/chosen/chosen.min.css' %}" rel="stylesheet" type="text/css"/>
+		<script type="text/javascript" src="{% static 'nekretnine/sumoselect/jquery.sumoselect.min.js' %}"></script>
+		<link href="{% static 'nekretnine/sumoselect/sumoselect.css' %}" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript" src="{% static 'nekretnine/jquery/jquery.cookie.js' %}"></script>
 		<link href="{% static 'nekretnine/menucool-slider/js-image-slider.css' %}" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript" src="{% static 'nekretnine/menucool-slider/js-image-slider.js' %}"></script>
@@ -16,13 +16,22 @@
 		<script src="{% static 'nekretnine/objekti.js' %}"></script>
 	</head>
 	<body class="objects">
-		
+		<!-- Google Tag Manager -->
+		<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-MN5KH9"
+		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+		'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer','GTM-MN5KH9');</script>
+		<!-- End Google Tag Manager -->
+
 		<div class="logo"></div>
 		<div id="filters" class="filters">
 			<button id="dugme_dodaj_filter" class="dodaj" onclick="window.libFilter.addFilterChoice()" >Dodaj uslove</button>
-			<div id="novi_filteri" class="novi_filteri"></div>
-			<div class="filter_range_slider" id="filter_range_slider"></div>
 		</div>
+		<div id="new_filters" class="new_filters"></div>
+		<div class="filter_range_slider" id="filter_range_slider"></div>
 		<div class="account">
 			{% if user.is_authenticated %}
 				<p>Prijavljeni ste kao {{ user.username }}</p>
@@ -43,7 +52,11 @@
 				</div>
 			</div>
 			<div class="desno" id="right">
-				<div id="prazan" class="details"><p> Ako želite detaljnije da pogledate neki stan,</p> <p>kliknite na gugme "Detalji"</p>
+				<div id="prazan" class="details">
+					<div class="welcome_message">
+						<p> Ako želite detaljnije da pogledate neki stan,</p>
+						<p>kliknite na dugme "Detalji"</p>
+					</div>
 				</div>
 			</div>
 		</div>
