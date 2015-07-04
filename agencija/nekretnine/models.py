@@ -115,9 +115,11 @@ class Ad(models.Model):
 	updated_at = models.DateTimeField(auto_now=True)
 	active = models.BooleanField(default=True)
 	reported_as_inactive_counter = models.IntegerField(default = 0)
-	
+	reported_as_middleman_counter = models.IntegerField(default = 0)
+
 	def __str__(self):
-		return "{0}, active: {1}, reported inactive: {2} times".format(self.object, self.active, self.reported_as_inactive_counter)
+		return "{0}, active: {1}, reported inactive: {2} times, reported middleman: {3} times".\
+			format(self.object, self.active, self.reported_as_inactive_counter, self.reported_as_middleman_counter)
 	
 	class Meta:
 		ordering = ['-active', '-reported_as_inactive_counter']

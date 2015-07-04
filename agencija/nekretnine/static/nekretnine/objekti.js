@@ -296,17 +296,21 @@ function ucitajSpisakStanova() {
 	});
 }
 
-function reportInactive(object_id) {
-	params = {'object_id': object_id, 'my_token': window.getMyToken()}
-	$.post("/report_inactive/", params).done(function (response) {
-		$("#reportingButton").hide();
-		$("#thanksForReporting").show();
-		ga('send', 'event', 'site_response', 'show', 'report_inactive_accepted');
-	}).fail(function(response) {
-		$("#reportingFailed").show();
-		ga('send', 'event', 'site_response', 'show', 'report_inactive_failed');
-	});
-	ga('send', 'event', 'user_request', 'report', 'inactive');
+function report(object_id, report_type) {
+	var params = {'object_id': object_id, 'my_token': window.getMyToken()}
+	if (report_type == 'report_inactive' || report_type == 'report_middleman') {
+		$.post("/" + report_type + "/", params).done(function (response) {
+			$("#reportingButton").hide();
+			$("#thanksForReporting").show();
+			ga('send', 'event', 'site_response', 'show', report_type + '_accepted');
+		}).fail(function(response) {
+			$("#reportingFailed").show();
+			ga('send', 'event', 'site_response', 'show', report_type + '_failed');
+		});
+		ga('send', 'event', 'user_request', 'report', report_type);
+	} else {
+		ga('send', 'event', 'user_request', 'unknown_report', report_type);
+	}
 }
 function mouseover(){
 	$("#filter_name").mouseover(function(){

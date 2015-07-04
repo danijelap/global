@@ -41,10 +41,14 @@
 
 	<div class="free_message">{{ stan.free_message }}</div>
 
-	<input id="reportingButton"  class="reporting_button" type="button" onclick="reportInactive({{ stan.id }})" value="Prijavite da je stan izdat" />
+	<input class="reporting_button" type="button" onclick="report({{ stan.id }}, 'report_inactive')" value="Prijavite da je stan izdat" />
+	<input class="reporting_button" type="button" onclick="report({{ stan.id }}, 'report_middleman')" value="Prijavite da je oglas agencijski" />
 	<span id="thanksForReporting" class="report">Hvala, Vaša prijava je zabeležena</span>
 	<span id="reportingFailed" class="report">Vaša prijava nije prihvaćena. Pokušajte kasnije ponovo.</span>
 	{% if ad.reported_as_inactive_counter > 1 %}
-	<div class="reported_inactive">Ovaj stan je verovatno izdat. Broj prijava: {{ ad.reported_as_inactive_counter }}.</div>
+	<div class="reported">Ovaj stan je verovatno izdat. Broj prijava: {{ ad.reported_as_inactive_counter }}.</div>
+	{% endif %}
+	{% if ad.reported_as_middleman_counter > 1 %}
+	<div class="reported">Ovaj stan je verovatno agencijski. Broj prijava: {{ ad.reported_as_middleman_counter }}.</div>
 	{% endif %}
 </div>

@@ -13,8 +13,8 @@ from nekretnine.models import *
 import json
 
 filters = {
-	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
-	'broj_soba': {'name': 'Broj soba', 'title': 'broja soba', 'model_filter_key': 'broj_soba', 'type': 'range', 'min_value': 0, 'max_value': 5, 'start_value': '0-3'},
+	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena (€)', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
+	'broj_soba': {'name': 'Broj soba', 'title': 'broj soba', 'model_filter_key': 'broj_soba', 'type': 'range', 'min_value': 0, 'max_value': 5, 'start_value': '0-3'},
 	'tip_objekta': {'name': 'Tip objekta', 'title': 'tip objekta', 'model_filter_key': 'tip_objekta_id', 'type': 'exact', 'objects': TipObjekta.objects},
 	'grad': {'name': 'Gradovi', 'title': 'grad', 'model_filter_key': 'deo_grada__grad_id', 'type': 'exact', 'objects': Grad.objects, 'default': True},
 	'deo_grada': {'name': 'Delovi grada', 'title': 'deo grada', 'model_filter_key': 'deo_grada_id', 'type': 'exact', 'objects': DeoGrada.objects, 'depends_on': 'grad', 'depends_on_filter_key': 'grad_id', 'default': True},
@@ -293,5 +293,16 @@ def report_inactive(request):
 		ad_reporter = AdReporter(ad = ad, reporter_token = my_token, reporter_ip_address = get_client_ip(request))
 		ad_reporter.save()
 		ad.reported_as_inactive_counter += 1
+		ad.save()
+	return HttpResponse("OK")
+
+def report_middleman(request):
+	ad = Ad.objects.get(object__id = request.POST.get('object_id'))
+	my_token = request.POST.get('my_token')
+	ad_reporters = AdReporter.objects.filter(ad = ad, reporter_token = my_token)
+	if len(ad_reporters) == 0:
+		ad_reporter = AdReporter(ad = ad, reporter_token = my_token, reporter_ip_address = get_client_ip(request))
+		ad_reporter.save()
+		ad.reported_as_middleman_counter += 1
 		ad.save()
 	return HttpResponse("OK")

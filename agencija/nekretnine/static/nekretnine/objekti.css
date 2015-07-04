@@ -52,12 +52,14 @@ body.objects {
 	float: left;
 	margin-left: 10px;
 	height: 30px;
+	width: 250px;
 }
 
 .filter_range {
 	float: left;
 	height: 30px;
 	margin-left: 10px;
+	width: 250px;
 }
 .filter_range_slider {
 	display: none;
@@ -72,6 +74,10 @@ body.objects {
 }
 .image_slider {
 	height: 350px;
+}
+button.skloni {
+	width: 20px;
+	float: right;
 }
 
 .ui-slider .ui-slider-handle {
@@ -225,6 +231,7 @@ div.button {
 	border-left:1px solid #5B626A;
 	border-top:1px solid #5B626A;
 	cursor: pointer;
+	z-index: 1;
 }
 
 .new_filter_active {
@@ -268,9 +275,13 @@ div.form {
 	font-size: 13px;
 }
 .reporting_button{
-	margin-left:25px;
+	margin-left: 25px;
 	border: 3px outset #C0C0C0 ;
-	background-color:white;
+	background-color: white;
+	margin-bottom: 50px;
+}
+.reported {
+	margin-bottom: 50px;
 }
 
 .welcome_message {
