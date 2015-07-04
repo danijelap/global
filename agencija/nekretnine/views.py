@@ -11,6 +11,7 @@ from nekretnine.forms import *
 from nekretnine.models import *
 
 import json
+from datetime import date
 
 filters = {
 	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena (€)', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
@@ -22,7 +23,8 @@ filters = {
 	'povrsina': {'name': 'Površina', 'title': 'površina', 'model_filter_key': 'povrsina', 'type': 'range', 'min_value': 0, 'max_value': 400, 'start_value': '50-100'},
 	'heating': {'name': 'Grejanje', 'title': 'grejanje', 'model_filter_key': 'heating_id', 'type': 'exact', 'objects': Heating.objects},
 	'floor': {'name': 'Sprat', 'title': 'sprat', 'model_filter_key': 'floor', 'type': 'range', 'min_value': 0, 'max_value': 30, 'start_value': '1-4'},
-	'additional_features': {'name': 'Prateći objekti', 'title': 'prateće objekte', 'model_filter_key': 'additional_features', 'type': 'multi', 'objects': AdditionalFeatures.objects},
+	'construction_year': {'name': 'Godina izgradnje', 'title': 'godina izgradnje', 'model_filter_key': 'construction_year', 'type': 'range', 'min_value': 1900, 'max_value': date.today().year, 'start_value': '1970-{0}'.format(date.today().year)},
+	'additional_features': {'name': 'Ostale pogodnosti', 'title': 'ostale pogodnosti', 'model_filter_key': 'additional_features', 'type': 'multi', 'objects': AdditionalFeatures.objects},
 }
 
 menu_items = [

@@ -55,6 +55,7 @@ class AdditionalFeatures(models.Model):
 class Owner(models.Model):
 	user = models.ForeignKey(User)
 	phone = models.BigIntegerField(validators=[validate_positive_number])
+	show_data_in_ad = models.BooleanField(default=True)
 	def __str__(self):
 		return "{0} {1}".format(self.user.first_name, self.user.last_name)
 
@@ -82,6 +83,11 @@ class Objekat(models.Model):
 			extension = os.path.splitext(object_image.image.path)[1]
 			result.append({'large_image': object_image.image, 'small_url': object_image.image.url + '.small' + extension})
 		return result
+
+	@property
+	def get_additional_features(self):
+		feature_names = [feature.name for feature in self.additional_features.all()]
+		return ", ".join(feature_names) if len(feature_names) > 0 else "-"
 
 	@property
 	def thumb(self):

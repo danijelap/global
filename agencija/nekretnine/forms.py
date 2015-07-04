@@ -166,9 +166,10 @@ class UserForm(forms.ModelForm):
 class OwnerForm(forms.ModelForm):
 	class Meta:
 		model = Owner
-		fields = ['phone']
+		fields = ['phone', 'show_data_in_ad']
 		labels = {
 			'phone': _("Telefon"),
+			'show_data_in_ad': _("Prikaži lične podatke u oglasima"),
 		}
 		widgets = {
 			'phone': forms.TextInput(attrs={'size': 15, 'title': _("Broj telefona")}),

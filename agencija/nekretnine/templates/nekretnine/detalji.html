@@ -35,9 +35,25 @@
 		<span class="details_values">{{ stan.cena }} €</span>
 		<span class="details_parameters">Depozit:</span>
 		<span class="details_values">{{ stan.deposit }} €</span>
+		<span class="details_parameters">Godina izgradnje:</span>
+		<span class="details_values">{{ stan.construction_year }}</span>
 		<span class="details_parameters">Grejanje:</span>
 		<span class="details_values">{{ stan.heating }}</span>
 	</div>
+	<div class="details_row">
+		<span class="details_parameters">Ostale pogodnosti:</span>
+		<span class="details_values">
+			{{ stan.get_additional_features }}
+		</span>
+	</div>
+	{% if stan.owner.show_data_in_ad %}
+	<div class="details_row">
+		<span class="details_parameters">Vlasnik:</span>
+		<span class="details_values">{{ stan.owner.user.first_name }} {{ stan.owner.user.last_name }}</span>
+		<span class="details_parameters">Telefon vlasnika:</span>
+		<span class="details_values">{{ stan.owner.phone }}</span>
+	</div>
+	{% endif %}
 
 	<div class="free_message">{{ stan.free_message }}</div>
 
