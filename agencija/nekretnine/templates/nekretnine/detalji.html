@@ -17,26 +17,59 @@
 		<span class="details_values">{{ stan.deo_grada.grad }} ({{ stan.deo_grada }})</span>
 	</div>
 	<div class="details_row">
-		<span class="details_parameters">Tip objekta:</span>
-		<span class="details_values">{{ stan.tip_objekta }} ({{ stan.namestenost }})</span>
-		<span class="details_parameters">Površina:</span>
-		<span class="details_values">{{ stan.povrsina }}m2</span>
-		<span class="details_parameters">Broj soba:</span>
-		<span class="details_values">{{ stan.broj_soba }}</span>
-		<span class="details_parameters">Cena:</span>
-		<span class="details_values">{{ stan.cena }} €</span>
-	</div>
-	<div class="details_row">
 		<span class="details_parameters">Adresa:</span>
 		<span class="details_values">{{ stan.adresa }}</span>
 	</div>
 	<div class="details_row">
+		<span class="details_parameters">Tip objekta:</span>
+		<span class="details_values">{{ stan.tip_objekta }} ({{ stan.namestenost }})</span>
+		<span class="details_parameters">Površina:</span>
+		<span class="details_values">{{ stan.povrsina }}m<sup>2</sup></span>
+		<span class="details_parameters">Broj soba:</span>
+		<span class="details_values">{{ stan.broj_soba }}</span>
+		<span class="details_parameters">Sprat:</span>
+		<span class="details_values">{{ stan.floor }} od {{ stan.floors }}</span>
 	</div>
-	
-	<input id="reportingButton"  class = "reportingButton" type="button" onclick="reportInactive({{ stan.id }})" value="Prijavite da je stan izdat" />
+	<div class="details_row">
+		<span class="details_parameters">Cena:</span>
+		<span class="details_values">{{ stan.cena }} €</span>
+		<span class="details_parameters">Depozit:</span>
+		<span class="details_values">{{ stan.deposit }} €</span>
+		<span class="details_parameters">Godina izgradnje:</span>
+		<span class="details_values">{{ stan.construction_year }}</span>
+		<span class="details_parameters">Grejanje:</span>
+		<span class="details_values">{{ stan.heating }}</span>
+	</div>
+	<div class="details_row">
+		<span class="details_parameters">Ostale pogodnosti:</span>
+		<span class="details_values">
+			{{ stan.get_additional_features }}
+		</span>
+	</div>
+	{% if stan.owner.show_data_in_ad %}
+	<div class="details_row">
+		<span class="details_parameters">Vlasnik:</span>
+		<span class="details_values">{{ stan.owner.user.first_name }} {{ stan.owner.user.last_name }}</span>
+		<span class="details_parameters">Telefon vlasnika:</span>
+		<span class="details_values">{{ stan.owner.phone }}</span>
+	</div>
+	{% endif %}
+
+	<div class="free_message">{{ stan.free_message }}</div>
+
+	<div id="send_message_container">
+		<textarea id="message_text"></textarea>
+		<input type="button" value="pošaljite poruku vlasniku" onclick="send_message({{ stan.id }}, $('#message_text').val())"></input>
+	</div>
+
+	<input class="reporting_button" type="button" onclick="report({{ stan.id }}, 'report_inactive')" value="Prijavite da je stan izdat" />
+	<input class="reporting_button" type="button" onclick="report({{ stan.id }}, 'report_middleman')" value="Prijavite da je oglas agencijski" />
 	<span id="thanksForReporting" class="report">Hvala, Vaša prijava je zabeležena</span>
 	<span id="reportingFailed" class="report">Vaša prijava nije prihvaćena. Pokušajte kasnije ponovo.</span>
 	{% if ad.reported_as_inactive_counter > 1 %}
-	<div class="reported_inactive">Ovaj stan je verovatno izdat. Broj prijava: {{ ad.reported_as_inactive_counter }}.</div>
+	<div class="reported">Ovaj stan je verovatno izdat. Broj prijava: {{ ad.reported_as_inactive_counter }}.</div>
+	{% endif %}
+	{% if ad.reported_as_middleman_counter > 1 %}
+	<div class="reported">Ovaj stan je verovatno agencijski. Broj prijava: {{ ad.reported_as_middleman_counter }}.</div>
 	{% endif %}
 </div>

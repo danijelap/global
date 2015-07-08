@@ -94,3 +94,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/objekti/'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'oglas.mojkutak'
+EMAIL_HOST_PASSWORD = 'dhxwawejmmyqshxj'
+#EMAIL_USE_SSL = True
+EMAIL_USE_TLS = True

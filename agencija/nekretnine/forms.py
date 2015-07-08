@@ -104,9 +104,9 @@ class ObjectForm(forms.ModelForm):
 	
 	class Meta:
 		model = Objekat
-		fields = [ 'adresa', 'tip_objekta', 'deo_grada', 'broj_soba', 'povrsina', 
-			'cena', 'namestenost', 'has_terrace', 'has_air_conditioner', 'has_cable', 
-			'has_elevator', 'floor', 'floors', 'heating' ]
+		fields = ['adresa', 'tip_objekta', 'deo_grada', 'broj_soba', 'povrsina',
+			'cena', 'namestenost', 'additional_features', 'floor', 'floors',
+			'heating', 'deposit', 'free_message']
 		labels = {
 			'adresa': _("Adresa"),
 			'tip_objekta': _("Tip objekta"),
@@ -115,14 +115,16 @@ class ObjectForm(forms.ModelForm):
 			'povrsina': _("Površina"),
 			'cena': _("Cena"),
 			'namestenost': _("Nameštenost"),
-			'has_terrace': _("Terasa"),
-			'has_air_conditioner': _("Klima uređaj"),
-			'has_cable': _("Kablovska TV"),
-			'has_elevator': _("Lift"),
+			'additional_features': _("Ostale pogodnosti"),
 			'floor': _("Sprat"),
 			'floors': _("Spratnost zgrade"),
 			'heating': _("Grejanje"),
+			'deposit': _("Depozit"),
+			'free_message': _("Slobodna poruka"),
 		}
+
+# hack because bug in Django https://code.djangoproject.com/ticket/9321
+ObjectForm.base_fields['additional_features'].help_text = "Držite Ctrl dugme (Command na Mac-u) da biste izabrali više opcija"
 
 class NewImagesForm(forms.Form):
 
@@ -164,9 +166,10 @@ class UserForm(forms.ModelForm):
 class OwnerForm(forms.ModelForm):
 	class Meta:
 		model = Owner
-		fields = ['phone']
+		fields = ['phone', 'show_data_in_ad']
 		labels = {
 			'phone': _("Telefon"),
+			'show_data_in_ad': _("Prikaži lične podatke u oglasima"),
 		}
 		widgets = {
 			'phone': forms.TextInput(attrs={'size': 15, 'title': _("Broj telefona")}),

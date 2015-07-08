@@ -47,11 +47,22 @@ class Heating(models.Model):
 	def __str__(self):
 		return self.name
 
+class AdditionalFeatures(models.Model):
+	name = models.TextField()
+	def __str__(self):
+		return self.name
+
 class Owner(models.Model):
 	user = models.ForeignKey(User)
 	phone = models.BigIntegerField(validators=[validate_positive_number])
+	show_data_in_ad = models.BooleanField(default=True)
+
+	@property
+	def objects_count(self):
+		return self.objekat_set.count()
+
 	def __str__(self):
-		return "{0} {1}".format(self.user.first_name, self.user.last_name)
+		return "{0} {1} (objekata: {2})".format(self.user.first_name, self.user.last_name, self.objects_count)
 
 class Objekat(models.Model):
 	adresa = models.TextField()
@@ -60,11 +71,11 @@ class Objekat(models.Model):
 	broj_soba = models.FloatField()
 	povrsina = models.IntegerField()
 	cena = models.IntegerField()
+	deposit = models.IntegerField()
+	construction_year = models.IntegerField()
+	free_message = models.TextField()
 	namestenost = models.ForeignKey(Namestenost)
-	has_terrace = models.BooleanField(default=False)
-	has_air_conditioner = models.BooleanField(default=False)
-	has_cable = models.BooleanField(default=False)
-	has_elevator = models.BooleanField(default=False)
+	additional_features = models.ManyToManyField(AdditionalFeatures)
 	floor = models.IntegerField()
 	floors = models.IntegerField()
 	heating = models.ForeignKey(Heating)
@@ -77,6 +88,11 @@ class Objekat(models.Model):
 			extension = os.path.splitext(object_image.image.path)[1]
 			result.append({'large_image': object_image.image, 'small_url': object_image.image.url + '.small' + extension})
 		return result
+
+	@property
+	def get_additional_features(self):
+		feature_names = [feature.name for feature in self.additional_features.all()]
+		return ", ".join(feature_names) if len(feature_names) > 0 else "-"
 
 	@property
 	def thumb(self):
@@ -110,9 +126,11 @@ class Ad(models.Model):
 	updated_at = models.DateTimeField(auto_now=True)
 	active = models.BooleanField(default=True)
 	reported_as_inactive_counter = models.IntegerField(default = 0)
-	
+	reported_as_middleman_counter = models.IntegerField(default = 0)
+
 	def __str__(self):
-		return "{0}, active: {1}, reported inactive: {2} times".format(self.object, self.active, self.reported_as_inactive_counter)
+		return "{0}, active: {1}, reported inactive: {2} times, reported middleman: {3} times".\
+			format(self.object, self.active, self.reported_as_inactive_counter, self.reported_as_middleman_counter)
 	
 	class Meta:
 		ordering = ['-active', '-reported_as_inactive_counter']
@@ -121,3 +139,13 @@ class AdReporter(models.Model):
 	ad = models.ForeignKey(Ad)
 	reporter_token = models.IntegerField()
 	reporter_ip_address = models.TextField()
+
+class UserMessage(models.Model):
+	object = models.ForeignKey(Objekat)
+	message = models.TextField()
+	sender_token = models.IntegerField()
+	sender_ip_address = models.TextField()
+
+	def __str__(self):
+		return "owner: {0}, message: {1}".\
+			format(self.object.owner, self.message[:30] + '...')

@@ -4,23 +4,28 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django import forms
+from django.db.models import Q
+from django.forms.models import model_to_dict
+from django.core.mail import send_mail
 
 from nekretnine.forms import *
 from nekretnine.models import *
 
 import json
-import copy
-from datetime import datetime
+from datetime import date
 
 filters = {
-	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
-	'broj_soba': {'name': 'Broj soba', 'title': 'broja soba', 'model_filter_key': 'broj_soba', 'type': 'range', 'min_value': 0, 'max_value': 5, 'start_value': '0-3'},
+	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena (€)', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
+	'broj_soba': {'name': 'Broj soba', 'title': 'broj soba', 'model_filter_key': 'broj_soba', 'type': 'range', 'min_value': 0, 'max_value': 5, 'start_value': '0-3'},
 	'tip_objekta': {'name': 'Tip objekta', 'title': 'tip objekta', 'model_filter_key': 'tip_objekta_id', 'type': 'exact', 'objects': TipObjekta.objects},
 	'grad': {'name': 'Gradovi', 'title': 'grad', 'model_filter_key': 'deo_grada__grad_id', 'type': 'exact', 'objects': Grad.objects, 'default': True},
 	'deo_grada': {'name': 'Delovi grada', 'title': 'deo grada', 'model_filter_key': 'deo_grada_id', 'type': 'exact', 'objects': DeoGrada.objects, 'depends_on': 'grad', 'depends_on_filter_key': 'grad_id', 'default': True},
 	'namestenost': {'name': 'Nameštenost', 'title': 'nameštenost', 'model_filter_key': 'namestenost_id', 'type': 'exact', 'objects': Namestenost.objects},
 	'povrsina': {'name': 'Površina', 'title': 'površina', 'model_filter_key': 'povrsina', 'type': 'range', 'min_value': 0, 'max_value': 400, 'start_value': '50-100'},
 	'heating': {'name': 'Grejanje', 'title': 'grejanje', 'model_filter_key': 'heating_id', 'type': 'exact', 'objects': Heating.objects},
+	'floor': {'name': 'Sprat', 'title': 'sprat', 'model_filter_key': 'floor', 'type': 'range', 'min_value': 0, 'max_value': 30, 'start_value': '1-4'},
+	'construction_year': {'name': 'Godina izgradnje', 'title': 'godina izgradnje', 'model_filter_key': 'construction_year', 'type': 'range', 'min_value': 1900, 'max_value': date.today().year, 'start_value': '1970-{0}'.format(date.today().year)},
+	'additional_features': {'name': 'Ostale pogodnosti', 'title': 'ostale pogodnosti', 'model_filter_key': 'additional_features', 'type': 'multi', 'objects': AdditionalFeatures.objects},
 }
 
 menu_items = [
@@ -192,18 +197,42 @@ def detalji(request):
 	return render(request, 'nekretnine/detalji.html', context)
 	
 def spisak(request):
-	filter_dictionary = {'ad__active': True}
-	for filter in request.GET:
-		value = request.GET.get(filter)
-		if filters[filter]['type'] == 'exact':
-			filter_dictionary[filters[filter]['model_filter_key']] = value
-		else:
+	query = Q(ad__active=True, owner__user__is_active=True)
+	many_to_many_filters = {}
+	for filter_name in request.GET:
+		if filter_name[-2:] == '[]':
+			filter_name = filter_name[:-2]
+		if filters[filter_name]['type'] == 'exact':
+			value = request.GET.get(filter_name)
+			if value.isdigit():
+				query_filter = {filters[filter_name]['model_filter_key']: value}
+				query = query & Q(**query_filter)
+		elif filters[filter_name]['type'] == 'range':
+			value = request.GET.get(filter_name)
 			min_value, max_value = value.split('-')
-			filter_dictionary[filters[filter]['model_filter_key'] + "__gte"] = min_value
-			filter_dictionary[filters[filter]['model_filter_key'] + "__lte"] = max_value
-		
-	objekti = Objekat.objects.filter(**filter_dictionary)
-	context = {'objekti':objekti}
+			query_filter = {
+				filters[filter_name]['model_filter_key'] + "__gte": min_value,
+				filters[filter_name]['model_filter_key'] + "__lte": max_value
+			}
+			query = query & Q(**query_filter)
+		elif filters[filter_name]['type'] == 'multi':
+			values = request.GET.getlist(filter_name + '[]')
+			many_to_many_filters[filters[filter_name]['model_filter_key']] = set([int(value) for value in values if value.isdigit()])
+
+	objects_to_exclude = []
+	objects = Objekat.objects.filter(query)
+
+	for model_filter_key, values_to_filter in many_to_many_filters.items():
+		for one_object in objects:
+			object_values = set(model_to_dict(one_object, model_filter_key)[model_filter_key])
+			if not values_to_filter.issubset(object_values):
+				objects_to_exclude.append(one_object.id)
+
+	if len(objects_to_exclude) > 0:
+		context = {'objekti': objects.exclude(id__in=objects_to_exclude)}
+	else:
+		context = {'objekti': objects}
+
 	return render(request, 'nekretnine/spisak.html', context)
 
 
@@ -219,15 +248,16 @@ def get_filter_choice(request):
 
 def make_filters(request):
 	niz_filtera = request.GET.getlist('filter_array[]')
-	response_content = '';
+	response_content = ''
 	for ime_filtera in niz_filtera:
 		template_data = {'id': ime_filtera, 'title': filters[ime_filtera]['title']}
-		if filters[ime_filtera]['type'] == 'exact':
+		if filters[ime_filtera]['type'] in ('exact', 'multi'):
 			template = loader.get_template('nekretnine/filter_lista.html')
 			if 'depends_on' in filters[ime_filtera]:
 				template_data['depends_on'] = filters[ime_filtera]['depends_on']
 			elif 'objects' in filters[ime_filtera]:
 				template_data['stavke'] = filters[ime_filtera]['objects'].all()
+			template_data['type'] = filters[ime_filtera]['type']
 		else:
 			template = loader.get_template('nekretnine/filter_range.html')
 			template_data['min_value'] = filters[ime_filtera]['min_value']
@@ -269,3 +299,28 @@ def report_inactive(request):
 		ad.reported_as_inactive_counter += 1
 		ad.save()
 	return HttpResponse("OK")
+
+def report_middleman(request):
+	ad = Ad.objects.get(object__id = request.POST.get('object_id'))
+	my_token = request.POST.get('my_token')
+	ad_reporters = AdReporter.objects.filter(ad = ad, reporter_token = my_token)
+	if len(ad_reporters) == 0:
+		ad_reporter = AdReporter(ad = ad, reporter_token = my_token, reporter_ip_address = get_client_ip(request))
+		ad_reporter.save()
+		ad.reported_as_middleman_counter += 1
+		ad.save()
+	return HttpResponse("OK")
+
+def send_message(request):
+	object_id = request.POST.get('object_id')
+	message = request.POST.get('message')
+	my_token = request.POST.get('my_token')
+	if object_id is not None and message is not None and my_token is not None \
+			and len(message) > 10:
+		object_ary = Objekat.objects.filter(id=object_id)
+		if len(object_ary) == 1:
+			user_message = UserMessage(object_id=object_id, message=message, sender_token=my_token, sender_ip_address=get_client_ip(request))
+			user_message.save()
+			send_mail("Poruka od potencijalnog stanara", message, "oglas.mojkutak@gmail.com", [object_ary[0].owner.user.email])
+	return HttpResponse("OK")
+
