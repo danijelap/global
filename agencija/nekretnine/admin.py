@@ -7,7 +7,7 @@ class GradInline(admin.TabularInline):
 class DrzavaAdmin(admin.ModelAdmin):
 	inlines = [GradInline]
 	
-class DeoGradaInline(admin.TabularInline):	
+class DeoGradaInline(admin.TabularInline):
 	model = DeoGrada
 
 class GradAdmin(admin.ModelAdmin):
@@ -29,3 +29,4 @@ admin.site.register(Heating)
 admin.site.register(Owner)
 admin.site.register(Ad)
 admin.site.register(AdditionalFeatures)
+admin.site.register(UserMessage)

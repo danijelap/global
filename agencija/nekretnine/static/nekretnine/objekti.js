@@ -300,7 +300,7 @@ function report(object_id, report_type) {
 	var params = {'object_id': object_id, 'my_token': window.getMyToken()}
 	if (report_type == 'report_inactive' || report_type == 'report_middleman') {
 		$.post("/" + report_type + "/", params).done(function (response) {
-			$("#reportingButton").hide();
+			$(".reporting_button").hide();
 			$("#thanksForReporting").show();
 			ga('send', 'event', 'site_response', 'show', report_type + '_accepted');
 		}).fail(function(response) {
@@ -312,6 +312,17 @@ function report(object_id, report_type) {
 		ga('send', 'event', 'user_request', 'unknown_report', report_type);
 	}
 }
+
+function send_message(object_id, message) {
+	var params = {'object_id': object_id, 'message': message, 'my_token': window.getMyToken()}
+	$.post("/send_message/", params).done(function(response) {
+		$("#send_message_container").hide();
+		$("#messageAccepted").show();
+		ga('send', 'event', 'site_response', 'show', 'message_accepted');
+	});
+	ga('send', 'event', 'user_request', 'send_message');
+}
+
 function mouseover(){
 	$("#filter_name").mouseover(function(){
         $("#filter_name").addClass("overmouse_color");

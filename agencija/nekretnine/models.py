@@ -56,8 +56,13 @@ class Owner(models.Model):
 	user = models.ForeignKey(User)
 	phone = models.BigIntegerField(validators=[validate_positive_number])
 	show_data_in_ad = models.BooleanField(default=True)
+
+	@property
+	def objects_count(self):
+		return self.objekat_set.count()
+
 	def __str__(self):
-		return "{0} {1}".format(self.user.first_name, self.user.last_name)
+		return "{0} {1} (objekata: {2})".format(self.user.first_name, self.user.last_name, self.objects_count)
 
 class Objekat(models.Model):
 	adresa = models.TextField()
@@ -134,3 +139,13 @@ class AdReporter(models.Model):
 	ad = models.ForeignKey(Ad)
 	reporter_token = models.IntegerField()
 	reporter_ip_address = models.TextField()
+
+class UserMessage(models.Model):
+	object = models.ForeignKey(Objekat)
+	message = models.TextField()
+	sender_token = models.IntegerField()
+	sender_ip_address = models.TextField()
+
+	def __str__(self):
+		return "owner: {0}, message: {1}".\
+			format(self.object.owner, self.message[:30] + '...')

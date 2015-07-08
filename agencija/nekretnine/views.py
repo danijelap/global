@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django import forms
 from django.db.models import Q
 from django.forms.models import model_to_dict
+from django.core.mail import send_mail
 
 from nekretnine.forms import *
 from nekretnine.models import *
@@ -196,15 +197,16 @@ def detalji(request):
 	return render(request, 'nekretnine/detalji.html', context)
 	
 def spisak(request):
-	query = Q(ad__active=True)
+	query = Q(ad__active=True, owner__user__is_active=True)
 	many_to_many_filters = {}
 	for filter_name in request.GET:
 		if filter_name[-2:] == '[]':
 			filter_name = filter_name[:-2]
 		if filters[filter_name]['type'] == 'exact':
 			value = request.GET.get(filter_name)
-			query_filter = {filters[filter_name]['model_filter_key']: value}
-			query = query & Q(**query_filter)
+			if value.isdigit():
+				query_filter = {filters[filter_name]['model_filter_key']: value}
+				query = query & Q(**query_filter)
 		elif filters[filter_name]['type'] == 'range':
 			value = request.GET.get(filter_name)
 			min_value, max_value = value.split('-')
@@ -215,7 +217,7 @@ def spisak(request):
 			query = query & Q(**query_filter)
 		elif filters[filter_name]['type'] == 'multi':
 			values = request.GET.getlist(filter_name + '[]')
-			many_to_many_filters[filters[filter_name]['model_filter_key']] = set([int(value) for value in values])
+			many_to_many_filters[filters[filter_name]['model_filter_key']] = set([int(value) for value in values if value.isdigit()])
 
 	objects_to_exclude = []
 	objects = Objekat.objects.filter(query)
@@ -246,7 +248,7 @@ def get_filter_choice(request):
 
 def make_filters(request):
 	niz_filtera = request.GET.getlist('filter_array[]')
-	response_content = '';
+	response_content = ''
 	for ime_filtera in niz_filtera:
 		template_data = {'id': ime_filtera, 'title': filters[ime_filtera]['title']}
 		if filters[ime_filtera]['type'] in ('exact', 'multi'):
@@ -308,3 +310,17 @@ def report_middleman(request):
 		ad.reported_as_middleman_counter += 1
 		ad.save()
 	return HttpResponse("OK")
+
+def send_message(request):
+	object_id = request.POST.get('object_id')
+	message = request.POST.get('message')
+	my_token = request.POST.get('my_token')
+	if object_id is not None and message is not None and my_token is not None \
+			and len(message) > 10:
+		object_ary = Objekat.objects.filter(id=object_id)
+		if len(object_ary) == 1:
+			user_message = UserMessage(object_id=object_id, message=message, sender_token=my_token, sender_ip_address=get_client_ip(request))
+			user_message.save()
+			send_mail("Poruka od potencijalnog stanara", message, "oglas.mojkutak@gmail.com", [object_ary[0].owner.user.email])
+	return HttpResponse("OK")
+

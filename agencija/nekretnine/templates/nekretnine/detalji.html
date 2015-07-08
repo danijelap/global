@@ -57,6 +57,11 @@
 
 	<div class="free_message">{{ stan.free_message }}</div>
 
+	<div id="send_message_container">
+		<textarea id="message_text"></textarea>
+		<input type="button" value="pošaljite poruku vlasniku" onclick="send_message({{ stan.id }}, $('#message_text').val())"></input>
+	</div>
+
 	<input class="reporting_button" type="button" onclick="report({{ stan.id }}, 'report_inactive')" value="Prijavite da je stan izdat" />
 	<input class="reporting_button" type="button" onclick="report({{ stan.id }}, 'report_middleman')" value="Prijavite da je oglas agencijski" />
 	<span id="thanksForReporting" class="report">Hvala, Vaša prijava je zabeležena</span>

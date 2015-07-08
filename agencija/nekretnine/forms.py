@@ -115,7 +115,7 @@ class ObjectForm(forms.ModelForm):
 			'povrsina': _("Površina"),
 			'cena': _("Cena"),
 			'namestenost': _("Nameštenost"),
-			'additional_features': _("Prateći objekti"),
+			'additional_features': _("Ostale pogodnosti"),
 			'floor': _("Sprat"),
 			'floors': _("Spratnost zgrade"),
 			'heating': _("Grejanje"),
