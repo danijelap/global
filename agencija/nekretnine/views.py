@@ -147,6 +147,7 @@ def personal_info(request):
 		context = {'owner_form': owner_form, 'user_form': user_form}
 		context['selected_item'] = 'personal_info'
 		context['menu_items'] = menu_items
+		context['email'] = owner.user.email
 		return render(request, 'nekretnine/personal_info.html', context)
 
 @login_required

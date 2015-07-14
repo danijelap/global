@@ -156,9 +156,8 @@ class AdForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
 	class Meta:
 		model = User
-		fields = ['email', 'first_name', 'last_name']
+		fields = ['first_name', 'last_name']
 		labels = {
-			'email': _("Email adresa"),
 			'first_name': _("Ime"),
 			'last_name': _("Prezime"),
 		}

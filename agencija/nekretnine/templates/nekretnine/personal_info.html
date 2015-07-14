@@ -4,6 +4,10 @@
 <form action="" method="POST">
     {% csrf_token %}
     {{ owner_form.as_p }}
+    <p>
+        <label>Email:</label>
+        <span>{{ email }}</span>
+    </p>
     {{ user_form.as_p }}
     <input type="submit" value="Sačuvaj">
 </form>
