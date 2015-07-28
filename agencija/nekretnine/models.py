@@ -129,7 +129,7 @@ class Ad(models.Model):
 	reported_as_middleman_counter = models.IntegerField(default = 0)
 
 	def __str__(self):
-		return "{0}, active: {1}, reported inactive: {2} times, reported middleman: {3} times".\
+		return "{0}, active: {1}, prijavljen kao izdat: {2} puta, prijavljen posrednik: {3} puta".\
 			format(self.object, self.active, self.reported_as_inactive_counter, self.reported_as_middleman_counter)
 	
 	class Meta:

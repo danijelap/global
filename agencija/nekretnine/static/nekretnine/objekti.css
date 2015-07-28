@@ -16,8 +16,11 @@ div.logo {
 }
 .account p {
 	margin: 0;
-#	font-size: 12px;
 	padding-right: 5px;
+}
+
+.big {
+	font-size: 16px;
 }
 
 body {

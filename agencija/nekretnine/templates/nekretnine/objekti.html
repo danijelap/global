@@ -33,7 +33,7 @@
 		</div>
 		<div id="new_filters" class="new_filters"></div>
 		<div class="filter_range_slider" id="filter_range_slider"></div>
-		<div class="account">
+		<div class="account{% if not user.is_authenticated %} big{% endif %}">
 			{% if user.is_authenticated %}
 				<p>Prijavljeni ste kao {{ user.username }}</p>
 				<p><a href="/ad/">Postavite oglas</a></p>
