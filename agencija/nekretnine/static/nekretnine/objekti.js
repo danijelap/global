@@ -246,10 +246,10 @@ function setHeightOfContainersDelayed() {
 }
 function setHeightOfContainers() {
 	// prvi nacin podesavanja css-a pomocu jQuery-ja. $(element).css(osobina, vrednost);
-	$("#spisak").css('height', $(window).height() - $("#filters").height() - $("#favoriti").height());
+	$("#spisak").css('height', $(window).height() - $("#filters").height() - $("#favoriti").height() - $("#footer").height());
 	// drugi nacin podesacanja css-a pomocu jQuery-ja. $(element).css(objekat_sa_osobinama);
 	// objekat_sa_osobinama je dictionary u koji moze da se stavi vise osobina.
-	detalji_css = { 'height' : $(window).height() - $("#filters").height() };
+	detalji_css = { 'height' : $(window).height() - $("#filters").height() - $("#footer").height() };
 	$("#right").css(detalji_css);
 }
 

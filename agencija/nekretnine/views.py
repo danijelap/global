@@ -13,6 +13,7 @@ from nekretnine.models import *
 
 import json
 from datetime import date
+import random
 
 filters = {
 	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena (€)', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
@@ -121,6 +122,7 @@ def ad(request):
 		else:  # create new ad
 			context['object_form'] = ObjectForm()
 			context['new_images_form'] = NewImagesForm()
+			context['create'] = True
 
 	context['selected_item'] = 'ad'
 	context['menu_items'] = menu_items
@@ -186,8 +188,18 @@ def index(request):
 	return render(request, 'nekretnine/index.html', context)
 	
 
+welcome_messages = [
+	'Dobro došli na našu interenet stranicu. Mi vam nudimo mogućnost da nađete ili izdate stan jednostavno i bez posrednika',
+	'Ako želite više detalja o nekom stanu kliknite na dugme "detalji"',
+	'Unesi poruku',
+	'Unesi poruku',
+	'Unesi poruku',
+]
 def objekti(request):
-	return render(request, 'nekretnine/objekti.html')
+	context = {
+		'welcome_message': random.choice(welcome_messages)
+	}
+	return render(request, 'nekretnine/objekti.html', context)
 
 def detalji(request):
 
@@ -325,3 +337,8 @@ def send_message(request):
 			send_mail("Poruka od potencijalnog stanara", message, "oglas.mojkutak@gmail.com", [object_ary[0].owner.user.email])
 	return HttpResponse("OK")
 
+def terms(request):
+	return render(request, 'nekretnine/terms.html')
+
+def tutorial(request):
+	return render(request, 'nekretnine/tutorial.html')

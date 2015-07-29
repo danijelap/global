@@ -298,3 +298,19 @@ div.form {
 	margin-bottom: 25px;
 	font-style: italic;
 }
+
+.legal {
+	width: 1150px;
+	float: left;
+	margin-left: 100px;
+}
+
+#footer {
+	width: 1350px;
+	clear: left;
+	text-align: center;
+	height: 40px;
+	padding: 10px;
+	margin-left: auto;
+	margin-right: auto;
+}
