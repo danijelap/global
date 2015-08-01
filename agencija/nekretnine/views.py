@@ -13,6 +13,7 @@ from nekretnine.models import *
 
 import json
 from datetime import date
+import random
 
 filters = {
 	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena (€)', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
@@ -34,6 +35,13 @@ menu_items = [
 	{'text': 'promena lozinke', 'id': 'change_pass', 'href': '/change_pass/'},
 	{'text': 'moji oglasi', 'id': 'ads', 'href': '/ads/'}, 
 	{'text': 'unos oglasa', 'id': 'ad', 'href': '/ad/'}
+]
+
+welcome_messages = [
+	'Dobro došli na našu interenet stranicu.<br />Mi vam nudimo mogućnost da nađete ili izdate stan jednostavno i bez posrednika',
+	'Ako želite da pogledate neki stan detaljnije, kliknite na dugme detalji',
+	'Ako vam se neki od stanova posebno dopadnu,<br />možete ih izdvojiti klikom na dugme u obliku srca',
+	'Ako imate nekih primedbi ili sugestija,<br />možete nas kontaktirati putem naše email adrese<br /><a href="mailto:oglas.mojkutak@gmail.com">oglas.mojkutak@gmail.com',
 ]
 
 def register(request):
@@ -121,6 +129,7 @@ def ad(request):
 		else:  # create new ad
 			context['object_form'] = ObjectForm()
 			context['new_images_form'] = NewImagesForm()
+			context['create'] = True
 
 	context['selected_item'] = 'ad'
 	context['menu_items'] = menu_items
@@ -147,6 +156,7 @@ def personal_info(request):
 		context = {'owner_form': owner_form, 'user_form': user_form}
 		context['selected_item'] = 'personal_info'
 		context['menu_items'] = menu_items
+		context['email'] = owner.user.email
 		return render(request, 'nekretnine/personal_info.html', context)
 
 @login_required
@@ -183,10 +193,12 @@ def index(request):
 	drzave = Drzava.objects.all().order_by('-name')
 	context = {'drzave': drzave}
 	return render(request, 'nekretnine/index.html', context)
-	
 
 def objekti(request):
-	return render(request, 'nekretnine/objekti.html')
+	context = {
+		'welcome_message': random.choice(welcome_messages)
+	}
+	return render(request, 'nekretnine/objekti.html', context)
 
 def detalji(request):
 
@@ -324,3 +336,8 @@ def send_message(request):
 			send_mail("Poruka od potencijalnog stanara", message, "oglas.mojkutak@gmail.com", [object_ary[0].owner.user.email])
 	return HttpResponse("OK")
 
+def terms(request):
+	return render(request, 'nekretnine/terms.html')
+
+def tutorial(request):
+	return render(request, 'nekretnine/tutorial.html')

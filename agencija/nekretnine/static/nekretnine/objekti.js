@@ -246,10 +246,10 @@ function setHeightOfContainersDelayed() {
 }
 function setHeightOfContainers() {
 	// prvi nacin podesavanja css-a pomocu jQuery-ja. $(element).css(osobina, vrednost);
-	$("#spisak").css('height', $(window).height() - $("#filters").height() - $("#favoriti").height());
+	$("#spisak").css('height', $(window).height() - $("#filters").height() - $("#favoriti").height() - $("#footer").height());
 	// drugi nacin podesacanja css-a pomocu jQuery-ja. $(element).css(objekat_sa_osobinama);
 	// objekat_sa_osobinama je dictionary u koji moze da se stavi vise osobina.
-	detalji_css = { 'height' : $(window).height() - $("#filters").height() };
+	detalji_css = { 'height' : $(window).height() - $("#filters").height() - $("#footer").height() };
 	$("#right").css(detalji_css);
 }
 
@@ -300,7 +300,7 @@ function report(object_id, report_type) {
 	var params = {'object_id': object_id, 'my_token': window.getMyToken()}
 	if (report_type == 'report_inactive' || report_type == 'report_middleman') {
 		$.post("/" + report_type + "/", params).done(function (response) {
-			$(".reporting_button").hide();
+			$(".report_ad .button").hide();
 			$("#thanksForReporting").show();
 			ga('send', 'event', 'site_response', 'show', report_type + '_accepted');
 		}).fail(function(response) {
@@ -313,8 +313,9 @@ function report(object_id, report_type) {
 	}
 }
 
-function send_message(object_id, message) {
-	var params = {'object_id': object_id, 'message': message, 'my_token': window.getMyToken()}
+function send_message(object_id, name, phone, email, message) {
+	message_text = 'Ime: ' + name + "\nTelefon: " + phone + "\nEmail: " + email + "\nPoruka: " + message;
+	var params = {'object_id': object_id, 'message': message_text, 'my_token': window.getMyToken()}
 	$.post("/send_message/", params).done(function(response) {
 		$("#send_message_container").hide();
 		$("#messageAccepted").show();

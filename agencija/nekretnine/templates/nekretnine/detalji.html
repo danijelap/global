@@ -58,12 +58,20 @@
 	<div class="free_message">{{ stan.free_message }}</div>
 
 	<div id="send_message_container">
+		<p>Interesuje Vas ovaj stan? Postavite pitanje.</p>
+		<p>Ime i prezime:</p><input id="message_name" type="text" /><br />
+		<p>Telefon:</p><input id="message_phone" type="text" /><br />
+		<p>Email:</p><input id="message_email" type="text" /><br />
+		<p>Poruka:</p>
 		<textarea id="message_text"></textarea>
-		<input type="button" value="pošaljite poruku vlasniku" onclick="send_message({{ stan.id }}, $('#message_text').val())"></input>
+		<p><div class="button" onclick="send_message({{ stan.id }}, $('#message_name').val(), $('#message_phone').val(), $('#message_email').val(), $('#message_text').val())">pošalji poruku vlasniku</div></p>
+		<div class="report_ad">
+			<div class="button" onclick="report({{ stan.id }}, 'report_inactive')">Prijavite da je stan izdat</div>
+			<div class="button" onclick="report({{ stan.id }}, 'report_middleman')">Prijavite da je oglas agencijski</div>
+		</div>
 	</div>
 
-	<input class="reporting_button" type="button" onclick="report({{ stan.id }}, 'report_inactive')" value="Prijavite da je stan izdat" />
-	<input class="reporting_button" type="button" onclick="report({{ stan.id }}, 'report_middleman')" value="Prijavite da je oglas agencijski" />
+	<span id="messageAccepted" class="report">Vaša poruka je poslata. Hvala što koristite mojkutak.rs.</span>
 	<span id="thanksForReporting" class="report">Hvala, Vaša prijava je zabeležena</span>
 	<span id="reportingFailed" class="report">Vaša prijava nije prihvaćena. Pokušajte kasnije ponovo.</span>
 	{% if ad.reported_as_inactive_counter > 1 %}

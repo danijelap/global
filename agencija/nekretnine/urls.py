@@ -3,7 +3,7 @@ from django.conf.urls import patterns, url
 from nekretnine import views
 
 urlpatterns = patterns('',
-	url(r'^detalji/$', views.detalji, name='detalji'),	
+	url(r'^detalji/$', views.detalji, name='detalji'),
 	url(r'^objekti/$', views.objekti, name='objekti'),
 	url(r'^spisak/$', views.spisak, name='spisak'),
 	url(r'^get_filter_choice/$', views.get_filter_choice, name='get_filter_choice'),
@@ -20,5 +20,11 @@ urlpatterns = patterns('',
 	url(r'^personal_info/$', views.personal_info, name='personal_info'),
 	url(r'^change_pass/$', views.change_password, name='change_pass'),
 	url(r'^logout/$', views.logout_view, name='logout'),
+	url(r'^terms/$', views.terms, name='terms'),
+	url(r'^tutorial/$', views.tutorial, name='tutorial'),
 	url(r'^$', views.construction, name='construction'),
+	url(r'^password_reset/$', 'django.contrib.auth.views.password_reset', {'post_reset_redirect' : '/password_reset_done/'}, name='password_reset'),
+	url(r'^password_reset_done/$', 'django.contrib.auth.views.password_reset_done', name='password_reset_done'),
+	url(r'^reset/(?P<uidb64>.+)/(?P<token>.+)/$','django.contrib.auth.views.password_reset_confirm',name='password_reset_confirm'),
+	url(r'^reset_done/$', 'django.contrib.auth.views.password_reset_complete', name='password_reset_complete'),
 )

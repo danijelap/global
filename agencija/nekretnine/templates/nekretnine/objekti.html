@@ -33,7 +33,7 @@
 		</div>
 		<div id="new_filters" class="new_filters"></div>
 		<div class="filter_range_slider" id="filter_range_slider"></div>
-		<div class="account">
+		<div class="account{% if not user.is_authenticated %} big{% endif %}">
 			{% if user.is_authenticated %}
 				<p>Prijavljeni ste kao {{ user.username }}</p>
 				<p><a href="/ad/">Postavite oglas</a></p>
@@ -41,7 +41,7 @@
 				<p><a href="/logout/">Odjavite se</a></p>
 			{% else %}
 				<p>Imate stan za izdavanje?</p>
-				<p><a href="/login/">Prijavite se i postavite oglas besplatno!</a></p>
+				<p><a href="/login/?next=/ads/">Prijavite se i postavite oglas besplatno!</a></p>
 			{% endif %}
 		</div>
 		<div class="objects_container">
@@ -55,11 +55,16 @@
 			<div class="desno" id="right">
 				<div id="prazan" class="details">
 					<div class="welcome_message">
-						<p> Ako želite detaljnije da pogledate neki stan,</p>
-						<p>kliknite na dugme "Detalji"</p>
+						<p>{{ welcome_message|safe }}</p>
 					</div>
 				</div>
 			</div>
+		</div>
+		<div id="footer">
+			<a target="_blank" href="/terms">Pravila korišćenja</a>
+			| <a target="_blank" href="/tutorial">Uputstvo</a>
+			{% if user.is_authenticated %}| <a href="/ad/">Postavite oglas</a>{% endif %}
+			| Kontakt: <a href="mailto:oglas.mojkutak@gmail.com">oglas.mojkutak@gmail.com</a>
 		</div>
 	</body>
 </html>

@@ -34,3 +34,7 @@ python manage.py migrate --list
 
 fake migration
 python manage.py migrate nekretnine 0010 --fake
+
+
+http://garmoncheg.blogspot.com.au/2012/07/django-resetting-passwords-with.html
+https://docs.djangoproject.com/en/1.7/topics/auth/default/

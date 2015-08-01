@@ -12,7 +12,7 @@
 		{% endfor %}
 		{{ new_images_form.as_p }}
 		{% if ad_form %}{{ ad_form.as_p }}{% endif %}
-		<input type="submit" value="Napravi oglas">
+		<input type="submit" value="{% if create %}Napravi oglas{% else %}Sačuvaj{% endif %}">
 	</div>
 </form>
 {% endblock %}

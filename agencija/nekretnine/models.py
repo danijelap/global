@@ -54,7 +54,7 @@ class AdditionalFeatures(models.Model):
 
 class Owner(models.Model):
 	user = models.ForeignKey(User)
-	phone = models.BigIntegerField(validators=[validate_positive_number])
+	phone = models.BigIntegerField(validators=[validate_positive_number], null=True)
 	show_data_in_ad = models.BooleanField(default=True)
 
 	@property
@@ -73,9 +73,9 @@ class Objekat(models.Model):
 	cena = models.IntegerField()
 	deposit = models.IntegerField()
 	construction_year = models.IntegerField()
-	free_message = models.TextField()
+	free_message = models.TextField(blank=True)
 	namestenost = models.ForeignKey(Namestenost)
-	additional_features = models.ManyToManyField(AdditionalFeatures)
+	additional_features = models.ManyToManyField(AdditionalFeatures, blank=True)
 	floor = models.IntegerField()
 	floors = models.IntegerField()
 	heating = models.ForeignKey(Heating)
@@ -129,7 +129,7 @@ class Ad(models.Model):
 	reported_as_middleman_counter = models.IntegerField(default = 0)
 
 	def __str__(self):
-		return "{0}, active: {1}, reported inactive: {2} times, reported middleman: {3} times".\
+		return "{0}, active: {1}, prijavljen kao izdat: {2} puta, prijavljen posrednik: {3} puta".\
 			format(self.object, self.active, self.reported_as_inactive_counter, self.reported_as_middleman_counter)
 	
 	class Meta:

@@ -44,14 +44,14 @@ class UserRegistrationForm(forms.Form):
 		# create user model which will have additional fields
 		# create user model for unconfirmed accounts
 		user = User.objects.create_user(
-			username = self.cleaned_data["email"],
-			password = self.cleaned_data["password1"],
-			email = self.cleaned_data["email"],
-			first_name = self.cleaned_data["first_name"],
-			last_name = self.cleaned_data["last_name"]
+			username=self.cleaned_data["email"],
+			password=self.cleaned_data["password1"],
+			email=self.cleaned_data["email"],
+			first_name=self.cleaned_data["first_name"],
+			last_name=self.cleaned_data["last_name"]
 		)
-		user.is_active = False
-		owner = Owner(user = user)
+		# user.is_active = False
+		owner = Owner(user=user)
 		if commit:
 			user.save()
 			owner.save()
@@ -105,7 +105,7 @@ class ObjectForm(forms.ModelForm):
 	class Meta:
 		model = Objekat
 		fields = ['adresa', 'tip_objekta', 'deo_grada', 'broj_soba', 'povrsina',
-			'cena', 'namestenost', 'additional_features', 'floor', 'floors',
+			'cena', 'construction_year', 'namestenost', 'additional_features', 'floor', 'floors',
 			'heating', 'deposit', 'free_message']
 		labels = {
 			'adresa': _("Adresa"),
@@ -114,6 +114,7 @@ class ObjectForm(forms.ModelForm):
 			'broj_soba': _("Broj soba"),
 			'povrsina': _("Površina"),
 			'cena': _("Cena"),
+			'construction_year': _("Godina izgradnje"),
 			'namestenost': _("Nameštenost"),
 			'additional_features': _("Ostale pogodnosti"),
 			'floor': _("Sprat"),
@@ -156,9 +157,8 @@ class AdForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
 	class Meta:
 		model = User
-		fields = ['email', 'first_name', 'last_name']
+		fields = ['first_name', 'last_name']
 		labels = {
-			'email': _("Email adresa"),
 			'first_name': _("Ime"),
 			'last_name': _("Prezime"),
 		}

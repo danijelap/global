@@ -5,13 +5,40 @@
 		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}" /> 
 	</head>
 	<body>
-		<form action="" method="post">
-			<div class="form">
+		<div class="logo"></div>
+
+		<div class="form">
+			{% if form.errors %}
+			<p>Uneli ste pogrešan email ili lozinku. Pokušajte ponovo.</p>
+			{% endif %}
+
+			{% if next %}
+				{% if user.is_authenticated %}
+				<p>Nemate omogućen pristup ovoj stranici.</p>
+				{% endif %}
+			{% endif %}
+
+			<form id="login_form" method="post" action="">
 				{% csrf_token %}
-				{{ form.as_p }}
-				<input type="submit" value="Prijavi se">
-				<p>Nemate nalog? <a href="/register/">Napravite ga!</a></p>
-			</div>
+				<table>
+				<tr>
+					<td>Email:</td>
+					<td>{{ form.username }}</td>
+				</tr>
+				<tr>
+					<td>Lozinka:</td>
+					<td>{{ form.password }}</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<div class="button" onclick="document.getElementById('login_form').submit();">Prijavite se</div>
+					</td>
+				</tr>
+				</table>
+				<input type="hidden" name="next" value="{{ next }}" />
+			</form>
+			<p>Nemate nalog? <a href="/register/">Napravite ga!</a></p>
 		</form>
 	</body>
 </html>
