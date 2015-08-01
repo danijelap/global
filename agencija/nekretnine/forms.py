@@ -133,6 +133,12 @@ class NewImagesForm(forms.Form):
 	image2 = forms.ImageField(required=False, label=_("Dodajte sliku"))
 	image3 = forms.ImageField(required=False, label=_("Dodajte sliku"))
 	image4 = forms.ImageField(required=False, label=_("Dodajte sliku"))
+	image5 = forms.ImageField(required=False, label=_("Dodajte sliku"))
+	image6 = forms.ImageField(required=False, label=_("Dodajte sliku"))
+	image7 = forms.ImageField(required=False, label=_("Dodajte sliku"))
+	image8 = forms.ImageField(required=False, label=_("Dodajte sliku"))
+	image9 = forms.ImageField(required=False, label=_("Dodajte sliku"))
+	image10 = forms.ImageField(required=False, label=_("Dodajte sliku"))
 
 	def get_images(self):
 		images = []
@@ -144,6 +150,18 @@ class NewImagesForm(forms.Form):
 		if image3: images.append(ObjectImage(image=image3))
 		image4 = self.cleaned_data.get("image4")
 		if image4: images.append(ObjectImage(image=image4))
+		image5 = self.cleaned_data.get("image5")
+		if image5: images.append(ObjectImage(image=image5))
+		image6 = self.cleaned_data.get("image6")
+		if image6: images.append(ObjectImage(image=image6))
+		image7 = self.cleaned_data.get("image7")
+		if image7: images.append(ObjectImage(image=image7))
+		image8 = self.cleaned_data.get("image8")
+		if image8: images.append(ObjectImage(image=image8))
+		image9 = self.cleaned_data.get("image9")
+		if image9: images.append(ObjectImage(image=image9))
+		image10 = self.cleaned_data.get("image10")
+		if image10: images.append(ObjectImage(image=image10))
 		return images
 
 class AdForm(forms.ModelForm):
