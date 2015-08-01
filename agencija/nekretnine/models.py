@@ -72,7 +72,7 @@ class Objekat(models.Model):
 	povrsina = models.IntegerField()
 	cena = models.IntegerField()
 	deposit = models.BooleanField()
-	construction_year = models.IntegerField(blank=True)
+	construction_year = models.IntegerField(null=True, blank=True)
 	free_message = models.TextField(blank=True)
 	namestenost = models.ForeignKey(Namestenost)
 	additional_features = models.ManyToManyField(AdditionalFeatures, blank=True)
