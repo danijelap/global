@@ -37,6 +37,13 @@ menu_items = [
 	{'text': 'unos oglasa', 'id': 'ad', 'href': '/ad/'}
 ]
 
+welcome_messages = [
+	'Dobro došli na našu interenet stranicu.<br />Mi vam nudimo mogućnost da nađete ili izdate stan jednostavno i bez posrednika',
+	'Ako želite da pogledate neki stan detaljnije, kliknite na dugme detalji',
+	'Ako vam se neki od stanova posebno dopadnu,<br />možete ih izdvojiti klikom na dugme u obliku srca',
+	'Ako imate nekih primedbi ili sugestija,<br />možete nas kontaktirati putem naše email adrese<br /><a href="mailto:oglas.mojkutak@gmail.com">oglas.mojkutak@gmail.com',
+]
+
 def register(request):
 	if request.method == 'POST':
 		form = UserRegistrationForm(request.POST)
@@ -186,15 +193,7 @@ def index(request):
 	drzave = Drzava.objects.all().order_by('-name')
 	context = {'drzave': drzave}
 	return render(request, 'nekretnine/index.html', context)
-	
 
-welcome_messages = [
-	'Dobro došli na našu interenet stranicu. Mi vam nudimo mogućnost da nađete ili izdate stan jednostavno i bez posrednika',
-	'Ako želite više detalja o nekom stanu kliknite na dugme "detalji"',
-	'Unesi poruku',
-	'Unesi poruku',
-	'Unesi poruku',
-]
 def objekti(request):
 	context = {
 		'welcome_message': random.choice(welcome_messages)

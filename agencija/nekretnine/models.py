@@ -54,7 +54,7 @@ class AdditionalFeatures(models.Model):
 
 class Owner(models.Model):
 	user = models.ForeignKey(User)
-	phone = models.BigIntegerField(validators=[validate_positive_number])
+	phone = models.BigIntegerField(validators=[validate_positive_number], null=True)
 	show_data_in_ad = models.BooleanField(default=True)
 
 	@property
@@ -73,9 +73,9 @@ class Objekat(models.Model):
 	cena = models.IntegerField()
 	deposit = models.IntegerField()
 	construction_year = models.IntegerField()
-	free_message = models.TextField()
+	free_message = models.TextField(blank=True)
 	namestenost = models.ForeignKey(Namestenost)
-	additional_features = models.ManyToManyField(AdditionalFeatures)
+	additional_features = models.ManyToManyField(AdditionalFeatures, blank=True)
 	floor = models.IntegerField()
 	floors = models.IntegerField()
 	heating = models.ForeignKey(Heating)

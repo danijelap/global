@@ -18,7 +18,7 @@
 				{% endif %}
 			{% endif %}
 
-			<form method="post" action="">
+			<form id="login_form" method="post" action="">
 				{% csrf_token %}
 				<table>
 				<tr>
@@ -29,11 +29,16 @@
 					<td>Lozinka:</td>
 					<td>{{ form.password }}</td>
 				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<div class="button" onclick="document.getElementById('login_form').submit();">Prijavite se</div>
+					</td>
+				</tr>
 				</table>
-				<input type="submit" value="Prijavite se" />
 				<input type="hidden" name="next" value="{{ next }}" />
 			</form>
 			<p>Nemate nalog? <a href="/register/">Napravite ga!</a></p>
-		</div>
+		</form>
 	</body>
 </html>

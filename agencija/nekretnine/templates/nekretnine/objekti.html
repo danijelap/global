@@ -55,15 +55,16 @@
 			<div class="desno" id="right">
 				<div id="prazan" class="details">
 					<div class="welcome_message">
-						<p>{{ welcome_message }}</p>
+						<p>{{ welcome_message|safe }}</p>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div id="footer">
-			<a target="_blank" href="/terms">Pravila korišćenja</a> |
-			<a target="_blank" href="/tutorial">Uputstvo</a> |
-			Kontakt: <a href="mailto:oglas.mojkutak@gmail.com">oglas.mojkutak@gmail.com</a>
+			<a target="_blank" href="/terms">Pravila korišćenja</a>
+			| <a target="_blank" href="/tutorial">Uputstvo</a>
+			{% if user.is_authenticated %}| <a href="/ad/">Postavite oglas</a>{% endif %}
+			| Kontakt: <a href="mailto:oglas.mojkutak@gmail.com">oglas.mojkutak@gmail.com</a>
 		</div>
 	</body>
 </html>

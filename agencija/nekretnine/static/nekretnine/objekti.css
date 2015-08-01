@@ -13,6 +13,7 @@ div.logo {
 .account {
 	float: right;
 	text-align: right;
+	width: 280px;
 }
 .account p {
 	margin: 0;
@@ -161,10 +162,13 @@ div.button {
 	border: 1px solid;
 	background-color: #C0DEED;
 	text-align: center;
-	float: right;
 	cursor: pointer;
 	margin-top: 5px;
 	margin-right: 5px;
+}
+
+.object .button {
+	float: right;
 }
 
 .red {
@@ -251,8 +255,8 @@ div.button {
 
 .report {
 	display: none;
+	margin-left: 25px;
 }
-
 form {
 	margin: 0px;
 	padding: 0px;
@@ -313,4 +317,33 @@ div.form {
 	padding: 10px;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+#send_message_container {
+	margin-left: 25px;
+	margin-top: 50px;
+}
+
+#send_message_container p {
+	font-size: 15px;
+	margin-bottom: 5px;
+	margin-top: 8px;
+}
+
+#send_message_container .button {
+	font-size: 14px;
+	width: 220px;
+}
+
+#send_message_container input {
+	width: 220px;
+}
+
+#send_message_container textarea {
+	height: 150px;
+	width: 220px;
+}
+
+.report_ad {
+	margin-top: 50px;
 }
