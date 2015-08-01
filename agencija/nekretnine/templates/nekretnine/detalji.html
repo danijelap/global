@@ -34,7 +34,7 @@
 		<span class="details_parameters">Cena:</span>
 		<span class="details_values">{{ stan.cena }} €</span>
 		<span class="details_parameters">Depozit:</span>
-		<span class="details_values">{{ stan.deposit }} €</span>
+		<span class="details_values">{% if stan.deposit %}da{% else %}ne{% endif %}</span>
 		<span class="details_parameters">Godina izgradnje:</span>
 		<span class="details_values">{{ stan.construction_year }}</span>
 		<span class="details_parameters">Grejanje:</span>

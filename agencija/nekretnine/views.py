@@ -30,7 +30,7 @@ filters = {
 }
 
 menu_items = [
-	{'text': 'početna strana', 'id': 'home_page', 'href': '/objekti/'}, 
+	{'text': 'početna strana', 'id': 'home_page', 'href': '/'},
 	{'text': 'lični podaci', 'id': 'personal_info', 'href': '/personal_info/'},
 	{'text': 'promena lozinke', 'id': 'change_pass', 'href': '/change_pass/'},
 	{'text': 'moji oglasi', 'id': 'ads', 'href': '/ads/'}, 
