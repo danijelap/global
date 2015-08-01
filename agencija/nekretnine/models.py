@@ -71,7 +71,7 @@ class Objekat(models.Model):
 	broj_soba = models.FloatField()
 	povrsina = models.IntegerField()
 	cena = models.IntegerField()
-	deposit = models.BooleanField()
+	deposit = models.BooleanField(default=False)
 	construction_year = models.IntegerField(null=True, blank=True)
 	free_message = models.TextField(blank=True)
 	namestenost = models.ForeignKey(Namestenost)
