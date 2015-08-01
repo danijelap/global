@@ -165,7 +165,7 @@ def change_password(request):
 		change_pass_form = ChangePasswordForm(request.POST, user=request.user)
 		if change_pass_form.is_valid():
 			change_pass_form.save()
-			return HttpResponseRedirect("/objekti/")
+			return HttpResponseRedirect("/")
 	else:
 		change_pass_form = ChangePasswordForm(user=request.user)
 	context = {'change_pass_form': change_pass_form}
@@ -176,7 +176,7 @@ def change_password(request):
 
 def logout_view(request):
 	logout(request)
-	return HttpResponseRedirect('/objekti/')
+	return HttpResponseRedirect('/')
 
 def get_client_ip(request):
 	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
