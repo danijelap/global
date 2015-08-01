@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login
 from django.utils.translation import ugettext_lazy as _
+from django.utils.safestring import mark_safe
 from nekretnine.models import *
 
 class UserRegistrationForm(forms.Form):
@@ -112,8 +113,8 @@ class ObjectForm(forms.ModelForm):
 			'tip_objekta': _("Tip objekta"),
 			'deo_grada': _("Deo grada"),
 			'broj_soba': _("Broj soba"),
-			'povrsina': _("Površina"),
-			'cena': _("Cena"),
+			'povrsina': mark_safe("Površina (m<sup>2</sup>)"),
+			'cena': _("Cena (€)"),
 			'construction_year': _("Godina izgradnje"),
 			'namestenost': _("Nameštenost"),
 			'additional_features': _("Ostale pogodnosti"),
