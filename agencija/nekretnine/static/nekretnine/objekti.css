@@ -76,9 +76,12 @@ body.objects {
 	font-weight:bold;
 	width: 5em;
 }
-.image_slider {
-	height: 350px;
+
+#slider {
+	background-repeat: no-repeat !important;
+	background-position: center center !important;
 }
+
 button.skloni {
 	width: 20px;
 	float: right;
@@ -181,6 +184,7 @@ div.button {
 	overflow: hidden;
 	border: 1px solid;
 	margin: 4px;
+	text-align: center;
 }
 .list_text {
 	float: left;
