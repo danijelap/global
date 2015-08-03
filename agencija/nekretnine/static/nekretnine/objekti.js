@@ -203,6 +203,7 @@ $(function() {
 	$.cookie.json = true;
 	window.favourites = $.cookie('favourites');
 	if (typeof window.favourites != 'object') window.favourites = [];
+	console.log(window.favourites);
 
 	window.libFilter.initSlider();
 	init_document_click();
@@ -346,6 +347,7 @@ function loadFlatList() {
 		}
 	})
 	$.get("/spisak", filter_dictionary, function (response) {
+		$("#favoriti").html("");
 		$("#spisak").html(response);
 		for (index in favourite_flats) {
 			addFavourite(favourite_flats[index]);

@@ -104,6 +104,7 @@ def ad(request):
 					object = object_form.save(commit=False)
 					object.owner = owner
 					object.save()
+					object_form.save_m2m()
 					for image in new_images_form.get_images():
 						image.object = object
 						image.save()
@@ -239,7 +240,7 @@ def spisak(request):
 				many_to_many_filters[filters[filter_name]['model_filter_key']] = set([int(value) for value in values if value.isdigit()])
 
 	objects_to_exclude = []
-	objects = Objekat.objects.filter(query | Q(id__in=favourite_flats))
+	objects = Objekat.objects.filter(query)
 
 	for model_filter_key, values_to_filter in many_to_many_filters.items():
 		for one_object in objects:
@@ -248,9 +249,10 @@ def spisak(request):
 				objects_to_exclude.append(one_object.id)
 
 	if len(objects_to_exclude) > 0:
-		context = {'objekti': objects.exclude(id__in=objects_to_exclude)}
-	else:
-		context = {'objekti': objects}
+		objects = objects.exclude(id__in=objects_to_exclude)
+	objects = objects | Objekat.objects.filter(Q(id__in=favourite_flats))
+
+	context = {'objekti': objects}
 
 	return render(request, 'nekretnine/spisak.html', context)
 

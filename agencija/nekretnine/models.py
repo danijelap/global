@@ -101,7 +101,7 @@ class Objekat(models.Model):
 		return img.url + '.small' + extension
 
 	def __str__(self):
-		return "{0} ({1} m2, {2} €)".format(self.deo_grada.name, self.povrsina, self.cena)
+		return "{0} ({1} m2, {2} €), {3}".format(self.deo_grada.name, self.povrsina, self.cena, self.id)
 
 def resize_image(img, width, height):
 	(base_width, base_height) = img.size
