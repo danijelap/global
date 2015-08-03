@@ -121,7 +121,7 @@ class ObjectImage(models.Model):
 		if self.image:
 			super(ObjectImage, self).save()
 			new_image = Image.open(self.image)
-			resize_image(new_image, 700, 306).save(self.image.path)
+			resize_image(new_image, 700, 394).save(self.image.path)
 			extension = os.path.splitext(self.image.path)[1]
 			resize_image(new_image, 80, 45).save(self.image.path + '.small' + extension)
 

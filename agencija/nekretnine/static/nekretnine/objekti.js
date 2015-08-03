@@ -201,6 +201,9 @@ $.ajaxSetup({
 
 $(function() {
 	$.cookie.json = true;
+	window.favourites = $.cookie('favourites');
+	if (typeof window.favourites != 'object') window.favourites = [];
+
 	window.libFilter.initSlider();
 	init_document_click();
 	
@@ -214,16 +217,46 @@ $(function() {
 	
 });
 
-function add_favorits(id_objekta) {
-	if ($("#stan_" + id_objekta).parents("#spisak").length == 1) {
-		x = $("#stan_" + id_objekta).remove();
-		$("#favoriti").append(x);
-		ga('send', 'event', 'user_request', 'add', 'favourite');
-	} else {
-		x = $("#stan_" + id_objekta).remove();
-		$("#spisak").append(x);
-		ga('send', 'event', 'user_request', 'remove', 'favourite');
+function addToArray(ary, item) {
+	var index = ary.indexOf(item);
+	if (index == -1) {
+		ary.push(item);
 	}
+}
+
+function removeFromArray(ary, item) {
+	var index = ary.indexOf(item);
+	if (index > -1) {
+		ary.splice(index, 1);
+	}
+}
+
+function isFavourite(object_id) {
+	var index = ary.indexOf(item);
+	return index > -1;
+}
+
+function addFavourite(object_id) {
+	if ($("#stan_" + object_id).parents("#spisak").length == 1) {
+		x = $("#stan_" + object_id).remove();
+		$("#favoriti").append(x);
+		addToArray(window.favourites, object_id);
+		ga('send', 'event', 'user_request', 'add', 'favourite');
+		setFavouriteHeight();
+	}
+}
+
+function removeFavourite(object_id) {
+	if ($("#stan_" + object_id).parents("#favoriti").length == 1) {
+		x = $("#stan_" + object_id).remove();
+		$("#spisak").append(x);
+		removeFromArray(window.favourites, object_id);
+		ga('send', 'event', 'user_request', 'remove', 'favourite');
+		setFavouriteHeight();
+	}
+}
+
+function setFavouriteHeight() {
 	favoriti = $("#favoriti").find("[id^=stan_]");
 	favorites_total_height = 0;
 	favoriti.each(function(index, element){
@@ -237,6 +270,16 @@ function add_favorits(id_objekta) {
 		$("#favoriti").css('height', maximum_height);
 	}
 	setHeightOfContainers();
+}
+
+function switchFavourite(object_id) {
+	if ($("#stan_" + object_id).parents("#spisak").length == 1) {
+		addFavourite(object_id);
+	} else {
+		removeFavourite(object_id);
+	}
+	$.cookie('favourites', window.favourites);
+	setFavouriteHeight();
 }
 
 var heightTimeout = null;
@@ -276,13 +319,21 @@ function vise(objekat_id) {
 		}
 		ga('send', 'event', 'site_response', 'show', 'details');
 	});
-	
+	window.location.hash = objekat_id;
 	ga('send', 'event', 'user_request', 'load', 'details');
 }
 
-function ucitajSpisakStanova() {
-	// TODO: add delay
+var spisakStanovaTimeout = null;
+function loadFlatList() {
 	var filter_dictionary = {};
+	var favourite_flats = [];
+	Array.prototype.push.apply(favourite_flats, window.favourites);
+	object_id = parseInt(window.location.hash.replace('#', ''), 10);
+	if (!isNaN(object_id)) {
+		favourite_flats.push(object_id);
+		vise(object_id);
+	}
+
 	filters = $("#filters").find("[id^=filter_]").filter("[id$=_value]");
 	filters.each(function(index, element) {
 		filter_id = element.id.substring(7, element.id.length-6);
@@ -290,10 +341,20 @@ function ucitajSpisakStanova() {
 		if (filter_value != "0") {
 			filter_dictionary[filter_id] = filter_value;
 		}
+		if (favourite_flats.length > 0) {
+			filter_dictionary['favourite_flats'] = favourite_flats;
+		}
 	})
 	$.get("/spisak", filter_dictionary, function (response) {
 		$("#spisak").html(response);
+		for (index in favourite_flats) {
+			addFavourite(favourite_flats[index]);
+		}
 	});
+}
+function ucitajSpisakStanova() {
+	clearTimeout(spisakStanovaTimeout);
+	spisakStanovaTimeout = setTimeout(loadFlatList, 500);
 }
 
 function report(object_id, report_type) {
