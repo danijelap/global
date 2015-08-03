@@ -270,6 +270,7 @@ function setFavouriteHeight() {
 		$("#favoriti").css('height', maximum_height);
 	}
 	setHeightOfContainers();
+	$.cookie('favourites', window.favourites, {expires: 30});
 }
 
 function switchFavourite(object_id) {
@@ -278,7 +279,6 @@ function switchFavourite(object_id) {
 	} else {
 		removeFavourite(object_id);
 	}
-	$.cookie('favourites', window.favourites);
 	setFavouriteHeight();
 }
 
