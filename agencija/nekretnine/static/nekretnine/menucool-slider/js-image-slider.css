@@ -11,15 +11,17 @@
 }
 
 #slider, #slider div.sliderInner {
-    width:700px;height:306px;/* Must be the same size as the slider images */
+    width:700px;height:394px;/* Must be the same size as the slider images */
 }
 
 #slider {
-	background:#fff url(loading.gif) no-repeat 50% 50%;
+	background:#fff url(loading.gif);
 	position:relative;
 	margin:0 auto; /*center-aligned*/
     transform: translate3d(0,0,0);
     box-shadow: 0px 1px 5px #999999;
+	background-repeat: no-repeat !important;
+	background-position: center center !important;
 }
 
 /* image wrapper */
@@ -71,7 +73,7 @@
 /* ------ built-in navigation bullets wrapper ------*/
 /* Note: check themes\2\js-image-slider.css to see how to hide nav bullets */
 #slider div.navBulletsWrapper  {
-    top:320px;/* Its position is relative to the #slider */
+    top:410px;/* Its position is relative to the #slider */
 	text-align:center;
 	background:none;
 	position:relative;

@@ -101,7 +101,14 @@ class Objekat(models.Model):
 		return img.url + '.small' + extension
 
 	def __str__(self):
-		return "{0} ({1} m2, {2} €)".format(self.deo_grada.name, self.povrsina, self.cena)
+		return "{0} ({1} m2, {2} €), {3}".format(self.deo_grada.name, self.povrsina, self.cena, self.id)
+
+def resize_image(img, width, height):
+	(base_width, base_height) = img.size
+	ratio = min(width/base_width, height/base_height)
+	final_width = int(base_width * ratio)
+	final_height = int(base_height * ratio)
+	return img.resize((final_width, final_height), Image.ANTIALIAS)
 
 class ObjectImage(models.Model):
 	def upload_path(self, filename):
@@ -109,16 +116,14 @@ class ObjectImage(models.Model):
 	
 	object = models.ForeignKey(Objekat)
 	image = models.ImageField(upload_to=upload_path)
-	
+
 	def save(self, *args, **kwargs):
 		if self.image:
 			super(ObjectImage, self).save()
 			new_image = Image.open(self.image)
-			new_size = (800, 450)
-			new_image.resize(new_size).save(self.image.path)
+			resize_image(new_image, 700, 394).save(self.image.path)
 			extension = os.path.splitext(self.image.path)[1]
-			thumb_size = (80, 45)
-			new_image.resize(thumb_size).save(self.image.path + '.small' + extension)
+			resize_image(new_image, 80, 45).save(self.image.path + '.small' + extension)
 
 class Ad(models.Model):
 	object = models.ForeignKey(Objekat)

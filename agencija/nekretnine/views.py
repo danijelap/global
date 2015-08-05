@@ -104,6 +104,7 @@ def ad(request):
 					object = object_form.save(commit=False)
 					object.owner = owner
 					object.save()
+					object_form.save_m2m()
 					for image in new_images_form.get_images():
 						image.object = object
 						image.save()
@@ -201,35 +202,42 @@ def objekti(request):
 	return render(request, 'nekretnine/objekti.html', context)
 
 def detalji(request):
-
 	id_stana = request.GET.get('id_stana')
-	stan = Objekat.objects.get(id = id_stana)
-	ad = Ad.objects.get(object = stan)
-	context = {'stan' : stan, 'ad': ad}
-	return render(request, 'nekretnine/detalji.html', context)
-	
+	stan_filter = Objekat.objects.filter(id=id_stana)
+	if len(stan_filter) == 1:
+		stan = stan_filter[0]
+		ad = Ad.objects.get(object=stan)
+		context = {'stan' : stan, 'ad': ad}
+		return render(request, 'nekretnine/detalji.html', context)
+	else:
+		return HttpResponse("Traženi stan ne postoji")
+
 def spisak(request):
 	query = Q(ad__active=True, owner__user__is_active=True)
 	many_to_many_filters = {}
+	favourite_flats = []
 	for filter_name in request.GET:
-		if filter_name[-2:] == '[]':
-			filter_name = filter_name[:-2]
-		if filters[filter_name]['type'] == 'exact':
-			value = request.GET.get(filter_name)
-			if value.isdigit():
-				query_filter = {filters[filter_name]['model_filter_key']: value}
+		if filter_name == 'favourite_flats[]':
+			favourite_flats = request.GET.getlist('favourite_flats[]')
+		else:
+			if filter_name[-2:] == '[]':
+				filter_name = filter_name[:-2]
+			if filters[filter_name]['type'] == 'exact':
+				value = request.GET.get(filter_name)
+				if value.isdigit():
+					query_filter = {filters[filter_name]['model_filter_key']: value}
+					query = query & Q(**query_filter)
+			elif filters[filter_name]['type'] == 'range':
+				value = request.GET.get(filter_name)
+				min_value, max_value = value.split('-')
+				query_filter = {
+					filters[filter_name]['model_filter_key'] + "__gte": min_value,
+					filters[filter_name]['model_filter_key'] + "__lte": max_value
+				}
 				query = query & Q(**query_filter)
-		elif filters[filter_name]['type'] == 'range':
-			value = request.GET.get(filter_name)
-			min_value, max_value = value.split('-')
-			query_filter = {
-				filters[filter_name]['model_filter_key'] + "__gte": min_value,
-				filters[filter_name]['model_filter_key'] + "__lte": max_value
-			}
-			query = query & Q(**query_filter)
-		elif filters[filter_name]['type'] == 'multi':
-			values = request.GET.getlist(filter_name + '[]')
-			many_to_many_filters[filters[filter_name]['model_filter_key']] = set([int(value) for value in values if value.isdigit()])
+			elif filters[filter_name]['type'] == 'multi':
+				values = request.GET.getlist(filter_name + '[]')
+				many_to_many_filters[filters[filter_name]['model_filter_key']] = set([int(value) for value in values if value.isdigit()])
 
 	objects_to_exclude = []
 	objects = Objekat.objects.filter(query)
@@ -241,9 +249,10 @@ def spisak(request):
 				objects_to_exclude.append(one_object.id)
 
 	if len(objects_to_exclude) > 0:
-		context = {'objekti': objects.exclude(id__in=objects_to_exclude)}
-	else:
-		context = {'objekti': objects}
+		objects = objects.exclude(id__in=objects_to_exclude)
+	objects = objects | Objekat.objects.filter(Q(id__in=favourite_flats))
+
+	context = {'objekti': objects}
 
 	return render(request, 'nekretnine/spisak.html', context)
 
