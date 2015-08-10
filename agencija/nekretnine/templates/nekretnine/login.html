@@ -6,12 +6,17 @@
 	</head>
 	<body>
 		<div class="logo"></div>
-		<h2 class="title_chekin">Prijava preko korisničkog naloga</h2>
-		<h3 class="title_chekin_two">Dragi korisnici</h3>
-		<p class="chekin">da biste postavili svoj oglas na naš sajt, potrebno je da se prijavite preko svog korisničkog
-			naloga, popunjavanjem
-		<p class="chekin">polja ispod teksta. Ako nemate kreiran nalog, možete ga napraviti klikom na link ispod dugmeta
-		za prijavu.</p>
+		<div class="login_message">
+			<h2>Prijava preko korisničkog naloga</h2>
+			<p>Dragi korisnici</p>
+			<p>
+				da biste postavili svoj oglas na naš sajt,
+				potrebno je da se prijavite preko svog korisničkog
+				naloga, popunjavanjem polja ispod teksta.
+				Ako nemate kreiran nalog,
+				možete ga napraviti klikom na link ispod dugmeta za prijavu.
+			</p>
+		</div>
 		<div class="form">
 			{% if form.errors %}
 			<p>Uneli ste pogrešan email ili lozinku. Pokušajte ponovo.</p>
@@ -43,6 +48,7 @@
 				</table>
 				<input type="hidden" name="next" value="{{ next }}" />
 			</form>
+			<p><a href="/password_reset/">Zaboravili ste lozinku?</a></p>
 			<p>Nemate nalog? <a href="/register/">Napravite ga!</a></p>
 		</form>
 	</body>

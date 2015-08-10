@@ -5,6 +5,12 @@ div.logo {
 	float: left;
 }
 
+.content {
+	clear: left;
+	width: 1000px;
+	margin: auto;
+}
+
 .levo {
 	width:600px;
 	float:left;
@@ -347,18 +353,15 @@ div.form {
 .report_ad {
 	margin-top: 50px;
 }
-.title_chekin {
-	margin-top: 20px;
 
+.login_message {
+	clear: left;
+	width: 500px;
+	padding-right: 500px;
+	margin: auto;
 }
-.chekin {
+.login_message p {
 	font-size: 15px;
-	margin-left: 160px;
-
-}
-.title_chekin_two {
-	margin-bottom: 35px;
-	margin-left: 30px;
 }
 /* jssor slider bullet navigator skin 13 css */
 /*
