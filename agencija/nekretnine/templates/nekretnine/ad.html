@@ -10,6 +10,7 @@
 		<img src="{{ image.url }}" />
 		<input type="checkbox" name="delete_images[]" value="{{ image.id }}" /> Obrisi
 		{% endfor %}
+		<p><b>Poželjno je da postavite slike, jer oglasi sa slikama imaju daleku veću posećenost</b></p>
 		<p><b>Da bi slike bile najbolje prikazane preporučujemo da odnos širine i visine bude 16:9.</b></p>
 		{{ new_images_form.as_p }}
 		<p>Ukoliko imate još slika možete ih naknadno uneti kasnije.</p>

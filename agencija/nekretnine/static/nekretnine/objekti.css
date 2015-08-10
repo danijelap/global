@@ -5,6 +5,12 @@ div.logo {
 	float: left;
 }
 
+.content {
+	clear: left;
+	width: 1000px;
+	margin: auto;
+}
+
 .levo {
 	width:600px;
 	float:left;
@@ -348,6 +354,15 @@ div.form {
 	margin-top: 50px;
 }
 
+.login_message {
+	clear: left;
+	width: 500px;
+	padding-right: 500px;
+	margin: auto;
+}
+.login_message p {
+	font-size: 15px;
+}
 /* jssor slider bullet navigator skin 13 css */
 /*
 .jssorb13 div           (normal)

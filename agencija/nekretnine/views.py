@@ -3,7 +3,6 @@ from django.template import RequestContext, loader
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect, HttpResponse
-from django import forms
 from django.db.models import Q
 from django.forms.models import model_to_dict
 from django.core.mail import send_mail
@@ -16,7 +15,7 @@ from datetime import date
 import random
 
 filters = {
-	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena (€)', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
+	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
 	'broj_soba': {'name': 'Broj soba', 'title': 'broj soba', 'model_filter_key': 'broj_soba', 'type': 'range', 'min_value': 0, 'max_value': 5, 'start_value': '0-3'},
 	'tip_objekta': {'name': 'Tip objekta', 'title': 'tip objekta', 'model_filter_key': 'tip_objekta_id', 'type': 'exact', 'objects': TipObjekta.objects},
 	'grad': {'name': 'Gradovi', 'title': 'grad', 'model_filter_key': 'deo_grada__grad_id', 'type': 'exact', 'objects': Grad.objects, 'default': True},
