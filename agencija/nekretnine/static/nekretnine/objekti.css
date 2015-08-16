@@ -363,6 +363,10 @@ div.form {
 .login_message p {
 	font-size: 15px;
 }
+
+.errorlist {
+	font-weight: bold;
+}
 /* jssor slider bullet navigator skin 13 css */
 /*
 .jssorb13 div           (normal)

@@ -1,6 +1,9 @@
 {% extends 'nekretnine/account.html' %}
 
 {% block content %}
+{% if error %}
+<h3>Niste dobro uneli podatke. Pogledajte ispod, polja koja nisu dobra su obeležena.</h3>
+{% endif %}
 <form action="" method="post" enctype="multipart/form-data">
 	<div class="form">
 		{% csrf_token %}

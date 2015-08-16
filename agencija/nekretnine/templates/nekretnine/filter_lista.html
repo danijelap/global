@@ -1,6 +1,5 @@
 <div class="filter_list" id="filter_{{ id }}">
-	<select id="filter_{{ id }}_value" onchange="ucitajSpisakStanova();"{% if type == 'multi' %} multiple placeholder="Izaberite {{ title }}"{% endif %}>
-		{% if type != 'multi' %}<option value="0">Izaberite {{ title }}...</option>{% endif %}
+	<select id="filter_{{ id }}_value" onchange="ucitajSpisakStanova();"{% if type == 'multi' %} multiple{% endif %}>
 		{% for stavka in stavke %}
 		<option value="{{ stavka.id }}">{{ stavka.name }}</option>
 		{% endfor %}
@@ -8,7 +7,12 @@
 	<button class="skloni" onclick="window.libFilter.removeFilter('{{ id }}')">x</button>
 </div>
 <script type="text/javascript">
-	$("#filter_{{ id }}_value").SumoSelect();
-	{% if not stavke %}
-	{% endif %}
+	$("#filter_{{ id }}_value").SumoSelect({
+		{% if type == 'multi' %}
+		selectAll: true,
+		selectAlltext: "Izaberite sve",
+		{% endif %}
+		captionFormat: "{{ title }}: {0}",
+		placeholder: "{{ title }}"
+	});
 </script>
