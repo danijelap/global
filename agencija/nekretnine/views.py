@@ -14,18 +14,23 @@ import json
 from datetime import date
 import random
 
+def multi_search_all(values_to_filter, object_values):
+	return values_to_filter.issubset(object_values)
+
+def multi_search_any(values_to_filter, object_values):
+	return len(values_to_filter.intersection(object_values)) > 0
+
 filters = {
 	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
 	'broj_soba': {'name': 'Broj soba', 'title': 'broj soba', 'model_filter_key': 'broj_soba', 'type': 'range', 'min_value': 0, 'max_value': 5, 'start_value': '0-3'},
 	'tip_objekta': {'name': 'Tip objekta', 'title': 'tip objekta', 'model_filter_key': 'tip_objekta_id', 'type': 'exact', 'objects': TipObjekta.objects},
-	'grad': {'name': 'Gradovi', 'title': 'grad', 'model_filter_key': 'deo_grada__grad_id', 'type': 'exact', 'objects': Grad.objects, 'default': True},
-	'deo_grada': {'name': 'Delovi grada', 'title': 'deo grada', 'model_filter_key': 'deo_grada_id', 'type': 'exact', 'objects': DeoGrada.objects, 'depends_on': 'grad', 'depends_on_filter_key': 'grad_id', 'default': True},
+	'deo_grada': {'name': 'Delovi grada', 'title': 'delovi grada', 'model_filter_key': 'deo_grada', 'type': 'multi', 'search': multi_search_any, 'objects': DeoGrada.objects, 'default': True},
 	'namestenost': {'name': 'Nameštenost', 'title': 'nameštenost', 'model_filter_key': 'namestenost_id', 'type': 'exact', 'objects': Namestenost.objects},
 	'povrsina': {'name': 'Površina', 'title': 'površina', 'model_filter_key': 'povrsina', 'type': 'range', 'min_value': 0, 'max_value': 400, 'start_value': '50-100'},
 	'heating': {'name': 'Grejanje', 'title': 'grejanje', 'model_filter_key': 'heating_id', 'type': 'exact', 'objects': Heating.objects},
 	'floor': {'name': 'Sprat', 'title': 'sprat', 'model_filter_key': 'floor', 'type': 'range', 'min_value': 0, 'max_value': 30, 'start_value': '1-4'},
-	'construction_year': {'name': 'Godina izgradnje', 'title': 'godina izgradnje', 'model_filter_key': 'construction_year', 'type': 'range', 'min_value': 1900, 'max_value': date.today().year, 'start_value': '1970-{0}'.format(date.today().year)},
-	'additional_features': {'name': 'Ostale pogodnosti', 'title': 'ostale pogodnosti', 'model_filter_key': 'additional_features', 'type': 'multi', 'objects': AdditionalFeatures.objects},
+#	'construction_year': {'name': 'Godina izgradnje', 'title': 'godina izgradnje', 'model_filter_key': 'construction_year', 'type': 'range', 'min_value': 1900, 'max_value': date.today().year, 'start_value': '1970-{0}'.format(date.today().year)},
+	'additional_features': {'name': 'Ostale pogodnosti', 'title': 'ostale pogodnosti', 'model_filter_key': 'additional_features', 'type': 'multi', 'search': multi_search_all, 'objects': AdditionalFeatures.objects},
 }
 
 menu_items = [
@@ -41,6 +46,10 @@ welcome_messages = [
 	'Ako želite da pogledate neki stan detaljnije, kliknite na dugme detalji',
 	'Ako vam se neki od stanova posebno dopadnu,<br />možete ih izdvojiti klikom na dugme u obliku srca',
 	'Ako imate nekih primedbi ili sugestija,<br />možete nas kontaktirati putem naše email adrese<br /><a href="mailto:oglas.mojkutak@gmail.com">oglas.mojkutak@gmail.com',
+]
+
+welcome_messages_auth = [
+	'Uspešno ste se prijavili. Oglas možete postaviti klikom na link “Postavite oglas” u gornjem desnom uglu ili na dnu stranice.',
 ]
 
 def register(request):
@@ -95,6 +104,7 @@ def ad(request):
 					context['new_images_form'] = new_images_form
 					context['ad_form'] = ad_form
 					context['object_id'] = object_id
+					context['error'] = True
 			else:  # saving new ad
 				object_form = ObjectForm(request.POST)
 				new_images_form = NewImagesForm(request.POST, request.FILES)
@@ -109,7 +119,11 @@ def ad(request):
 						image.save()
 					ad = Ad(object=object)
 					ad.save()
-				return HttpResponseRedirect("/ads/")
+					return HttpResponseRedirect("/ads/")
+				else:
+					context['object_form'] = object_form
+					context['new_images_form'] = new_images_form
+					context['error'] = True
 		else:
 			raise forms.ValidationError(
 				"Vaš nalog nije aktiviran. Proverite email i ispratite uputstva.",
@@ -195,8 +209,12 @@ def index(request):
 	return render(request, 'nekretnine/index.html', context)
 
 def objekti(request):
+	if request.user.is_authenticated():
+		welcome_message = random.choice(welcome_messages_auth)
+	else:
+		welcome_message = random.choice(welcome_messages)
 	context = {
-		'welcome_message': random.choice(welcome_messages)
+		'welcome_message': welcome_message
 	}
 	return render(request, 'nekretnine/objekti.html', context)
 
@@ -236,15 +254,21 @@ def spisak(request):
 				query = query & Q(**query_filter)
 			elif filters[filter_name]['type'] == 'multi':
 				values = request.GET.getlist(filter_name + '[]')
-				many_to_many_filters[filters[filter_name]['model_filter_key']] = set([int(value) for value in values if value.isdigit()])
+				many_to_many_filters[filters[filter_name]['model_filter_key']] = {
+					'values': set([int(value) for value in values if value.isdigit()]),
+					'search': filters[filter_name]['search']
+				}
 
 	objects_to_exclude = []
 	objects = Objekat.objects.filter(query)
 
 	for model_filter_key, values_to_filter in many_to_many_filters.items():
 		for one_object in objects:
-			object_values = set(model_to_dict(one_object, model_filter_key)[model_filter_key])
-			if not values_to_filter.issubset(object_values):
+			object_values = model_to_dict(one_object, model_filter_key)[model_filter_key]
+			if not isinstance(object_values, list):
+				object_values = [object_values]
+			object_values = set(object_values)
+			if not values_to_filter['search'](values_to_filter['values'], object_values):
 				objects_to_exclude.append(one_object.id)
 
 	if len(objects_to_exclude) > 0:

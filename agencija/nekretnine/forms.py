@@ -99,6 +99,7 @@ class UserLoginForm(forms.Form):
 		return user
 
 class ObjectForm(forms.ModelForm):
+
 	error_messages = {
 		'account_disabled': _("Vaš nalog nije aktiviran. Proverite email i ispratite uputstva."),
 	}
@@ -126,7 +127,8 @@ class ObjectForm(forms.ModelForm):
 		}
 
 # hack because bug in Django https://code.djangoproject.com/ticket/9321
-ObjectForm.base_fields['additional_features'].help_text = "Držite Ctrl dugme (Command na Mac-u) da biste izabrali više opcija"
+ObjectForm.base_fields['additional_features'].help_text = None
+ObjectForm.base_fields['additional_features'].widget = forms.CheckboxSelectMultiple()
 
 class NewImagesForm(forms.Form):
 
