@@ -236,7 +236,7 @@ def objekti(request, city_parts=None):
 		'welcome_message': welcome_message
 	}
 	if city_parts is not None:
-		context['city_parts'] = json.dumps([dg.id for dg in DeoGrada.objects.filter(name__contains=city_parts.strip('/'))])
+		context['city_parts'] = json.dumps([dg.id for dg in DeoGrada.objects.filter(name__icontains=city_parts.strip('/'))])
 	return render(request, 'nekretnine/objekti.html', context)
 
 def detalji(request):
