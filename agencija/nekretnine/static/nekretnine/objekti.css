@@ -364,6 +364,10 @@ div.form {
 	font-size: 15px;
 }
 
+p.required label:after {
+	content: '*';
+}
+
 .errorlist {
 	font-weight: bold;
 }

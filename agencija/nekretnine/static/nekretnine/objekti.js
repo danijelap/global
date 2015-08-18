@@ -55,15 +55,22 @@ window.libFilter = {
 		ga('send', 'event', 'user_request', 'load', 'filters');
 	},
 	showFilters: function() {
-		startFilters = $.cookie('filters');
-		if (typeof startFilters === 'undefined') {
-			startFilters = {};
-			for (filter_id in this.availableFilters) {
-				if (this.availableFilters[filter_id]['default']) {
-					if (this.availableFilters[filter_id]['start_value']) {
-						startFilters[filter_id] = this.availableFilters[filter_id]['start_value'];
-					} else {
-						startFilters[filter_id] = 0;
+		var raw_city_parts = $("#city_parts").val()
+		if (typeof raw_city_parts != 'undefined') {
+			var city_parts = JSON.parse(raw_city_parts);
+			startFilters = {deo_grada: city_parts};
+		} else {
+			startFilters = $.cookie('filters');
+			console.log(startFilters);
+			if (typeof startFilters === 'undefined') {
+				startFilters = {};
+				for (filter_id in this.availableFilters) {
+					if (this.availableFilters[filter_id]['default']) {
+						if (this.availableFilters[filter_id]['start_value']) {
+							startFilters[filter_id] = this.availableFilters[filter_id]['start_value'];
+						} else {
+							startFilters[filter_id] = 0;
+						}
 					}
 				}
 			}
