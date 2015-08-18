@@ -11,8 +11,8 @@
 		<script type="text/javascript" src="{% static 'nekretnine/jquery/jquery.cookie.js' %}"></script>
 		<script type="text/javascript" src="{% static 'nekretnine/jssor-slider/jssor.slider.mini.js' %}"></script>
 
-		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}?v3" />
-		<script src="{% static 'nekretnine/objekti.js' %}?v3"></script>
+		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}?v4" />
+		<script src="{% static 'nekretnine/objekti.js' %}?v4"></script>
 	</head>
 	<body class="objects">
 		{% csrf_token %}
@@ -26,6 +26,9 @@
 		})(window,document,'script','dataLayer','GTM-MN5KH9');</script>
 		<!-- End Google Tag Manager -->
 
+		{% if city_parts %}
+		<input id="city_parts" type="hidden" value="{{ city_parts }}" />
+		{% endif %}
 		<div class="logo"></div>
 		<div id="filters" class="filters">
 			<button id="dugme_dodaj_filter" class="dodaj" onclick="window.libFilter.addFilterChoice()" >Dodaj uslove</button>

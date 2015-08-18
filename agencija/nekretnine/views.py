@@ -21,16 +21,35 @@ def multi_search_any(values_to_filter, object_values):
 	return len(values_to_filter.intersection(object_values)) > 0
 
 filters = {
-	'cena': {'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena', 'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
-	'broj_soba': {'name': 'Broj soba', 'title': 'broj soba', 'model_filter_key': 'broj_soba', 'type': 'range', 'min_value': 0, 'max_value': 5, 'start_value': '0-3'},
-	'tip_objekta': {'name': 'Tip objekta', 'title': 'tip objekta', 'model_filter_key': 'tip_objekta_id', 'type': 'exact', 'objects': TipObjekta.objects},
-	'deo_grada': {'name': 'Delovi grada', 'title': 'delovi grada', 'model_filter_key': 'deo_grada', 'type': 'multi', 'search': multi_search_any, 'objects': DeoGrada.objects, 'default': True},
-	'namestenost': {'name': 'Nameštenost', 'title': 'nameštenost', 'model_filter_key': 'namestenost_id', 'type': 'exact', 'objects': Namestenost.objects},
-	'povrsina': {'name': 'Površina', 'title': 'površina', 'model_filter_key': 'povrsina', 'type': 'range', 'min_value': 0, 'max_value': 400, 'start_value': '50-100'},
-	'heating': {'name': 'Grejanje', 'title': 'grejanje', 'model_filter_key': 'heating_id', 'type': 'exact', 'objects': Heating.objects},
-	'floor': {'name': 'Sprat', 'title': 'sprat', 'model_filter_key': 'floor', 'type': 'range', 'min_value': 0, 'max_value': 30, 'start_value': '1-4'},
+	'cena': {
+		'name': 'Cena', 'title': 'cena', 'model_filter_key': 'cena',
+		'type': 'range', 'min_value': 0, 'max_value': 1500, 'start_value': '0-300'},
+	'broj_soba': {
+		'name': 'Broj soba', 'title': 'broj soba', 'model_filter_key': 'broj_soba',
+		'type': 'range', 'min_value': 0, 'max_value': 5, 'start_value': '0-3'},
+	'tip_objekta': {
+		'name': 'Tip objekta', 'title': 'tip objekta', 'model_filter_key': 'tip_objekta_id',
+		'type': 'exact', 'objects': TipObjekta.objects},
+	'deo_grada': {
+		'name': 'Delovi grada', 'title': 'delovi grada', 'model_filter_key': 'deo_grada',
+		'type': 'multi', 'search': multi_search_any, 'objects': DeoGrada.objects, 'default': True,
+		'start_value': [dg.id for dg in DeoGrada.objects.all()]},
+	'namestenost': {
+		'name': 'Nameštenost', 'title': 'nameštenost', 'model_filter_key': 'namestenost_id',
+		'type': 'exact', 'objects': Namestenost.objects},
+	'povrsina': {
+		'name': 'Površina', 'title': 'površina', 'model_filter_key': 'povrsina',
+		'type': 'range', 'min_value': 0, 'max_value': 400, 'start_value': '50-100'},
+	'heating': {
+		'name': 'Grejanje', 'title': 'grejanje', 'model_filter_key': 'heating_id',
+		'type': 'exact', 'objects': Heating.objects},
+	'floor': {
+		'name': 'Sprat', 'title': 'sprat', 'model_filter_key': 'floor',
+		'type': 'range', 'min_value': 0, 'max_value': 30, 'start_value': '1-4'},
 #	'construction_year': {'name': 'Godina izgradnje', 'title': 'godina izgradnje', 'model_filter_key': 'construction_year', 'type': 'range', 'min_value': 1900, 'max_value': date.today().year, 'start_value': '1970-{0}'.format(date.today().year)},
-	'additional_features': {'name': 'Ostale pogodnosti', 'title': 'ostale pogodnosti', 'model_filter_key': 'additional_features', 'type': 'multi', 'search': multi_search_all, 'objects': AdditionalFeatures.objects},
+	'additional_features': {
+		'name': 'Ostale pogodnosti', 'title': 'ostale pogodnosti', 'model_filter_key': 'additional_features',
+		'type': 'multi', 'search': multi_search_all, 'objects': AdditionalFeatures.objects},
 }
 
 menu_items = [
@@ -208,7 +227,7 @@ def index(request):
 	context = {'drzave': drzave}
 	return render(request, 'nekretnine/index.html', context)
 
-def objekti(request):
+def objekti(request, city_parts=None):
 	if request.user.is_authenticated():
 		welcome_message = random.choice(welcome_messages_auth)
 	else:
@@ -216,6 +235,8 @@ def objekti(request):
 	context = {
 		'welcome_message': welcome_message
 	}
+	if city_parts is not None:
+		context['city_parts'] = json.dumps([dg.id for dg in DeoGrada.objects.filter(name__contains=city_parts.strip('/'))])
 	return render(request, 'nekretnine/objekti.html', context)
 
 def detalji(request):

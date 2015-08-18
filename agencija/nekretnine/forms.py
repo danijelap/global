@@ -100,6 +100,8 @@ class UserLoginForm(forms.Form):
 
 class ObjectForm(forms.ModelForm):
 
+	required_css_class = 'required'
+
 	error_messages = {
 		'account_disabled': _("Vaš nalog nije aktiviran. Proverite email i ispratite uputstva."),
 	}
