@@ -7,7 +7,9 @@
 		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}" /> 
 	</head>
 	<body>
-		<div class="logo"></div>
+		<a href="/">
+			<div class="logo"></div>
+		</a>
 		<div class="menu">
 			Prijavljen kao {{ user.username }}. Dobrodošli!
 			{% for menu_item in menu_items %}

@@ -394,3 +394,6 @@ def terms(request):
 
 def tutorial(request):
 	return render(request, 'nekretnine/tutorial.html')
+
+def about(request):
+	return render(request, 'nekretnine/about.html')
