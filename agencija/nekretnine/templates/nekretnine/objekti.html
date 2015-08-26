@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Moj kutak - nađite stan bez posrednika</title>
+		<meta name="description" content="Stanovi za izdavanje bez posrednika u Beogradu.">
+		<meta name="Keywords" content="izdavanje stanova, nekretnine beograd, oglasi, iznajmljivanje stanova, bez posrednika">
+		<title>Moj kutak - izdavanje stanova bez posrednika</title>
 		{% load staticfiles %}
 		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/jquery/jquery-ui.min-1.11.4.css' %}" />
 		<script type="text/javascript" src="{% static 'nekretnine/jquery/jquery-1.10.2.js' %}"></script>
@@ -29,7 +31,9 @@
 		{% if city_parts %}
 		<input id="city_parts" type="hidden" value="{{ city_parts }}" />
 		{% endif %}
-		<div class="logo"></div>
+		<a href="/">
+			<div class="logo"></div>
+		</a>
 		<div id="filters" class="filters">
 			<button id="dugme_dodaj_filter" class="dodaj" onclick="window.libFilter.addFilterChoice()" >Dodaj uslove</button>
 		</div>
@@ -63,8 +67,9 @@
 			</div>
 		</div>
 		<div id="footer">
-			<a target="_blank" href="/terms">Pravila korišćenja</a>
-			| <a target="_blank" href="/tutorial">Uputstvo</a>
+			<a href="/about">O nama</a>
+			| <a href="/terms">Pravila korišćenja</a>
+			| <a href="/tutorial">Uputstvo</a>
 			{% if user.is_authenticated %}| <a href="/ad/">Postavite oglas</a>{% endif %}
 			| Kontakt: <a href="mailto:oglas.mojkutak@gmail.com">oglas.mojkutak@gmail.com</a>
 		</div>
