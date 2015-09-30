@@ -14,7 +14,7 @@ class GradAdmin(admin.ModelAdmin):
 	inlines = [DeoGradaInline]
 
 class ObjectImageInline(admin.TabularInline):
-    model = ObjectImage
+	model = ObjectImage
 
 class ObjectAdmin(admin.ModelAdmin):
 	inlines = [ObjectImageInline]
