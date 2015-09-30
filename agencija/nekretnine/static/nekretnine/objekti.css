@@ -266,6 +266,7 @@ div.button {
 form {
 	margin: 0px;
 	padding: 0px;
+	font-size: 15px;
 }
 form p label {
 	display: block;
@@ -309,12 +310,6 @@ div.form {
 	font-style: italic;
 }
 
-.legal {
-	width: 1150px;
-	float: left;
-	margin-left: 100px;
-}
-
 #footer {
 	width: 1350px;
 	clear: left;
@@ -354,13 +349,14 @@ div.form {
 	margin-top: 50px;
 }
 
-.login_message {
+.text {
 	clear: left;
 	width: 500px;
 	padding-right: 500px;
 	margin: auto;
+	text-align: justify;
 }
-.login_message p {
+.text p {
 	font-size: 15px;
 }
 
