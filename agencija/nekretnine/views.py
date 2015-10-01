@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.template import RequestContext, loader
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.db.models import Q
 from django.forms.models import model_to_dict
 from django.core.mail import send_mail
@@ -236,7 +236,10 @@ def objekti(request, city_parts=None):
 		'welcome_message': welcome_message
 	}
 	if city_parts is not None:
-		context['city_parts'] = json.dumps([dg.id for dg in DeoGrada.objects.filter(name__icontains=city_parts.strip('/'))])
+		city_parts_list = DeoGrada.objects.filter(name__icontains=city_parts.strip('/'))
+		if len(city_parts_list) == 0:
+			raise Http404("Ova stranica ne postoji")
+		context['city_parts'] = json.dumps([dg.id for dg in city_parts_list])
 	return render(request, 'nekretnine/objekti.html', context)
 
 def detalji(request):
