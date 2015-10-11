@@ -1,6 +1,6 @@
 {% extends 'nekretnine/account.html' %}
 
-{% block content %}
+{% block account_content %}
 {% for ad in ads %}
 <a href="/ad/?id={{ ad.object.id }}">
 	<div class="ad">{{ ad }}</div>

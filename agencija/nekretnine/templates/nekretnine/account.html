@@ -1,44 +1,21 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Moj kutak - nađite stan bez posrednika</title>
-		{% load staticfiles %}
-		<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}" /> 
-		<script type="text/javascript">
-			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-			ga('create', 'UA-64564624-1', 'auto');
-			ga('send', 'pageview');
-		</script>
-	</head>
-	<body>
-		<!-- Google Tag Manager -->
-		<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-MN5KH9"
-		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-		'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-		})(window,document,'script','dataLayer','GTM-MN5KH9');</script>
-		<!-- End Google Tag Manager -->
-		<a href="/"><div class="logo"></div></a>
+{% extends 'nekretnine/template.html' %}
+{% block title %}izaberite stan po vašoj meri{% endblock %}
+{% block content %}
 		<div class="menu">
-			Prijavljen kao {{ user.username }}. Dobrodošli!
-			{% for menu_item in menu_items %}
-			<a href="{{ menu_item.href }}">
-				<div class="menu_item{% if menu_item.id = selected_item %} menu_item_selected{% endif %}" 
-						onmouseover="$(this).addClass('menu_item_hover')" 
-						onmouseout="$(this).removeClass('menu_item_hover')">
-					{{ menu_item.text }}
-				</div>
-			</a>
-			{% endfor %}
+			<div class="info">Prijavljen kao <span>{{ user.username }}</span> Dobrodošli!</div>
+			<div id='cssmenu'>
+				<ul>
+					{% for menu_item in menu_items %}
+					<li{% if menu_item.id = selected_item %} class='active'{% endif %}>
+						<a href='{{ menu_item.href }}'>
+							<span>{{ menu_item.text }}</span>
+						</a>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
 		</div>
 		<div class="account_content">
-			{% block content %}{% endblock %}
+			{% block account_content %}{% endblock %}
 		</div>
-	</body>
-</html>
+{% endblock %}

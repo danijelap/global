@@ -1,28 +1,23 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta name="description" content="Stanovi za izdavanje bez posrednika u Beogradu.">
+		<meta name="Keywords" content="izdavanje stanova, nekretnine beograd, oglasi, iznajmljivanje stanova, bez posrednika">
 		<title>Moj kutak - {% block title %}{% endblock %} - izdavanje stanova bez posrednika</title>
 		{% load staticfiles %}
-		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}" />
-		<script type="text/javascript">
-			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-			ga('create', 'UA-64564624-1', 'auto');
-			ga('send', 'pageview');
-		</script>
+		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/jquery/jquery-ui.min-1.11.4.css' %}" />
+		<script type="text/javascript" src="{% static 'nekretnine/jquery/jquery-1.10.2.js' %}"></script>
+		<script type="text/javascript" src="{% static 'nekretnine/jquery/jquery-ui-1.11.4.min.js' %}"></script>
+		<script type="text/javascript" src="{% static 'nekretnine/sumoselect/jquery.sumoselect.min.js' %}"></script>
+		<link href="{% static 'nekretnine/sumoselect/sumoselect.css' %}" rel="stylesheet" type="text/css"/>
+		<script type="text/javascript" src="{% static 'nekretnine/jquery/jquery.cookie.js' %}"></script>
+		<script type="text/javascript" src="{% static 'nekretnine/jssor-slider/jssor.slider.mini.js' %}"></script>
+		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}?v4" />
+		<script src="{% static 'nekretnine/objekti.js' %}?v4"></script>
+		{% block head %}{% endblock %}
 	</head>
-	<body>
-		<!-- Google Tag Manager -->
-		<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-MN5KH9"
-		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-		'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-		})(window,document,'script','dataLayer','GTM-MN5KH9');</script>
-		<!-- End Google Tag Manager -->
+	<body class="{{ body_class|default_if_none:'' }}">
+		{% csrf_token %}
 		<a href="/"><div class="logo"></div></a>
 		{% block content %}{% endblock %}
 	</body>
