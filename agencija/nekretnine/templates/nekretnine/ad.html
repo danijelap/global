@@ -1,6 +1,15 @@
 {% extends 'nekretnine/account.html' %}
 
 {% block account_content %}
+<div class="text">
+	<h2>Dobrodošli na stranicu za postavljanje oglasa</h2>
+	<p>
+		Na ovoj stranici unosite podatke o vašem stanu. Polja označena sa zvezdicom su obavezna da se popune.
+		Ukoliko smo zaboravili neki detalj, možete ga dodati u polju "Slobodna poruka".
+		Kada unesete sve podatke, oglas ćete sačuvati klikom na dugme
+		"{% if create %}Napravi oglas{% else %}Sačuvaj{% endif %}" na dnu stranice.
+	</p>
+</div>
 {% if error %}
 <h3>Niste dobro uneli podatke. Pogledajte ispod, polja koja nisu dobra su obeležena.</h3>
 {% endif %}
