@@ -1,37 +1,14 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta name="description" content="Stanovi za izdavanje bez posrednika u Beogradu.">
-		<meta name="Keywords" content="izdavanje stanova, nekretnine beograd, oglasi, iznajmljivanje stanova, bez posrednika">
-		<title>Moj kutak - izdavanje stanova bez posrednika</title>
-		{% load staticfiles %}
-		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/jquery/jquery-ui.min-1.11.4.css' %}" />
-		<script type="text/javascript" src="{% static 'nekretnine/jquery/jquery-1.10.2.js' %}"></script>
-		<script type="text/javascript" src="{% static 'nekretnine/jquery/jquery-ui-1.11.4.min.js' %}"></script>
-		<script type="text/javascript" src="{% static 'nekretnine/sumoselect/jquery.sumoselect.min.js' %}"></script>
-		<link href="{% static 'nekretnine/sumoselect/sumoselect.css' %}" rel="stylesheet" type="text/css"/>
-		<script type="text/javascript" src="{% static 'nekretnine/jquery/jquery.cookie.js' %}"></script>
-		<script type="text/javascript" src="{% static 'nekretnine/jssor-slider/jssor.slider.mini.js' %}"></script>
-
-		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}?v4" />
-		<script src="{% static 'nekretnine/objekti.js' %}?v4"></script>
-	</head>
-	<body class="objects">
-		{% csrf_token %}
-		<!-- Google Tag Manager -->
-		<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-MN5KH9"
-		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-		'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-		})(window,document,'script','dataLayer','GTM-MN5KH9');</script>
-		<!-- End Google Tag Manager -->
-
+{% extends 'nekretnine/template.html' %}
+{% block title %}izaberite stan po vašoj meri{% endblock %}
+{% block head %}
+<script type="text/javascript">
+$(setupObjectsPage);
+</script>
+{% endblock %}
+{% block content %}
 		{% if city_parts %}
 		<input id="city_parts" type="hidden" value="{{ city_parts }}" />
 		{% endif %}
-		<a href="/"><div class="logo"></div></a>
 		<div id="filters" class="filters">
 			<button id="dugme_dodaj_filter" class="dodaj" onclick="window.libFilter.addFilterChoice()" >Dodaj uslove</button>
 		</div>
@@ -71,5 +48,4 @@
 			{% if user.is_authenticated %}| <a href="/ad/">Postavite oglas</a>{% endif %}
 			| Kontakt: <a href="mailto:oglas.mojkutak@gmail.com">oglas.mojkutak@gmail.com</a>
 		</div>
-	</body>
-</html>
+{% endblock %}

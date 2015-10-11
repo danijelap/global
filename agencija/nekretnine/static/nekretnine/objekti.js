@@ -61,7 +61,6 @@ window.libFilter = {
 			startFilters = {deo_grada: city_parts};
 		} else {
 			startFilters = $.cookie('filters');
-			console.log(startFilters);
 			if (typeof startFilters === 'undefined') {
 				startFilters = {};
 				for (filter_id in this.availableFilters) {
@@ -219,23 +218,21 @@ $.ajaxSetup({
 	}
 });
 
-$(function() {
+function setupObjectsPage() {
 	$.cookie.json = true;
 	window.favourites = $.cookie('favourites');
 	if (typeof window.favourites != 'object') window.favourites = [];
 
 	window.libFilter.initSlider();
 	init_document_click();
-	
+
 	setHeightOfContainers();
 	$(window).resize(setHeightOfContainers);
-	
+
 	window.libFilter.loadAvailableFilters(function() {
 		window.libFilter.showFilters();
-//		ucitajSpisakStanova();
 	});
-	
-});
+}
 
 function addToArray(ary, item) {
 	var index = ary.indexOf(item);

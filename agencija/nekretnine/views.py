@@ -233,7 +233,8 @@ def objekti(request, city_parts=None):
 	else:
 		welcome_message = random.choice(welcome_messages)
 	context = {
-		'welcome_message': welcome_message
+		'welcome_message': welcome_message,
+		'body_class': 'objects',
 	}
 	if city_parts is not None:
 		city_parts_list = DeoGrada.objects.filter(name__icontains=city_parts.strip('/'))

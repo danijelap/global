@@ -1,6 +1,6 @@
 {% extends 'nekretnine/account.html' %}
 
-{% block content %}
+{% block account_content %}
 <form action="" method="POST">
     {% csrf_token %}
     {{ change_pass_form.as_p }}
