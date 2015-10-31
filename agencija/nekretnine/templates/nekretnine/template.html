@@ -3,7 +3,7 @@
 	<head>
 		<meta name="description" content="Stanovi za izdavanje bez posrednika u Beogradu.">
 		<meta name="Keywords" content="izdavanje stanova, nekretnine beograd, oglasi, iznajmljivanje stanova, bez posrednika">
-		<title>Moj kutak - {% block title %}{% endblock %} - izdavanje stanova bez posrednika</title>
+		<title>Moj kutak - {% block subtitle %}{% endblock %} - izdavanje stanova bez posrednika</title>
 		{% load staticfiles %}
 		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/jquery/jquery-ui.min-1.11.4.css' %}" />
 		<script type="text/javascript" src="{% static 'nekretnine/jquery/jquery-1.10.2.js' %}"></script>
@@ -12,8 +12,8 @@
 		<link href="{% static 'nekretnine/sumoselect/sumoselect.css' %}" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript" src="{% static 'nekretnine/jquery/jquery.cookie.js' %}"></script>
 		<script type="text/javascript" src="{% static 'nekretnine/jssor-slider/jssor.slider.mini.js' %}"></script>
-		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}?v4" />
-		<script src="{% static 'nekretnine/objekti.js' %}?v4"></script>
+		<link rel="stylesheet" type="text/css" href="{% static 'nekretnine/objekti.css' %}?v5" />
+		<script src="{% static 'nekretnine/objekti.js' %}?v5"></script>
 		{% block head %}{% endblock %}
 	</head>
 	<body class="{{ body_class|default_if_none:'' }}">

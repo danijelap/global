@@ -1,6 +1,13 @@
 {% extends 'nekretnine/account.html' %}
 
 {% block account_content %}
+<div class="text">
+	<h2>Uspešno ste se prijavili</h2>
+	<p>
+		Kliknite na link "Lični podaci" koji se nalazi u meniju sa leve strane.
+		Nakon što unesete svoje podatke u tražena polja, možete postaviti oglas klikom na link "unos oglasa".
+	</p>
+</div>
 {% for ad in ads %}
 <a href="/ad/?id={{ ad.object.id }}">
 	<div class="ad">{{ ad }}</div>

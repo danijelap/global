@@ -31,9 +31,10 @@ div.logo {
 }
 
 body {
-	margin:0;
+	margin: 0;
 	font-family: Trebuchet MS;
 	font-size: 14px;
+	padding: 0;
 }
 body.objects {
 	overflow-y:hidden;

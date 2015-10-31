@@ -1,6 +1,17 @@
 {% extends 'nekretnine/account.html' %}
 
 {% block account_content %}
+<div class="text">
+	<h2>Lični podaci vlasnika stana</h2>
+	<p>
+		Potrebno je da ostavite svoje podatke, da bi potencijalni stanari mogli da vas kontaktiraju.
+		Vi odlučujete o tome da li će vaši podaci biti prikazani u oglasu ili ne.
+		Ukoliko odlučite da vaši podaci ne budu prikazani u oglasu, potencijalni stanari će moci da vam pošalju poruku
+		(u delu oglasa predvidenom za to), koja će vam stici na mejl.
+		Ukoliko prikažete podatke u oglasu, moći ce da vas kontaktiraju i preko telefona. Izbor je na vama.
+	</p>
+</div>
+
 <form action="" method="POST">
     {% csrf_token %}
     {{ owner_form.as_p }}
