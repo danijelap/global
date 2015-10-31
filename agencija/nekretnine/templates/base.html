@@ -1,0 +1,11 @@
+{% extends 'nekretnine/template.html' %}
+{% load pages_tags mezzanine_tags i18n staticfiles %}
+{% block subtitle %}zanimljivosti o Beogradu{% endblock %}
+{% block content %}
+{% page_menu "page_menu.html" %}
+		<div class="account_content">
+			<div class="text">
+			{% block main %}Ovde možete pročitati zanimljivosti o Beogradu{% endblock %}
+			</div>
+		</div>
+{% endblock %}
