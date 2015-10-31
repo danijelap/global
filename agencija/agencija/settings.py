@@ -126,6 +126,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+SOUTH_DATABASE_ADAPTERS = {'default':'south.db.mysql'}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
