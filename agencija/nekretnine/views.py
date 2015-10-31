@@ -241,6 +241,7 @@ def objekti(request, city_parts=None):
 		if len(city_parts_list) == 0:
 			raise Http404("Ova stranica ne postoji")
 		context['city_parts'] = json.dumps([dg.id for dg in city_parts_list])
+		context['city_part_name'] = city_parts_list[0].name
 	return render(request, 'nekretnine/objekti.html', context)
 
 def detalji(request):

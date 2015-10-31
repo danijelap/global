@@ -1,5 +1,5 @@
 {% extends 'nekretnine/template.html' %}
-{% block subtitle %}izaberite stan po vašoj meri{% endblock %}
+{% block subtitle %}{% if city_part_name %}{{ city_part_name }}{% else %}izaberite stan po vašoj meri{% endif %}{% endblock %}
 {% block head %}
 <script type="text/javascript">
 $(setupObjectsPage);

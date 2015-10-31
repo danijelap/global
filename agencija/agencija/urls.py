@@ -5,8 +5,14 @@ from django.conf.urls.static import static
 from django.conf.urls.i18n import i18n_patterns
 from mezzanine.core.views import direct_to_template
 from mezzanine.conf import settings as msettings
+from django.contrib.sitemaps.views import sitemap
+from nekretnine.sitemaps import StaticViewSitemap
 
 admin.autodiscover()
+
+sitemaps = {
+    'static': StaticViewSitemap,
+}
 
 urlpatterns = i18n_patterns("",
     # Change the admin prefix here to use an alternate URL for the
@@ -23,5 +29,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url("^beograd/?$", direct_to_template, {"template": "base.html"}, name="home"),
     ("^%s/" % settings.SITE_PREFIX, include("mezzanine.urls")),
+    url(r'^robots\.txt$', include('robots.urls')),
+    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     url(r'^', include('nekretnine.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

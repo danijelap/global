@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     "mezzanine.forms",
     "mezzanine.galleries",
     "mezzanine.twitter",
+    "robots",
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -130,6 +131,7 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+SOUTH_DATABASE_ADAPTERS = {'default':'south.db.mysql'}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
